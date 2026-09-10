@@ -49,9 +49,9 @@ const home = (hash: string) => (route.name === 'home' ? { hash } : { name: 'home
       </router-link>
 
       <nav class="nav">
-        <router-link :to="home('#work')" class="nav-link">Work</router-link>
-        <router-link :to="home('#talks')" class="nav-link">Talks</router-link>
-        <router-link :to="home('#book')" class="nav-link">The Book</router-link>
+        <router-link to="/work" class="nav-link" active-class="is-active">Work</router-link>
+        <router-link to="/talks" class="nav-link" active-class="is-active">Talks</router-link>
+        <router-link to="/book" class="nav-link" active-class="is-active">The Book</router-link>
         <router-link to="/about" class="nav-link" active-class="is-active">About</router-link>
       </nav>
 
