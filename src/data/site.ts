@@ -18,7 +18,7 @@ export const site = {
 }
 
 export const hero = {
-  lines: ['Institutions', 'can stay', 'open', 'to the people', 'they serve.'],
+  lines: ['Institutions', 'must stay', 'open', 'to the people', 'they serve.'],
   sub: 'Most of them do not. Twenty years inside the ones that tried: a first-grade classroom on the Navajo Nation, a state community college board, sixty rural districts, and a book about why organizations stop listening.',
 }
 
