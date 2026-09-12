@@ -112,8 +112,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
     </nav>
 
     <div ref="stack" class="stack">
-      <!-- The work: pinned for extra scroll that steps through the doors -->
-      <div ref="workWrap" class="panel-wrap" :style="{ height: workHeight }">
+      <!-- The work: pinned while its spacer scrolls, stepping through the doors -->
       <section class="panel">
         <div class="frame spread">
           <div class="spread-top">
@@ -168,10 +167,9 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
           </div>
         </div>
       </section>
-      </div>
+      <div ref="workWrap" class="spacer" :style="{ height: workHeight }" aria-hidden="true"></div>
 
-      <!-- The book: pinned, stepping from the argument to the details -->
-      <div ref="bookWrap" class="panel-wrap" :style="{ height: bookHeight }">
+      <!-- The book: pinned while its spacer scrolls, from the argument to the details -->
       <section class="panel">
         <div class="frame spread">
           <div class="spread-top">
@@ -229,7 +227,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
           </div>
         </div>
       </section>
-      </div>
+      <div ref="bookWrap" class="spacer" :style="{ height: bookHeight }" aria-hidden="true"></div>
 
       <!-- The record -->
       <section class="panel">
@@ -541,8 +539,11 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
   z-index: 1;
 }
 
-.panel-wrap {
+// Empty scroll after a pinned panel; the panel steps through its content
+// while this passes, and the next panel slides over once it has.
+.spacer {
   position: relative;
+  pointer-events: none;
 }
 
 // Floating toolbar for the spreads. Fixed to the right edge, only present
@@ -655,9 +656,11 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
   opacity: calc(1 - var(--cover, 0) * 0.45);
   will-change: transform;
 
-  // The blur is only paid for while the next spread is sliding over.
+  // The blur is only paid for while the next spread is sliding over, and
+  // it eases in: almost none as the edge arrives, most of it once the next
+  // spread is well on its way.
   &.covered {
-    filter: blur(calc(var(--cover, 0) * 12px));
+    filter: blur(calc(var(--cover, 0) * var(--cover, 0) * 14px));
   }
 
   &::before {
@@ -1495,8 +1498,8 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
     }
   }
 
-  .panel-wrap {
-    height: auto !important;
+  .spacer {
+    display: none;
   }
 
   .stack-nav {

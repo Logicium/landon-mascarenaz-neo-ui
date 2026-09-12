@@ -2,9 +2,9 @@ import { onBeforeUnmount, onMounted, ref, type Ref } from 'vue'
 import { scrollToY } from './useLenis'
 
 // Stacked spreads. Every `.panel` inside `root` is sticky at the top of the
-// viewport; the next one scrolls up over it. A panel may sit inside a
-// taller `.panel-wrap` so it stays pinned for extra scroll (the work spread
-// uses that room to step through its doors).
+// viewport; the next one scrolls up over it. A panel may be followed by a
+// `.spacer` so it stays pinned for extra scroll (the work and book spreads
+// use that room to step through their content).
 //
 // Each scroll frame sets `--cover` (0 to 1) on every panel, how far the
 // following panel has covered it, which the CSS turns into blur, scale and
@@ -17,7 +17,19 @@ export function useStack(root: Ref<HTMLElement | null>) {
   let raf = 0
   let panels: HTMLElement[] = []
 
-  const anchorOf = (p: HTMLElement) => (p.parentElement?.classList.contains('panel-wrap') ? p.parentElement : p)
+  // Document offset of a panel's natural (unpinned) position: the stack's
+  // top plus the heights of everything before it. Sticky panels report a
+  // pinned rect, so this is measured from the flow instead.
+  const anchorTop = (p: HTMLElement) => {
+    const el = root.value
+    if (!el) return 0
+    let y = el.getBoundingClientRect().top + window.scrollY
+    for (const child of Array.from(el.children)) {
+      if (child === p) break
+      y += (child as HTMLElement).offsetHeight
+    }
+    return y
+  }
 
   const update = () => {
     raf = 0
@@ -30,7 +42,7 @@ export function useStack(root: Ref<HTMLElement | null>) {
       const cover = next ? Math.min(1, Math.max(0, 1 - next.getBoundingClientRect().top / vh)) : 0
       panels[i]!.style.setProperty('--cover', cover.toFixed(3))
       panels[i]!.classList.toggle('covered', cover > 0.004)
-      if (anchorOf(panels[i]!).getBoundingClientRect().top <= vh * 0.5) current = i
+      if (panels[i]!.getBoundingClientRect().top <= vh * 0.5) current = i
     }
     active.value = current
     const r = el.getBoundingClientRect()
@@ -46,7 +58,7 @@ export function useStack(root: Ref<HTMLElement | null>) {
   const scrollTo = (i: number) => {
     const p = panels[i]
     if (!p) return
-    scrollToY(anchorOf(p).getBoundingClientRect().top + window.scrollY)
+    scrollToY(anchorTop(p))
   }
 
   onMounted(() => {
