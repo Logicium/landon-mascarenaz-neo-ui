@@ -1,4 +1,7 @@
 // All copy for the site lives here. Edit text without touching layout.
+//
+// Biographical claims carry source ids that resolve to `sources` below, so
+// every fact on the page can link out to the public record it came from.
 
 export const site = {
   name: 'Landon Mascareñaz',
@@ -15,9 +18,130 @@ export const site = {
 }
 
 export const hero = {
-  lines: ['Institutions', 'can stay', 'open', 'to the people', 'they serve.'],
-  sub: 'Most of them do not. Twenty years inside the ones that tried: a classroom on the Navajo Nation, a state community college board, sixty rural districts, and a book about why organizations stop listening.',
+  lines: ['Institutions', 'must stay', 'open', 'to the people', 'they serve.'],
+  sub: 'Most of them do not. Twenty years inside the ones that tried: a first-grade classroom on the Navajo Nation, a state community college board, sixty rural districts, and a book about why organizations stop listening.',
 }
+
+// ---------- sources ----------
+
+export interface Source {
+  id: string
+  title: string
+  outlet: string
+  date: string
+  url: string
+}
+
+export const sources: Source[] = [
+  {
+    id: 'cccs-bio',
+    title: 'Dr. Landon Mascareñaz, State Board profile',
+    outlet: 'Colorado Community College System',
+    date: '',
+    url: 'https://cccs.edu/about/governance/dr-landon-mascarenaz/',
+  },
+  {
+    id: 'cccs-chair',
+    title: 'State Board welcomes Dr. Landon Mascareñaz as new chair',
+    outlet: 'Colorado Community College System',
+    date: 'Aug 2023',
+    url: 'https://cccs.edu/cccs-news/state-board-welcomes-dr-landon-mascarenaz-as-new-chair/',
+  },
+  {
+    id: 'cc-staff',
+    title: 'Staff: Landon Mascareñaz, Founding Chief Executive Officer',
+    outlet: 'Courageous Colorado',
+    date: '',
+    url: 'https://www.courageouscolorado.org/staff',
+  },
+  {
+    id: 'copolitics',
+    title: 'Q&A with Courageous Colorado’s Landon Mascareñaz: nonprofit aims to bring bravery back to politics',
+    outlet: 'Colorado Politics, Ernest Luning',
+    date: 'Oct 2025',
+    url: 'https://www.coloradopolitics.com/2025/10/17/qa-with-courageous-colorados-landon-mascare%C3%B1az-nonprofit-aims-to-bring-bravery-back-to-politics/',
+  },
+  {
+    id: 'unite',
+    title: 'Opening Colorado’s primaries: how Landon Mascareñaz is building a Colorado-first coalition for reform',
+    outlet: 'Unite America',
+    date: 'Jan 2026',
+    url: 'https://www.uniteamerica.org/articles/opening-colorados-primaries-how-landon-mascarenaz-is-building-a-colorado-first-coalition-for-reform',
+  },
+  {
+    id: 'hep',
+    title: 'The Open System: Redesigning Education and Reigniting Democracy',
+    outlet: 'Harvard Education Press',
+    date: '2023',
+    url: 'https://hep.gse.harvard.edu/9781682538135/the-open-system/',
+  },
+  {
+    id: 'osi',
+    title: 'Mascareñaz bio and archive',
+    outlet: 'The Open System Institute',
+    date: '',
+    url: 'https://www.theopensystem.org/mascarenaz-bio-archive',
+  },
+  {
+    id: 'pahara',
+    title: 'Fellow profile: Landon Mascareñaz',
+    outlet: 'Pahara Institute',
+    date: '',
+    url: 'https://www.pahara.org/fellow/landon-mascare%C3%B1az',
+  },
+  {
+    id: 'cei',
+    title: 'Mascareñaz to join the Colorado Education Initiative team',
+    outlet: 'Colorado Education Initiative',
+    date: 'Jun 2019',
+    url: 'https://www.coloradoedinitiative.org/mascarenaz-to-join-the-colorado-education-initiative-team/',
+  },
+  {
+    id: 'hti',
+    title: 'Homegrown Talent Initiative',
+    outlet: 'Colorado Succeeds',
+    date: '',
+    url: 'https://coloradosucceeds.org/resource/homegrown-talent-initiative/',
+  },
+  {
+    id: 'the74',
+    title: 'First person: how Colorado’s Homegrown Talent Initiative is boosting the “educonomy” in 8 rural communities',
+    outlet: 'The 74',
+    date: '',
+    url: 'https://www.the74million.org/article/first-person-how-colorados-homegrown-talent-initiative-is-boosting-the-educonomy-in-8-rural-communities-to-help-students-succeed/',
+  },
+  {
+    id: 'emergent',
+    title: 'About Emergent Campus Trinidad',
+    outlet: 'Emergent Campus',
+    date: '',
+    url: 'https://emergentcampus.org/trinidad-campus/',
+  },
+  {
+    id: 'ctn',
+    title: 'Landon Mascareñaz, Convener and Chair',
+    outlet: 'Colorado Trustee Network',
+    date: '',
+    url: 'https://colorado-trustee-network.squarespace.com/convening-committee-members/landon-mascarenaz',
+  },
+  {
+    id: 'wpr',
+    title: 'Contributor page: Landon Mascareñaz',
+    outlet: 'Wisconsin Public Radio',
+    date: '',
+    url: 'https://www.wpr.org/person/landon-mascarenaz',
+  },
+  {
+    id: 'linkedin',
+    title: 'Landon Mascareñaz',
+    outlet: 'LinkedIn',
+    date: '',
+    url: 'https://www.linkedin.com/in/landonmascarenaz',
+  },
+]
+
+export const sourceById = (id: string) => sources.find((s) => s.id === id)
+export const sourceIndex = (id: string) => sources.findIndex((s) => s.id === id) + 1
 
 export const clients = [
   'Colorado Mountain College',
@@ -36,6 +160,9 @@ export interface Door {
   short: string
   body: string
   audiences: string[]
+  hue: string
+  image: string
+  imageAlt: string
 }
 
 export const doors: Door[] = [
@@ -43,8 +170,11 @@ export const doors: Door[] = [
     n: '01',
     title: 'Leadership & Latino America',
     short: 'Leadership',
-    body: 'Representation, belonging, and what a leader actually does with a seat once they have one. From a Mexican-American leader whose work runs through education, democracy and public life.',
+    body: 'Representation, belonging, and what a leader actually does with a seat once they have one. From a Mexican-American leader whose family roots run through Colorado and New Mexico for generations.',
     audiences: ['Latino organizations', 'Universities & HSIs', 'Fellowship cohorts'],
+    hue: 'var(--clay)',
+    image: 'speaking',
+    imageAlt: 'Landon Mascareñaz speaking to a room, mid-sentence, hands open.',
   },
   {
     n: '02',
@@ -52,6 +182,9 @@ export const doors: Door[] = [
     short: 'Democracy',
     body: 'Trust is not won at the ballot box. It is decided by whether the schools, colleges and city halls people actually deal with turn out to be responsive.',
     audiences: ['Foundations', 'Civic organizations', 'Public affairs forums'],
+    hue: 'var(--clay)',
+    image: 'room',
+    imageAlt: 'A community meeting seen from the back of the room, a slide about political crisis on the screen.',
   },
   {
     n: '03',
@@ -59,6 +192,9 @@ export const doors: Door[] = [
     short: 'Mobility',
     body: 'Community colleges as engines of mobility, regional talent ecosystems, and what it takes to align education, employers and communities around one goal.',
     audiences: ['Higher education', 'Workforce boards', 'Economic development'],
+    hue: 'var(--clay)',
+    image: 'rural',
+    imageAlt: 'A rural Colorado classroom, students laughing as a teacher reads to them.',
   },
 ]
 
@@ -87,6 +223,7 @@ export interface Talk {
   level: string
   formats: string
   door: number
+  image: string
   outcomes: string[]
 }
 
@@ -101,6 +238,7 @@ export const talks: Talk[] = [
     level: 'Intermediate to advanced',
     formats: 'Keynote · Retreat',
     door: 2,
+    image: 'panel',
     outcomes: [
       'Sequence a board-led transformation from listening through strategic plan to executive hire.',
       'Distinguish decisions that belong to a governing board from those that belong to administration.',
@@ -118,6 +256,7 @@ export const talks: Talk[] = [
     level: 'Intro to intermediate',
     formats: 'Keynote · Workshop',
     door: 2,
+    image: 'rural',
     outcomes: [
       'Map the education, employer and workforce actors in their region and find the missing relationships.',
       'Explain why regional collaboratives fail at convening more often than at funding.',
@@ -135,6 +274,7 @@ export const talks: Talk[] = [
     level: 'All levels',
     formats: 'Keynote · Fireside',
     door: 1,
+    image: 'room',
     outcomes: [
       'Explain the relationship between institutional responsiveness and civic trust.',
       'Identify why many participation efforts increase cynicism, and what distinguishes the ones that do not.',
@@ -152,6 +292,7 @@ export const talks: Talk[] = [
     level: 'Intermediate',
     formats: 'Keynote · Cabinet retreat',
     door: 2,
+    image: 'trinidad',
     outcomes: [
       'Compare their institution’s stated priorities against its budget and calendar.',
       'Identify what an institution has to stop doing to make mobility a real organizing purpose.',
@@ -169,6 +310,7 @@ export const talks: Talk[] = [
     level: 'All levels',
     formats: 'Keynote · Workshop · Moderation',
     door: 1,
+    image: 'sign',
     outcomes: [
       'Assemble a coalition around a shared concrete problem rather than shared values.',
       'Identify what must be true before a first convening for the second one to happen.',
@@ -186,6 +328,7 @@ export const talks: Talk[] = [
     level: 'All levels',
     formats: 'Keynote · Fireside · Workshop',
     door: 0,
+    image: 'speaking',
     outcomes: [
       'Diagnose whether their organization is currently open or closed to the people it serves.',
       'Distinguish consultation that gathers input from participation that changes decisions.',
@@ -199,10 +342,15 @@ export const openSystem = {
   title: 'The Open System',
   authors: 'Mascareñaz & Tran',
   press: 'Harvard Education Press',
+  year: '2023',
+  pages: '280',
+  isbn: '978-1-68253-813-5',
+  source: 'hep',
+  moves: 'Drawing on the Kentucky Coalition for Advancing Education and Colorado’s Homegrown Talent Initiative, the book sets out six moves that bring an institution back into contact with the people it serves, and a diagnostic a leader can run on their own organization within a week.',
   statement: 'Closing usually looks like competence from the inside.',
   body: [
     'Organizations rarely decide to stop listening. They tighten process, protect staff time, standardize decisions. Each of these looks like good management on the day it happens. Years later the institution cannot say what the people it serves actually want.',
-    'The Open System, written with Dr. Doannie Tran, is a working framework for diagnosing that drift and reversing it. It runs underneath all three doors rather than sitting beside them as a fourth.',
+    'The Open System, written with Dr. Doannie Tran and published by Harvard Education Press in 2023, is a working framework for diagnosing that drift and reversing it. It draws on the Kentucky Coalition for Advancing Education and Colorado’s Homegrown Talent Initiative, and it runs underneath all three doors rather than sitting beside them as a fourth.',
   ],
   pull: 'He does not present it as theory. He chaired the board that ran the process the book describes.',
   taughtAt: [
@@ -213,6 +361,13 @@ export const openSystem = {
     ['University of Kentucky', ''],
     ['University of Colorado Denver', 'School of Public Affairs'],
   ] as [string, string][],
+}
+
+// A single thing he has said, on the record, with the record attached.
+export const said = {
+  quote: 'People don’t fear change. They actually fear loss.',
+  context: 'On why reform has to be built locally, with the people it affects',
+  source: 'unite',
 }
 
 export const watch = [
@@ -227,32 +382,75 @@ export const testimonials = [
   { quote: 'This is the section that convinces a committee member who has never seen him speak.', name: 'Full name', title: 'Title, Organization' },
 ]
 
+export interface Paragraph {
+  text: string
+  cites: string[]
+}
+
 export const person = {
   title: 'Not a commentator. A builder who kept the receipts.',
   body: [
-    'Landon began as a first-grade teacher on the Navajo Nation, went on to lead Teach For America New Mexico, and earned a doctorate in education leadership from the Harvard Graduate School of Education.',
-    'Governor Jared Polis appointed him to Colorado’s state community college board in 2019. He rose to vice chair and then chair, and during his tenure the board ran a statewide listening tour, rebuilt the strategic plan around economic mobility, secured philanthropic investment for a statewide innovation fund, adopted new governance policies, and hired a new chancellor. He co-founded the Colorado Trustee Network.',
-    'He helped launch and lead the Homegrown Talent Initiative across sixty rural Colorado districts, serves as board president of Emergent Campus, and sits on the board of Latinos for Education.',
-  ],
+    {
+      text: 'Born in California and raised in Littleton, Colorado, Landon studied international relations at Lewis & Clark College in Portland, then began his career as a first-grade teacher on the Navajo Nation with Teach For America. He went on to lead Teach For America New Mexico for five years and earned a doctorate in education leadership from the Harvard Graduate School of Education in 2015.',
+      cites: ['cccs-chair', 'osi'],
+    },
+    {
+      text: 'Governor Jared Polis appointed him to Colorado’s State Board for Community Colleges and Occupational Education in 2019. He served as vice chair and in August 2023 was elected chair, succeeding former state senator Rollie Heath, on a bipartisan board that oversees thirteen colleges. During his tenure the board ran a statewide listening tour, rebuilt the strategic plan around economic mobility, secured philanthropic investment for a statewide innovation fund, adopted new governance policies, and hired a new chancellor. He convened and chairs the Colorado Trustee Network.',
+      cites: ['cccs-chair', 'cccs-bio', 'ctn'],
+    },
+    {
+      text: 'At the Colorado Education Initiative he directed the Homegrown Talent Initiative, which grew from eight pilot communities in 2019 to more than sixty rural districts across eight regions of the state. He is helping bring the Emergent Campus model to Trinidad, in southern Colorado, where he keeps an office at the A.R. Mitchell Museum of Western Art, and he sits on the boards of Latinos for Education and Caring for Colorado.',
+      cites: ['hti', 'emergent', 'cc-staff'],
+    },
+    {
+      text: 'In the summer of 2025, after a listening tour through roughly twenty Colorado communities, he founded Courageous Colorado, a nonpartisan effort to open the state’s primaries and rebuild civic trust. Its coalition now numbers close to thirty organizations from the left, right and center.',
+      cites: ['copolitics', 'unite'],
+    },
+  ] as Paragraph[],
 }
 
-export const record: [string, string][] = [
-  ['2025', 'Colorado Mountain College Hispanic Serving Institution Summit, opening panel'],
-  ['2025', 'Colorado Community College System Adult Leadership Summit'],
-  ['2024', 'City of Raton Economic Development Conference'],
-  ['2023', 'ECMC Foundation'],
-  ['2023', 'Public Charter Schools of New Mexico'],
-  ['2020', 'Association of Latino Administrators and Superintendents'],
-  ['TV', 'Next with Kyle Clark · Real Talk with Micah Smith · 9News'],
-  ['Podcast', 'Future Hindsight · New Books Network · Ethical Schools · Wisconsin Public Radio'],
-  ['Faculty', 'Leadership Institute of Nevada, Executive Leadership Program'],
+// Dated, sourced. Rendered on the About page.
+export interface Milestone {
+  year: string
+  text: string
+  source: string
+}
+
+export const timeline: Milestone[] = [
+  { year: '2005', text: 'First-grade teacher on the Navajo Nation, Teach For America.', source: 'osi' },
+  { year: '2007', text: 'Executive Director, Teach For America New Mexico, through 2012.', source: 'osi' },
+  { year: '2012', text: 'Enters the doctoral program in education leadership at the Harvard Graduate School of Education. Completes it in 2015.', source: 'linkedin' },
+  { year: '2013', text: 'Co-designs the launch of the NACA Inspired Schools Network, serving Indigenous communities.', source: 'osi' },
+  { year: '2014', text: 'Leads the Family and Community Engagement office at Denver Public Schools, through 2017.', source: 'osi' },
+  { year: '2017', text: 'Vice President of Advocacy and Partnerships, A+ Colorado.', source: 'ctn' },
+  { year: '2019', text: 'Appointed to the State Board for Community Colleges and Occupational Education by Governor Jared Polis. Joins the Colorado Education Initiative as Vice President of Community Partnership. The Homegrown Talent Initiative launches in eight rural communities.', source: 'cei' },
+  { year: '2020', text: 'Deploys the Denver Metro Emergency Food Network during the pandemic, distributing more than 320,000 free meals. Keynotes the Association of Latino Administrators and Superintendents.', source: 'osi' },
+  { year: '2022', text: 'Homegrown Talent expands to more than sixty districts. Chairs the Reisher Scholars committee.', source: 'hti' },
+  { year: '2023', text: 'The Open System is published by Harvard Education Press. Elected chair of the State Board, succeeding Rollie Heath.', source: 'cccs-chair' },
+  { year: '2025', text: 'Founds Courageous Colorado after a spring listening tour of roughly twenty communities. Launches a statewide activation tour in October.', source: 'copolitics' },
+  { year: '2026', text: 'The coalition to open Colorado’s primaries reaches close to thirty organizations across the political spectrum.', source: 'unite' },
 ]
 
-export const stats: [string, string][] = [
-  ['60', 'Rural districts reached through the Homegrown Talent Initiative'],
-  ['3', 'Years chairing the board of one of the largest community college systems in the country'],
-  ['6', 'Universities teaching The Open System framework'],
-  ['20', 'Years across education, workforce, rural and civic institutions'],
+export const record: [string, string, string][] = [
+  ['2026', 'Unite America: building a Colorado-first coalition for reform', 'unite'],
+  ['2025', 'Q&A, Colorado Politics: bringing bravery back to politics', 'copolitics'],
+  ['2025', 'Colorado Mountain College Hispanic Serving Institution Summit, opening panel', ''],
+  ['2025', 'Colorado Community College System Adult Leadership Summit', ''],
+  ['2024', 'City of Raton Economic Development Conference', ''],
+  ['2023', 'ECMC Foundation', ''],
+  ['2023', 'Public Charter Schools of New Mexico', ''],
+  ['2020', 'Association of Latino Administrators and Superintendents, keynote', 'osi'],
+  ['TV', 'Next with Kyle Clark · Real Talk with Micah Smith · 9News', ''],
+  ['Podcast', 'Future Hindsight · New Books Network · Ethical Schools · Wisconsin Public Radio', 'wpr'],
+  ['Fellow', 'Pahara Institute · Flamboyan Family Engagement Fellowship', 'pahara'],
+  ['Faculty', 'Leadership Institute of Nevada, Executive Leadership Program', ''],
+]
+
+export const stats: [string, string, string][] = [
+  ['60', 'Rural districts in the Homegrown Talent Initiative, across eight regions of Colorado', 'hti'],
+  ['13', 'Colleges in the system whose bipartisan state board he chaired', 'cccs-chair'],
+  ['30', 'Organizations, left, right and center, in the Courageous Colorado coalition', 'unite'],
+  ['2005', 'First classroom. First grade, on the Navajo Nation', 'osi'],
 ]
 
 export const planners: [string, string][] = [

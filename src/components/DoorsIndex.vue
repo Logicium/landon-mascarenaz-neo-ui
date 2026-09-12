@@ -25,14 +25,6 @@ onBeforeUnmount(() => io?.disconnect())
 
 <template>
   <section id="work" class="doors frame">
-    <div class="sec-head">
-      <div class="sec-idx">
-        <span class="mono">01</span>
-        <span class="mono">Three ways in</span>
-      </div>
-      <h2 class="heading" v-reveal>One body of work.<br />Three doors into it.</h2>
-    </div>
-
     <div class="layout">
       <aside class="pin">
         <div class="counter" aria-hidden="true">
@@ -67,6 +59,12 @@ onBeforeUnmount(() => io?.disconnect())
             <span class="mono idx">{{ d.n }}</span>
             <span class="serif who-serif">for {{ d.audiences[0] }}</span>
           </div>
+          <figure class="door-img print" v-reveal>
+            <picture>
+              <source :srcset="`/img/${d.image}.avif`" type="image/avif" />
+              <img :src="`/img/${d.image}.jpg`" :alt="d.imageAlt" loading="lazy" />
+            </picture>
+          </figure>
           <h3 class="door-title">{{ d.title }}</h3>
           <p class="door-body">{{ d.body }}</p>
           <ul class="aud">
@@ -80,14 +78,13 @@ onBeforeUnmount(() => io?.disconnect())
 
 <style scoped lang="scss">
 .doors {
-  padding-block: var(--band);
+  padding-block: 0 var(--band);
 }
 
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
   column-gap: clamp(24px, 4vw, 96px);
-  margin-top: clamp(56px, 7vw, 120px);
 }
 
 .pin {
@@ -103,22 +100,22 @@ onBeforeUnmount(() => io?.disconnect())
   display: flex;
   align-items: flex-end;
   gap: 10px;
-  color: var(--ink);
+  color: var(--clay);
 
   .digits {
     overflow: hidden;
-    height: clamp(96px, 13vw, 210px);
+    height: calc(var(--fs-num-xl) * 0.82);
     display: flex;
     align-items: flex-end;
   }
 
   .big {
-    font-size: clamp(120px, 16vw, 260px);
+    font-size: var(--fs-num-xl);
     display: block;
   }
 
   .of {
-    font-size: clamp(24px, 2.6vw, 40px);
+    font-size: var(--fs-sub);
     color: var(--mute);
     padding-bottom: 0.15em;
   }
@@ -167,6 +164,10 @@ onBeforeUnmount(() => io?.disconnect())
 
     &.on {
       color: var(--ink);
+
+      .mono {
+        color: var(--clay);
+      }
     }
   }
 }
@@ -195,7 +196,17 @@ onBeforeUnmount(() => io?.disconnect())
   }
 
   .idx {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     color: var(--ink);
+
+    &::before {
+      content: '';
+      width: 9px;
+      height: 9px;
+      background: var(--clay);
+    }
   }
 
   .who-serif {
@@ -203,8 +214,22 @@ onBeforeUnmount(() => io?.disconnect())
     color: var(--mute);
   }
 
+  .door-img {
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    margin-block: 6px 10px;
+
+    picture,
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
   .door-title {
-    font-size: clamp(30px, 3.6vw, 56px);
+    font-size: var(--fs-heading);
     font-weight: 360;
     letter-spacing: -0.036em;
     line-height: 1;
@@ -243,7 +268,7 @@ onBeforeUnmount(() => io?.disconnect())
   }
 
   &.on .aud li::before {
-    background: var(--signal);
+    background: var(--clay);
   }
 }
 

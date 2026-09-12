@@ -1,5 +1,10 @@
 // Landon Mascareñaz. Design system.
-// Paper, ink, one signal. Hairlines, numerals, and a lot of air.
+// Warm white paper, warm ink, and two inks with two jobs.
+// Clay, an iron-oxide red, is the human record: solid shapes and type for
+// where he is from, what he has done and what he has said.
+// Turquoise is the system: only ever lines, points and small marks, for the
+// framework, the network and the evidence. They share a frame once, in the
+// hero, where a solid clay sun sits inside a turquoise net.
 
 *,
 *::before,
@@ -10,23 +15,42 @@
 }
 
 :root {
-  --paper: #f3f2ee;
-  --paper-2: #ebeae5;
-  --ink: #121212;
-  --ink-2: #3a3a38;
-  --mute: #74736e;
-  --faint: #aaa9a3;
-  --line: #dcdad4;
-  --line-2: #cfcdc6;
-  --signal: #2640ff;
+  --paper: #fbf9f5;
+  --paper-2: #f3efe8;
+  --ink: #1a1613;
+  --ink-2: #3e3733;
+  --mute: #7a7268;
+  --faint: #aca59a;
+  --line: #e4dfd5;
+  --line-2: #d3ccc0;
+
+  --clay: #b4401f;
+  --clay-deep: #8c2e12;
+  // Gem turquoise for lines and marks; the deep one for small type.
+  --turq: #1fb1b3;
+  --turq-deep: #127a78;
+
+  // Solid accents (buttons, selection, focus) reach for clay.
+  --signal: var(--clay);
 
   --sans: 'Geist', 'Inter', 'Helvetica Neue', Arial, sans-serif;
   --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
   --serif: 'Instrument Serif', 'Times New Roman', Georgia, serif;
 
+  // Type scale. Every page draws from these seven sizes and nothing else.
+  --fs-display: clamp(46px, 7.6vw, 132px);
+  --fs-heading: clamp(32px, 4.4vw, 68px);
+  --fs-sub: clamp(22px, 2.4vw, 34px);
+  --fs-title: clamp(20px, 1.8vw, 28px);
+  --fs-num-xl: clamp(96px, 13vw, 220px);
+  --fs-num-lg: clamp(56px, 6.6vw, 112px);
+  --fs-num-md: clamp(36px, 3.6vw, 56px);
+
+  // Rhythm. A band between sections, a large gap between a head and its body.
   --measure: 36em;
   --gutter: clamp(20px, 4vw, 64px);
   --band: clamp(88px, 12vw, 200px);
+  --gap-l: clamp(40px, 6vw, 96px);
   --header-h: 68px;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -36,7 +60,24 @@
 html {
   background: var(--paper);
   scrollbar-gutter: stable;
-  scroll-behavior: smooth;
+}
+
+// Lenis owns the easing; the browser must not also smooth.
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
@@ -77,8 +118,22 @@ ol {
 }
 
 ::selection {
-  background: var(--ink);
+  background: var(--clay);
   color: var(--paper);
+}
+
+// Paper grain. A fixed sheet of fractal noise multiplied over everything,
+// faint enough to read as stock rather than as an effect.
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.22 0 0 0 0 0.17 0 0 0 0 0.12 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
 }
 
 :focus-visible {
@@ -99,21 +154,21 @@ h4 {
 }
 
 .display {
-  font-size: clamp(46px, 7.6vw, 132px);
+  font-size: var(--fs-display);
   font-weight: 340;
   line-height: 0.96;
   letter-spacing: -0.045em;
 }
 
 .heading {
-  font-size: clamp(32px, 4.4vw, 68px);
+  font-size: var(--fs-heading);
   font-weight: 360;
   line-height: 1;
   letter-spacing: -0.038em;
 }
 
 .subheading {
-  font-size: clamp(22px, 2.4vw, 34px);
+  font-size: var(--fs-sub);
   font-weight: 380;
   line-height: 1.12;
   letter-spacing: -0.028em;
@@ -185,6 +240,11 @@ h4 {
 
 .rule {
   border-top: 1px solid var(--line);
+}
+
+// A section: a band above, nothing below (the next section brings its own).
+.sec {
+  padding-block: var(--band) 0;
 }
 
 // Section head: a hairline, a mono index on the left, and the heading.
@@ -289,6 +349,112 @@ h4 {
   }
 }
 
+// Superscript citation after a sentence. Numbers match the source list.
+.cites {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: 5px;
+  vertical-align: super;
+  line-height: 0;
+}
+
+.cite {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  color: var(--turq-deep);
+  transition: color 0.3s var(--ease-out);
+
+  &:hover {
+    color: var(--ink);
+  }
+}
+
+// Small outbound reference link with an arrow.
+.ext {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--mute);
+  transition: color 0.3s var(--ease-out);
+
+  &::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-top: 1px solid currentColor;
+    border-right: 1px solid currentColor;
+    transform: translateY(1px);
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  &:hover {
+    color: var(--turq-deep);
+
+    &::after {
+      transform: translate(2px, -1px);
+    }
+  }
+}
+
+// ---------- print treatments ----------
+// `.tone` is the colour photograph's place in the palette: saturation pulled
+// down, warmed toward the paper, so a snapshot reads as part of the sheet.
+.tone {
+  background: var(--paper-2);
+
+  img {
+    filter: saturate(0.58) sepia(0.2) contrast(1.05) brightness(1.02);
+  }
+}
+
+// Photographs are never full colour. `.print` is one ink on paper: a
+// grayscale image multiplied into the sheet. `.duo` is a clay duotone, the
+// shadows printing in clay and the highlights falling to paper, with a
+// halftone screen laid over the top like a risograph pass.
+.print {
+  background: var(--paper);
+
+  img {
+    filter: grayscale(1) contrast(1.08);
+    mix-blend-mode: multiply;
+  }
+}
+
+.duo {
+  position: relative;
+  background: var(--clay);
+  isolation: isolate;
+
+  img {
+    filter: grayscale(1) contrast(1.18) brightness(1.04);
+    mix-blend-mode: screen;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(26, 22, 19, 0.7) 0.65px, transparent 1.05px);
+    background-size: 5px 5px;
+    mix-blend-mode: multiply;
+    opacity: 0.32;
+  }
+}
+
+// A rotated mono caption running up the edge of a spread.
+.edge {
+  position: absolute;
+  right: clamp(10px, 1.4vw, 22px);
+  top: 50%;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg) translateY(50%);
+  white-space: nowrap;
+  color: var(--faint);
+  pointer-events: none;
+}
+
 // ---------- placeholders ----------
 
 .slot {
@@ -374,10 +540,6 @@ h4 {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
   *,
   *::before,
   *::after {

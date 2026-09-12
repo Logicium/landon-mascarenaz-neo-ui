@@ -26,7 +26,7 @@ watch(
   <article v-if="talk" class="talk-page" :key="talk.slug">
     <header class="frame head">
       <div class="crumbs mono">
-        <router-link :to="{ name: 'home', hash: '#talks' }" class="link-line">Talks</router-link>
+        <router-link to="/talks" class="link-line">Talks</router-link>
         <span>{{ talk.n }} / {{ String(talks.length).padStart(2, '0') }}</span>
       </div>
 
@@ -47,7 +47,7 @@ watch(
           <div><dt class="mono">Audience</dt><dd>{{ talk.audience }}</dd></div>
           <div><dt class="mono">Level</dt><dd>{{ talk.level }}</dd></div>
           <div><dt class="mono">Formats</dt><dd>{{ talk.formats }}</dd></div>
-          <div><dt class="mono">Door</dt><dd>{{ door?.n }} {{ door?.title }}</dd></div>
+          <div><dt class="mono">Door</dt><dd class="door-dd"><i class="door-sq" aria-hidden="true"></i>{{ door?.n }} {{ door?.title }}</dd></div>
         </dl>
         <a href="#contact" class="btn" @click.prevent="router.push({ name: 'home', hash: '#contact' })">
           Book this session
@@ -89,7 +89,20 @@ watch(
 
 <style scoped lang="scss">
 .talk-page {
+  --door-c: var(--turq);
   padding-top: calc(var(--header-h) + clamp(40px, 6vw, 96px));
+}
+
+.door-dd {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.door-sq {
+  width: 9px;
+  height: 9px;
+  background: var(--door-c);
 }
 
 .crumbs {
@@ -108,12 +121,13 @@ watch(
   grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
   column-gap: clamp(16px, 2vw, 32px);
   align-items: end;
-  padding-top: clamp(32px, 5vw, 80px);
+  padding-top: var(--gap-l);
 }
 
+// The index numeral is printed in a pale pass of the talk's door colour.
 .big-n {
-  font-size: clamp(96px, 14vw, 240px);
-  color: var(--line-2);
+  font-size: var(--fs-num-xl);
+  color: color-mix(in srgb, var(--door-c) 24%, var(--paper));
   line-height: 0.8;
 }
 
@@ -124,12 +138,11 @@ watch(
 }
 
 .title {
-  font-size: clamp(40px, 6vw, 104px);
   max-width: 11em;
 }
 
 .subtitle {
-  font-size: clamp(22px, 2.4vw, 36px);
+  font-size: var(--fs-sub);
   color: var(--mute);
   line-height: 1.15;
 }
@@ -138,8 +151,8 @@ watch(
   display: grid;
   grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
   column-gap: clamp(16px, 2vw, 32px);
-  padding-block: clamp(48px, 6vw, 96px) var(--band);
-  margin-top: clamp(32px, 4vw, 64px);
+  padding-block: var(--gap-l) var(--band);
+  margin-top: var(--gap-l);
   border-top: 1px solid var(--line);
 }
 
@@ -197,7 +210,7 @@ watch(
     text-wrap: pretty;
 
     .mono {
-      color: var(--signal);
+      color: var(--turq-deep);
       padding-top: 5px;
     }
   }
@@ -226,13 +239,13 @@ watch(
     }
 
     .pg-t {
-      font-size: clamp(20px, 2vw, 30px);
+      font-size: var(--fs-title);
       font-weight: 380;
       letter-spacing: -0.03em;
     }
 
     &:hover {
-      color: var(--signal);
+      color: var(--turq-deep);
     }
   }
 }

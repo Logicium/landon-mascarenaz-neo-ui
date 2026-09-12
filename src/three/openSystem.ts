@@ -4,20 +4,25 @@
 //  A closed system: a few thousand points on a sphere, each tied
 //  to its nearest neighbours by a hairline. As the page scrolls
 //  the sphere opens. Points lift off the surface in slow bands,
-//  the ties stretch and thin, and a handful of signal-blue nodes
-//  carry the eye. Pointer position tilts the whole thing a few
+//  the ties stretch and thin, and a handful of clay nodes
+//  carry the eye. Inside the net sits one flat clay disc, a sun
+//  printed as a single ink pass and locked to the sphere's centre,
+//  so opening reads as the cage lifting away from a solid core.
+//  A hairline orbit crosses the type. Pointer position tilts the whole thing a few
 //  degrees. Nothing spins fast, nothing glows.
 // =============================================================
 
 import {
-  AdditiveBlending,
   BufferAttribute,
   BufferGeometry,
+  CircleGeometry,
   Color,
   Group,
   LineBasicMaterial,
   LineLoop,
   LineSegments,
+  Mesh,
+  MeshBasicMaterial,
   NormalBlending,
   PerspectiveCamera,
   Points,
@@ -26,8 +31,12 @@ import {
   WebGLRenderer,
 } from 'three'
 
-const INK = new Color('#121212')
-const SIGNAL = new Color('#2640ff')
+// The points and the orbit are gem turquoise, the way the stone reads in
+// daylight; the ties and the anchor nodes are the deeper turquoise of its
+// shadow. The sun alone is clay.
+const NET = new Color('#127a78')
+const GEM = new Color('#1fb1b3')
+const CLAY = new Color('#b4401f')
 
 const COUNT = 2600
 const NEIGHBOURS = 2
@@ -77,7 +86,7 @@ void main() {
   float big = step(0.978, vSeed);
   vec3 col = mix(uInk, uSignal, big);
   float depth = smoothstep(5.4, 2.3, vZ);
-  float alpha = a * mix(0.22, 0.85, depth) * mix(0.6, 1.0, big) * uAlpha;
+  float alpha = a * mix(0.3, 0.95, depth) * mix(0.7, 1.0, big) * uAlpha;
   gl_FragColor = vec4(col, alpha);
 }
 `
@@ -94,14 +103,14 @@ void main() {
 `
 
 const LINE_FRAG = /* glsl */ `
-uniform vec3 uInk;
+uniform vec3 uLine;
 uniform float uAlpha;
 uniform float uOpen;
 varying float vZ;
 void main() {
   float depth = smoothstep(5.4, 2.3, vZ);
-  float alpha = mix(0.06, 0.2, depth) * (1.0 - uOpen * 0.55) * uAlpha;
-  gl_FragColor = vec4(uInk, alpha);
+  float alpha = mix(0.1, 0.3, depth) * (1.0 - uOpen * 0.55) * uAlpha;
+  gl_FragColor = vec4(uLine, alpha);
 }
 `
 
@@ -167,6 +176,8 @@ export class OpenSystemScene {
   private points: Points
   private lines: LineSegments
   private ring: LineLoop
+  private sun: Mesh
+  private sunScale = 1
   private uniforms: Record<string, { value: number | Color }>
   private raf = 0
   private start = performance.now()
@@ -203,8 +214,9 @@ export class OpenSystemScene {
       uReveal: { value: 0 },
       uAlpha: { value: 1 },
       uPixel: { value: this.renderer.getPixelRatio() },
-      uInk: { value: INK },
-      uSignal: { value: SIGNAL },
+      uInk: { value: GEM },
+      uSignal: { value: NET },
+      uLine: { value: NET },
     }
 
     const pGeo = new BufferGeometry()
@@ -256,12 +268,25 @@ export class OpenSystemScene {
     }
     const rGeo = new BufferGeometry()
     rGeo.setAttribute('position', new BufferAttribute(ringPos, 3))
-    this.ring = new LineLoop(rGeo, new LineBasicMaterial({ color: INK, transparent: true, opacity: 0.22, blending: AdditiveBlending, depthTest: false }))
+    this.ring = new LineLoop(rGeo, new LineBasicMaterial({ color: GEM, transparent: true, opacity: 0.55, blending: NormalBlending, depthTest: false }))
     this.ring.rotation.x = 1.15
     this.ring.rotation.z = 0.35
 
+    // The sun. A flat disc that faces the camera and shares the sphere's
+    // centre, drawn first so every point and tie prints over it. It lives
+    // outside the group so the group's tilt never turns it into an ellipse,
+    // and it is smaller than the closed sphere so it sits inside the net.
+    this.sun = new Mesh(
+      new CircleGeometry(1, 96),
+      new MeshBasicMaterial({ color: CLAY, transparent: true, opacity: 0, depthWrite: false, depthTest: false }),
+    )
+    this.sun.renderOrder = -1
+    this.lines.renderOrder = 1
+    this.points.renderOrder = 2
+    this.ring.renderOrder = 1
+
     this.group.add(this.lines, this.points, this.ring)
-    this.scene.add(this.group)
+    this.scene.add(this.sun, this.group)
 
     this.ro = new ResizeObserver(() => this.resize())
     this.ro.observe(this.host)
@@ -274,6 +299,8 @@ export class OpenSystemScene {
       this.uniforms.uReveal!.value = 1
       this.uniforms.uOpen!.value = 0.35
       this.uniforms.uTime!.value = 4
+      this.sun.scale.setScalar(this.sunScale)
+      ;(this.sun.material as MeshBasicMaterial).opacity = 1
       this.renderer.render(this.scene, this.camera)
     } else {
       this.syncLoop()
@@ -323,19 +350,27 @@ export class OpenSystemScene {
     this.camera.aspect = w / h
     this.camera.updateProjectionMatrix()
     const wide = w / h > 1.1
-    this.group.position.x = wide ? 1.0 : 0.3
-    this.group.position.y = wide ? 0.6 : 0.72
+    // Wide: upper right, beside the headline. Narrow: tucked into the top
+    // right corner and cropped by the edge, above the headline.
+    this.group.position.x = wide ? 1.0 : 0.58
+    this.group.position.y = wide ? 0.6 : 0.98
     this.group.scale.setScalar(wide ? 0.64 : 0.55)
+    // The sun sits inside the closed sphere. As the page scrolls and the
+    // net opens, the points lift off its edge.
+    this.sun.position.copy(this.group.position)
+    this.sunScale = (wide ? 0.64 : 0.55) * 0.74
     // The orbit stays wide so its arc still crosses the headline.
     this.ring.scale.setScalar(wide ? 1.5 : 1.15)
-    // On a phone the sphere sits behind the headline, so it steps back.
-    this.presence = wide ? 1 : 0.55
+    // On a phone part of the net crosses the headline, so it steps back.
+    this.presence = wide ? 1 : 0.7
     if (this.reduced) this.renderOnce()
   }
 
   private renderOnce() {
     this.uniforms.uOpen!.value = this.openTarget
     this.uniforms.uAlpha!.value = this.alphaTarget * this.presence
+    this.sun.scale.setScalar(this.sunScale)
+    ;(this.sun.material as MeshBasicMaterial).opacity = this.alphaTarget
     this.renderer.render(this.scene, this.camera)
   }
 
@@ -358,7 +393,13 @@ export class OpenSystemScene {
     this.group.rotation.y = t * 0.045 + this.tilt.y
     this.group.rotation.x = this.tilt.x + 0.12
     this.ring.rotation.y = t * 0.05
-    ;(this.ring.material as LineBasicMaterial).opacity = 0.22 * this.reveal * this.alpha
+    ;(this.ring.material as LineBasicMaterial).opacity = 0.55 * this.reveal * this.alpha
+
+    // The sun grows in with the sphere and fades out with the scroll, but
+    // ignores the pointer tilt so it always reads as a flat printed disc.
+    const ease = 1 - Math.pow(1 - this.reveal, 3)
+    this.sun.scale.setScalar(this.sunScale * ease)
+    ;(this.sun.material as MeshBasicMaterial).opacity = ease * (this.alpha / Math.max(this.presence, 0.01))
 
     this.camera.position.z = 3.4 + this.open * 0.35
 
@@ -375,6 +416,8 @@ export class OpenSystemScene {
     ;(this.lines.material as ShaderMaterial).dispose()
     this.ring.geometry.dispose()
     ;(this.ring.material as LineBasicMaterial).dispose()
+    this.sun.geometry.dispose()
+    ;(this.sun.material as MeshBasicMaterial).dispose()
     this.renderer.dispose()
   }
 }
