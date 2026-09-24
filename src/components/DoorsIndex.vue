@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { doors } from '@/data/site'
+import { doors, valuesFor, valuesStatement } from '@/data/site'
 
 // Three doors into one body of work. The left column pins a large index
 // numeral that ticks over as each door scrolls through the middle of the
@@ -42,8 +42,10 @@ onBeforeUnmount(() => io?.disconnect())
           <li v-for="(d, i) in doors" :key="d.n" :class="{ on: i === active }">
             <span class="mono">{{ d.n }}</span>
             <span class="mini-t">{{ d.short }}</span>
+            <span class="mini-v serif">{{ valuesFor(i).map((v) => v.word).join(' & ') }}</span>
           </li>
         </ol>
+        <p class="serif pin-statement" v-reveal>{{ valuesStatement }}</p>
       </aside>
 
       <div class="list">
@@ -70,6 +72,12 @@ onBeforeUnmount(() => io?.disconnect())
           <ul class="aud">
             <li v-for="a in d.audiences" :key="a" class="mono">{{ a }}</li>
           </ul>
+          <dl class="held">
+            <div v-for="v in valuesFor(i)" :key="v.word" :class="{ shared: v.shared }">
+              <dt>{{ v.word }}</dt>
+              <dd>{{ v.body }}</dd>
+            </div>
+          </dl>
         </article>
       </div>
     </div>
@@ -142,6 +150,15 @@ onBeforeUnmount(() => io?.disconnect())
   max-width: 24em;
 }
 
+.pin-statement {
+  font-size: var(--fs-title);
+  line-height: 1.3;
+  color: var(--ink-2);
+  max-width: 22em;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
 .mini {
   display: flex;
   flex-direction: column;
@@ -153,6 +170,18 @@ onBeforeUnmount(() => io?.disconnect())
     align-items: baseline;
     color: var(--faint);
     transition: color 0.4s var(--ease-out);
+
+    .mini-v {
+      margin-left: auto;
+      font-size: 15px;
+      opacity: 0;
+      transition: opacity 0.4s var(--ease-out);
+    }
+
+    &.on .mini-v {
+      opacity: 1;
+      color: var(--clay);
+    }
 
     .mini-t {
       font-size: 13.5px;
@@ -270,6 +299,42 @@ onBeforeUnmount(() => io?.disconnect())
   &.on .aud li::before {
     background: var(--clay);
   }
+
+  // The two values behind the door, set as a pair of hairline columns.
+  .held {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(20px, 2.4vw, 40px);
+    margin-top: 18px;
+    border-top: 1px solid var(--line);
+
+    div {
+      padding-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    dt {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: var(--fs-sub);
+      line-height: 1;
+      letter-spacing: -0.01em;
+    }
+
+    .shared dt {
+      color: var(--clay);
+    }
+
+    dd {
+      font-size: 14.5px;
+      line-height: 1.5;
+      color: var(--mute);
+      max-width: 26em;
+      text-wrap: pretty;
+    }
+  }
 }
 
 @media (hover: hover) {
@@ -288,8 +353,13 @@ onBeforeUnmount(() => io?.disconnect())
     position: static;
   }
 
-  .mini {
+  .mini,
+  .pin-statement {
     display: none;
+  }
+
+  .door .held {
+    grid-template-columns: 1fr;
   }
 }
 </style>

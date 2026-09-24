@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { site, talks, testimonials, watch } from '@/data/site'
+
+// A clip stays a poster until it is asked for; only then does the YouTube
+// player load, on the privacy-enhanced domain.
+const playing = ref<string | null>(null)
 
 onMounted(() => {
   document.title = `Talks · ${site.name}`
@@ -62,8 +66,24 @@ onMounted(() => {
       </div>
 
       <div class="frames">
-        <figure v-for="(w, i) in watch" :key="w.label" class="film" v-reveal :style="{ '--reveal-delay': `${i * 90}ms` }">
-          <div class="slot film-slot">
+        <figure v-for="(w, i) in watch" :key="w.label" class="film" :class="{ live: !!w.youtube }" v-reveal :style="{ '--reveal-delay': `${i * 90}ms` }">
+          <div v-if="w.youtube && playing === w.youtube" class="film-frame">
+            <iframe
+              :src="`https://www.youtube-nocookie.com/embed/${w.youtube}?autoplay=1&rel=0`"
+              :title="w.label"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+            ></iframe>
+          </div>
+          <button v-else-if="w.youtube" type="button" class="film-frame film-poster tone" :aria-label="`Play ${w.label}`" @click="playing = w.youtube ?? null">
+            <picture>
+              <source :srcset="`/img/${w.poster}-c.avif`" type="image/avif" />
+              <img :src="`/img/${w.poster}-c.jpg`" :alt="w.label" loading="lazy" />
+            </picture>
+            <span class="play" aria-hidden="true"></span>
+          </button>
+          <div v-else class="slot film-slot">
             <span class="play" aria-hidden="true"></span>
             <span class="slot-tag">Video 16:9</span>
           </div>
@@ -275,6 +295,55 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 14px;
+
+  .film-frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--ink);
+
+    iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+  }
+
+  .film-poster {
+    width: 100%;
+    display: block;
+    cursor: pointer;
+
+    picture,
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 30%;
+    }
+
+    img {
+      transform: scale(1.03);
+      transition: transform 1.1s var(--ease-out);
+    }
+
+    .play {
+      border-color: var(--paper);
+      background: rgba(20, 16, 12, 0.35);
+      backdrop-filter: blur(6px);
+
+      &::after {
+        border-left-color: var(--paper);
+      }
+    }
+  }
+
+  &.live:hover .film-poster img {
+    transform: scale(1);
+  }
 
   .film-slot {
     aspect-ratio: 16 / 9;
