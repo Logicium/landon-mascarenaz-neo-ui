@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import SourceList from '@/components/SourceList.vue'
 import { useHorizontal } from '@/composables/useHorizontal'
-import { openSystem, person, planners, record, site, sourceById, sourceIndex, stats, timeline } from '@/data/site'
+import { honors, openSystem, person, planners, record, site, sourceById, sourceIndex, stats, timeline, values, valuesStatement } from '@/data/site'
 
 // The timeline runs sideways: a tall wrapper keeps it pinned while the
 // track slides left, and the big year reads out whichever entry is nearest.
@@ -57,6 +57,37 @@ onMounted(() => {
           </p>
           <p>{{ openSystem.pull }}</p>
         </div>
+      </div>
+    </section>
+
+    <section class="frame vals">
+      <div class="bio-grid">
+        <div class="tl-side">
+          <span class="mono">Values</span>
+          <span class="mono tl-note">Six words, in his own wording</span>
+        </div>
+        <div class="vals-main">
+          <p class="serif vals-statement" v-reveal>{{ valuesStatement }}</p>
+          <dl class="vals-grid" v-reveal>
+            <div v-for="v in values" :key="v.word" :class="{ shared: v.shared }">
+              <dt>{{ v.word }}</dt>
+              <dd>{{ v.body }}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="frame hon">
+      <div class="bio-grid">
+        <span class="mono">Honors</span>
+        <ul class="honors" v-reveal>
+          <li v-for="[org, what, src] in honors" :key="org">
+            <span class="hon-org">{{ org }}</span>
+            <span class="hon-what">{{ what }}</span>
+            <a :href="srcUrl(src)" target="_blank" rel="noopener noreferrer" class="mono ext" :title="srcTitle(src)">{{ sourceById(src)?.outlet }}</a>
+          </li>
+        </ul>
       </div>
     </section>
 
@@ -239,8 +270,116 @@ onMounted(() => {
   line-height: 1.6;
 }
 
+.vals,
+.hon,
 .nums {
   padding-top: var(--band);
+}
+
+.vals-main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-l);
+}
+
+.vals-statement {
+  font-size: var(--fs-sub);
+  line-height: 1.25;
+  color: var(--ink);
+  max-width: 26em;
+  text-wrap: pretty;
+}
+
+// Two rows of three. A dot pattern sits behind the sheet, the net from the
+// hero seen from very far away; the three shared values carry a clay mark.
+.vals-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: radial-gradient(circle, var(--line-2) 0.8px, transparent 1.2px);
+    background-size: 14px 14px;
+    opacity: 0.5;
+    mask-image: linear-gradient(160deg, #000 10%, transparent 80%);
+    -webkit-mask-image: linear-gradient(160deg, #000 10%, transparent 80%);
+  }
+
+  div {
+    position: relative;
+    padding: 24px 24px 32px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 220px;
+  }
+
+  dt {
+    font-size: var(--fs-sub);
+    font-weight: 360;
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+    padding-right: 24px;
+  }
+
+  .shared dt {
+    color: var(--clay);
+  }
+
+  .shared::after {
+    content: '';
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 9px;
+    height: 9px;
+    background: var(--clay);
+  }
+
+  dd {
+    margin-top: auto;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+}
+
+.honors {
+  border-top: 1px solid var(--line);
+  max-width: 52em;
+
+  li {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 5fr) minmax(0, 3fr);
+    gap: 16px;
+    padding-block: 16px;
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
+  }
+
+  .hon-org {
+    font-size: 17px;
+    font-weight: 450;
+    letter-spacing: -0.015em;
+  }
+
+  .hon-what {
+    font-size: 15px;
+    color: var(--ink-2);
+  }
+
+  .ext {
+    justify-self: end;
+  }
 }
 
 .stat-grid {
@@ -501,6 +640,19 @@ onMounted(() => {
 
     .stat:nth-child(3) {
       padding-left: 0;
+    }
+  }
+
+  .vals-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .honors li {
+    grid-template-columns: 1fr;
+    gap: 4px;
+
+    .ext {
+      justify-self: start;
     }
   }
 

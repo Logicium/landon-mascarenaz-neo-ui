@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import HeroScene from '@/components/HeroScene.vue'
-import { clients, doors, hero, openSystem, said, site, sourceById, stats, talks } from '@/data/site'
+import { clients, doors, hero, honors, openSystem, said, site, sourceById, stats, talks, values, valuesFor } from '@/data/site'
 import { useStack } from '@/composables/useStack'
 import { useHorizontal } from '@/composables/useHorizontal'
 import { useSteps } from '@/composables/useSteps'
@@ -155,7 +155,12 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
                   </picture>
                 </transition>
               </div>
-              <span class="mono plate-cap">Three doors into one body of work</span>
+              <transition name="cap" mode="out-in">
+                <span :key="door.n" class="plate-cap">
+                  <span class="mono">Held by</span>
+                  <span class="serif plate-vals">{{ valuesFor(doorIndex).map((v) => v.word).join(' & ') }}</span>
+                </span>
+              </transition>
             </div>
           </div>
           <div class="spread-foot">
@@ -245,6 +250,14 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
                 <span class="stat-l">{{ l }}</span>
               </div>
             </div>
+            <ul class="honor-row">
+              <li v-for="[org, what, src] in honors" :key="org">
+                <a :href="sourceById(src)?.url" target="_blank" rel="noopener noreferrer" class="honor">
+                  <span class="honor-org">{{ org }}</span>
+                  <span class="mono">{{ what }}</span>
+                </a>
+              </li>
+            </ul>
           </div>
           <div class="spread-foot">
             <router-link to="/about" class="btn ghost">
@@ -324,6 +337,9 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
           <div class="person-copy" v-reveal>
             <p class="subheading">A first-grade teacher on the Navajo Nation who went on to chair the board of a thirteen-college system, direct a sixty-district rural talent initiative, and found a statewide civic coalition.</p>
             <p class="lede">Born in California, raised in Littleton, Colorado, with family roots in Colorado and New Mexico that run back generations. He lives in Denver and keeps an office in Trinidad.</p>
+            <ul class="words" aria-label="Values">
+              <li v-for="v in values" :key="v.word" :class="{ shared: v.shared }">{{ v.word }}</li>
+            </ul>
             <router-link to="/about" class="btn ghost">
               About Landon
               <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg>
@@ -890,6 +906,15 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
 
   .plate-cap {
     align-self: flex-start;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+
+    .plate-vals {
+      font-size: var(--fs-title);
+      color: var(--clay);
+      line-height: 1;
+    }
   }
 }
 
@@ -1097,13 +1122,51 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
 
 // The record
 .rec-body {
-  grid-template-rows: auto auto auto;
+  grid-template-rows: auto auto auto auto;
   align-content: center;
-  row-gap: clamp(20px, 3vh, 40px);
+  row-gap: clamp(16px, 2.6vh, 36px);
 }
 
 .rec-lede {
   max-width: 30em;
+}
+
+// Honors under the figures: the same four columns, hairline, small.
+.honor-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+
+  li {
+    border-right: 1px solid var(--line);
+    padding: 14px 24px 4px 0;
+
+    &:not(:first-child) {
+      padding-left: 24px;
+    }
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+
+  .honor {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--ink);
+    transition: color 0.35s var(--ease-out);
+
+    .honor-org {
+      font-size: 14px;
+      font-weight: 450;
+      letter-spacing: -0.01em;
+    }
+
+    &:hover {
+      color: var(--clay);
+    }
+  }
 }
 
 .stat-row {
@@ -1359,6 +1422,37 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
   }
 }
 
+// Six words he works by. The three he and his collaborators agreed on
+// first are set in clay; the rest in ink.
+.words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 0;
+  width: 100%;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-title);
+  font-weight: 380;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+
+  li {
+    padding-right: 22px;
+    margin-right: 22px;
+    border-right: 1px solid var(--line);
+
+    &:last-child {
+      border-right: 0;
+      margin-right: 0;
+      padding-right: 0;
+    }
+
+    &.shared {
+      color: var(--clay);
+    }
+  }
+}
+
 // ---------- contact ----------
 .contact {
   background: var(--ink);
@@ -1509,6 +1603,18 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
   .book-cover picture {
     height: auto;
     width: min(100%, 260px);
+  }
+
+  .honor-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    li:nth-child(2) {
+      border-right: 0;
+    }
+
+    li:nth-child(3) {
+      padding-left: 0;
+    }
   }
 
   .stat-row {

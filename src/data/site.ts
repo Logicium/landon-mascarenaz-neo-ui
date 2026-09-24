@@ -138,6 +138,69 @@ export const sources: Source[] = [
     date: '',
     url: 'https://www.linkedin.com/in/landonmascarenaz',
   },
+  {
+    id: 'obama',
+    title: 'USA Leaders 2026–2027: Landon Mascareñaz',
+    outlet: 'Obama Foundation',
+    date: '2026',
+    url: 'https://www.obama.org/programs/leaders/usa/2026-2027/landon-mascarenaz/',
+  },
+  {
+    id: 'cllaro',
+    title: 'Roger Cisneros Public Policy Award, 31st Bernie Valdez Awards',
+    outlet: 'Open Hearts & Open Democracy',
+    date: 'Sep 2026',
+    url: 'https://openheartsopendemocracy.substack.com/p/wednesday-september-16',
+  },
+  {
+    id: 'lion',
+    title: 'Executive Leadership Academy, faculty',
+    outlet: 'Leadership Institute of Nevada',
+    date: '',
+    url: 'https://www.lionv.org/executive-leadership-academy',
+  },
+  {
+    id: 'amacad',
+    title: 'Our Common Purpose',
+    outlet: 'American Academy of Arts & Sciences',
+    date: '',
+    url: 'https://www.amacad.org/ourcommonpurpose',
+  },
+]
+
+// ---------- values ----------
+// Six words, in Landon's own wording. The three he and Joze both landed on
+// (truth, stewardship, abundance) carry `shared`, and each pair lives
+// behind one of the three doors.
+
+export interface Value {
+  word: string
+  body: string
+  shared: boolean
+  door: number
+}
+
+export const values: Value[] = [
+  { word: 'Openness', body: 'Keep your heart, mind, and path open. Seek perspectives that challenge you. Hold strong convictions while remaining open to new possibilities.', shared: false, door: 1 },
+  { word: 'Truth', body: 'Begin with shared reality. Face what is true, test assumptions, and pursue clarity, even when it complicates the story you want to tell.', shared: true, door: 1 },
+  { word: 'Agency', body: 'Shape what comes next. Give people the freedom and responsibility to choose, create, contribute, and build, not simply participate in someone else’s vision.', shared: false, door: 0 },
+  { word: 'Courage', body: 'Move toward the breakthrough. Question inherited assumptions, cross boundaries, enter difficult conversations, and create what does not yet exist.', shared: false, door: 0 },
+  { word: 'Abundance', body: 'Believe more is possible together. Share ideas, relationships, platforms, and opportunities. Build partnerships that make everyone more capable.', shared: true, door: 2 },
+  { word: 'Stewardship', body: 'Leave things more open than you found them. Use influence responsibly, lift up others, strengthen communities, and create opportunity for what comes next.', shared: true, door: 2 },
+]
+
+export const valuesFor = (door: number) => values.filter((v) => v.door === door)
+
+// DRAFT for Landon and Joze to sign off. Built from the three shared values.
+export const valuesStatement =
+  'Begin with what is true. Leave things more open than you found them. Believe more is possible together than alone. Truth, stewardship and abundance hold the rest of the work in place: they are what a listening tour, a rebuilt strategic plan and a cross-partisan coalition have in common.'
+
+// Honors and appointments, each with its record.
+export const honors: [string, string, string][] = [
+  ['Obama Foundation', 'USA Leader, 2026 to 2027 cohort', 'obama'],
+  ['CLLARO', 'Roger Cisneros Public Policy Award, 2026', 'cllaro'],
+  ['American Academy of Arts & Sciences', 'Our Common Purpose council', 'amacad'],
+  ['Leadership Institute of Nevada', 'Executive Leadership Academy faculty', 'lion'],
 ]
 
 export const sourceById = (id: string) => sources.find((s) => s.id === id)
@@ -173,8 +236,8 @@ export const doors: Door[] = [
     body: 'Representation, belonging, and what a leader actually does with a seat once they have one. From a Mexican-American leader whose family roots run through Colorado and New Mexico for generations.',
     audiences: ['Latino organizations', 'Universities & HSIs', 'Fellowship cohorts'],
     hue: 'var(--clay)',
-    image: 'speaking',
-    imageAlt: 'Landon Mascareñaz speaking to a room, mid-sentence, hands open.',
+    image: 'cafe',
+    imageAlt: 'Landon Mascareñaz at a café table by a winter window, looking out at the street.',
   },
   {
     n: '02',
@@ -328,7 +391,7 @@ export const talks: Talk[] = [
     level: 'All levels',
     formats: 'Keynote · Fireside · Workshop',
     door: 0,
-    image: 'speaking',
+    image: 'keynote',
     outcomes: [
       'Diagnose whether their organization is currently open or closed to the people it serves.',
       'Distinguish consultation that gathers input from participation that changes decisions.',
@@ -370,8 +433,15 @@ export const said = {
   source: 'unite',
 }
 
-export const watch = [
-  { label: 'Full keynote', note: '20 to 45 min, named event' },
+export interface Clip {
+  label: string
+  note: string
+  youtube?: string
+  poster?: string
+}
+
+export const watch: Clip[] = [
+  { label: 'Keynote opening', note: 'Association of Latino Administrators and Superintendents', youtube: 'Bb-JZpJJRbE', poster: 'keynote' },
   { label: 'Panel moderation', note: 'Named event' },
   { label: 'Fireside / interview', note: 'Named event' },
 ]
@@ -406,6 +476,10 @@ export const person = {
       text: 'In the summer of 2025, after a listening tour through roughly twenty Colorado communities, he founded Courageous Colorado, a nonpartisan effort to open the state’s primaries and rebuild civic trust. Its coalition now numbers close to thirty organizations from the left, right and center.',
       cites: ['copolitics', 'unite'],
     },
+    {
+      text: 'In 2026 he was named an Obama Foundation USA Leader and received CLLARO’s Roger Cisneros Public Policy Award at the 31st Bernie Valdez Awards. He serves on the Our Common Purpose council at the American Academy of Arts and Sciences and teaches on the faculty of the Executive Leadership Academy at the Leadership Institute of Nevada.',
+      cites: ['obama', 'cllaro', 'amacad', 'lion'],
+    },
   ] as Paragraph[],
 }
 
@@ -429,9 +503,13 @@ export const timeline: Milestone[] = [
   { year: '2023', text: 'The Open System is published by Harvard Education Press. Elected chair of the State Board, succeeding Rollie Heath.', source: 'cccs-chair' },
   { year: '2025', text: 'Founds Courageous Colorado after a spring listening tour of roughly twenty communities. Launches a statewide activation tour in October.', source: 'copolitics' },
   { year: '2026', text: 'The coalition to open Colorado’s primaries reaches close to thirty organizations across the political spectrum.', source: 'unite' },
+  { year: '2026', text: 'Named an Obama Foundation USA Leader, 2026 to 2027 cohort, for the statewide engagement work behind Courageous Colorado.', source: 'obama' },
+  { year: '2026', text: 'Receives CLLARO’s Roger Cisneros Public Policy Award at the 31st Annual Bernie Valdez Awards in September.', source: 'cllaro' },
 ]
 
 export const record: [string, string, string][] = [
+  ['2026', 'Obama Foundation USA Leader, 2026 to 2027 cohort', 'obama'],
+  ['2026', 'Roger Cisneros Public Policy Award, CLLARO Bernie Valdez Awards', 'cllaro'],
   ['2026', 'Unite America: building a Colorado-first coalition for reform', 'unite'],
   ['2025', 'Q&A, Colorado Politics: bringing bravery back to politics', 'copolitics'],
   ['2025', 'Colorado Mountain College Hispanic Serving Institution Summit, opening panel', ''],
@@ -443,7 +521,8 @@ export const record: [string, string, string][] = [
   ['TV', 'Next with Kyle Clark · Real Talk with Micah Smith · 9News', ''],
   ['Podcast', 'Future Hindsight · New Books Network · Ethical Schools · Wisconsin Public Radio', 'wpr'],
   ['Fellow', 'Pahara Institute · Flamboyan Family Engagement Fellowship', 'pahara'],
-  ['Faculty', 'Leadership Institute of Nevada, Executive Leadership Program', ''],
+  ['Council', 'Our Common Purpose, American Academy of Arts & Sciences', 'amacad'],
+  ['Faculty', 'Executive Leadership Academy, Leadership Institute of Nevada', 'lion'],
 ]
 
 export const stats: [string, string, string][] = [
