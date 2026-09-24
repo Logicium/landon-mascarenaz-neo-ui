@@ -9,7 +9,7 @@ const year = new Date().getFullYear()
       <div class="foot">
         <div class="col">
           <span class="mono">Represented by</span>
-          <span class="val">{{ site.agency }}</span>
+          <a :href="site.agencyUrl" class="val link-line" target="_blank" rel="noopener">{{ site.agency }}</a>
         </div>
         <div class="col">
           <span class="mono">Bookings</span>

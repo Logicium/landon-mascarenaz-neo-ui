@@ -15,6 +15,8 @@ export const site = {
   email: 'bookings@openfutures.example',
   emailLabel: 'bookings@openfutures',
   agency: 'Open Futures',
+  // The agency site. Domain pending; the brief signs as openfutures.co.
+  agencyUrl: 'https://openfutures.co',
 }
 
 export const hero = {

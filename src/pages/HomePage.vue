@@ -364,7 +364,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
               <li><span class="mono">Travels from</span><span>{{ site.travelsFrom }}</span></li>
               <li><span class="mono">Virtual</span><span>Available, 30 to 45 minutes</span></li>
               <li><span class="mono">Recording</span><span>Permitted, on demand</span></li>
-              <li><span class="mono">Represented by</span><span>{{ site.agency }}</span></li>
+              <li><span class="mono">Represented by</span><a :href="site.agencyUrl" target="_blank" rel="noopener">{{ site.agency }}</a></li>
             </ul>
             <router-link :to="{ path: '/about', hash: '#planners' }" class="mono ext">Everything a committee will ask</router-link>
           </div>
