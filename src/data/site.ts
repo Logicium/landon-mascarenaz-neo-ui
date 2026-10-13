@@ -12,11 +12,10 @@ export const site = {
     'Fmr. Chair, Colorado State Board for Community Colleges and Occupational Education',
   ],
   travelsFrom: 'Denver, Colorado',
-  email: 'bookings@openfutures.example',
-  emailLabel: 'bookings@openfutures',
+  email: 'bookings@openfuturesagency.com',
+  emailLabel: 'bookings@openfuturesagency.com',
   agency: 'Open Futures',
-  // The agency site. Domain pending; the brief signs as openfutures.co.
-  agencyUrl: 'https://openfutures.co',
+  agencyUrl: 'https://openfuturesagency.com',
   substack: {
     label: 'Open Hearts & Open Democracy',
     url: 'https://openheartsopendemocracy.substack.com',
