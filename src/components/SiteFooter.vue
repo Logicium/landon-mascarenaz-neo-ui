@@ -49,7 +49,7 @@ const year = new Date().getFullYear()
   gap: 6px;
 
   .val {
-    font-size: 14px;
+    font-size: var(--fs-small);
     color: var(--ink);
   }
 

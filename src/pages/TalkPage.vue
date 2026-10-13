@@ -80,8 +80,11 @@ watch(
             <figcaption>
               <span class="mono">In the press</span>
               <span class="press-t">{{ article.title }}</span>
-              <span class="mono ext">{{ article.outlet }}<template v-if="article.date"> · {{ article.date }}</template></span>
+              <span class="press-m">{{ article.outlet }}<template v-if="article.date">, {{ article.date }}</template></span>
             </figcaption>
+            <span class="src-go" aria-hidden="true">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 12 12 2M4 2h8v8" /></svg>
+            </span>
           </a>
         </figure>
         <figure v-else class="slot still" v-reveal>
@@ -190,7 +193,7 @@ watch(
       gap: 4px;
       padding-block: 12px;
       border-bottom: 1px solid var(--line);
-      font-size: 14px;
+      font-size: var(--fs-small);
     }
   }
 }
@@ -220,7 +223,7 @@ watch(
     gap: 16px;
     padding-block: 16px;
     border-bottom: 1px solid var(--line);
-    font-size: clamp(16px, 1.25vw, 19px);
+    font-size: var(--fs-lede);
     line-height: 1.5;
     color: var(--ink-2);
     text-wrap: pretty;
@@ -236,12 +239,12 @@ watch(
   aspect-ratio: 3 / 2;
 }
 
-// The article that covers this session's ground, as a page capture.
+// The article that covers this session's ground: the capture full width,
+// the caption beneath it in one line.
 .press-link {
-  display: grid;
-  grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
-  column-gap: clamp(20px, 2.4vw, 40px);
-  align-items: end;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
   padding-top: 22px;
   border-top: 1px solid var(--line);
 }
@@ -249,45 +252,49 @@ watch(
 .press-img {
   display: block;
   aspect-ratio: 3 / 2;
-  overflow: hidden;
 
   picture,
   img {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: top;
-  }
-
-  img {
-    transform: scale(1.03);
-    transition: transform 1.1s var(--ease-out);
   }
 }
 
 .press figcaption {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding-bottom: 6px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  column-gap: clamp(16px, 2vw, 32px);
+  align-items: baseline;
 
   .press-t {
-    font-size: var(--fs-title);
-    font-weight: 380;
-    letter-spacing: -0.02em;
-    line-height: 1.15;
+    font-size: var(--fs-body-lg);
+    font-weight: 450;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
     text-wrap: pretty;
+  }
+
+  .press-m {
+    font-size: var(--fs-small);
+    color: var(--mute);
+    white-space: nowrap;
   }
 }
 
-.press-link:hover {
-  .press-img img {
-    transform: scale(1);
-  }
+.press .src-go {
+  display: none;
+}
 
-  .ext {
-    color: var(--turq-deep);
+.press-link:hover {
+  .src-go {
+    background: var(--turq-deep);
+    color: var(--paper);
+    box-shadow: inset 0 0 0 1px var(--turq-deep);
+
+    svg {
+      transform: translate(1px, -1px);
+    }
   }
 }
 
@@ -333,9 +340,9 @@ watch(
     position: static;
   }
 
-  .press-link {
+  .press figcaption {
     grid-template-columns: 1fr;
-    row-gap: 16px;
+    row-gap: 6px;
   }
 
   .big-n {

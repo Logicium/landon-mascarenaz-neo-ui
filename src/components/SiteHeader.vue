@@ -5,9 +5,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const scrolled = ref(false)
 const hidden = ref(false)
-const clock = ref('')
 let lastY = 0
-let timer = 0
 
 const onScroll = () => {
   const y = window.scrollY
@@ -17,24 +15,13 @@ const onScroll = () => {
   lastY = y
 }
 
-const tick = () => {
-  clock.value = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/Denver',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  }).format(new Date())
-}
 
 onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true })
   onScroll()
-  tick()
-  timer = window.setInterval(tick, 15000)
 })
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll)
-  window.clearInterval(timer)
 })
 
 const home = (hash: string) => (route.name === 'home' ? { hash } : { name: 'home', hash })
@@ -56,7 +43,6 @@ const home = (hash: string) => (route.name === 'home' ? { hash } : { name: 'home
       </nav>
 
       <div class="right">
-        <span class="mono clock">Denver <span class="t">{{ clock }}</span></span>
         <router-link :to="home('#contact')" class="btn small">Request availability</router-link>
       </div>
     </div>
@@ -114,7 +100,7 @@ const home = (hash: string) => (route.name === 'home' ? { hash } : { name: 'home
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
+  font-size: var(--fs-small);
   font-weight: 500;
   letter-spacing: -0.012em;
   justify-self: start;
@@ -147,7 +133,7 @@ const home = (hash: string) => (route.name === 'home' ? { hash } : { name: 'home
 .nav {
   display: flex;
   gap: clamp(18px, 2.6vw, 40px);
-  font-size: 13.5px;
+  font-size: var(--fs-small);
   font-weight: 450;
   color: var(--mute);
 
@@ -187,13 +173,6 @@ const home = (hash: string) => (route.name === 'home' ? { hash } : { name: 'home
   gap: 22px;
 }
 
-.clock {
-  color: var(--mute);
-
-  .t {
-    color: var(--ink);
-  }
-}
 
 .btn.small {
   height: 38px;
@@ -206,8 +185,7 @@ const home = (hash: string) => (route.name === 'home' ? { hash } : { name: 'home
     grid-template-columns: 1fr auto;
   }
 
-  .nav,
-  .clock {
+  .nav {
     display: none;
   }
 }

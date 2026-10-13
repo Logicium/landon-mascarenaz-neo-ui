@@ -171,7 +171,7 @@ onMounted(() => {
 .body-copy {
   margin-top: 28px;
   max-width: 40em;
-  font-size: clamp(17px, 1.3vw, 20px);
+  font-size: var(--fs-lede);
 }
 
 .pull {
@@ -193,13 +193,13 @@ onMounted(() => {
     gap: 4px;
     padding-top: 14px;
     border-top: 1px solid var(--line);
-    font-size: 16px;
+    font-size: var(--fs-body);
     line-height: 1.4;
   }
 
   .inst-s {
     color: var(--mute);
-    font-size: 13px;
+    font-size: var(--fs-small);
   }
 }
 

@@ -173,7 +173,7 @@ onBeforeUnmount(() => io?.disconnect())
 
     .mini-v {
       margin-left: auto;
-      font-size: 15px;
+      font-size: var(--fs-body);
       opacity: 0;
       transition: opacity 0.4s var(--ease-out);
     }
@@ -184,7 +184,7 @@ onBeforeUnmount(() => io?.disconnect())
     }
 
     .mini-t {
-      font-size: 13.5px;
+      font-size: var(--fs-small);
     }
 
     .mono {
@@ -239,7 +239,7 @@ onBeforeUnmount(() => io?.disconnect())
   }
 
   .who-serif {
-    font-size: 19px;
+    font-size: var(--fs-body-lg);
     color: var(--mute);
   }
 
@@ -266,7 +266,7 @@ onBeforeUnmount(() => io?.disconnect())
   }
 
   .door-body {
-    font-size: clamp(16px, 1.25vw, 19px);
+    font-size: var(--fs-lede);
     line-height: 1.55;
     color: var(--ink-2);
     max-width: 34em;
@@ -328,7 +328,7 @@ onBeforeUnmount(() => io?.disconnect())
     }
 
     dd {
-      font-size: 14.5px;
+      font-size: var(--fs-body);
       line-height: 1.5;
       color: var(--mute);
       max-width: 26em;

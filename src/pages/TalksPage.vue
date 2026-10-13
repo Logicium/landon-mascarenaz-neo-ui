@@ -85,7 +85,7 @@ onMounted(() => {
               loading="lazy"
             ></iframe>
           </div>
-          <button v-else type="button" class="film-frame film-poster tone" :aria-label="`Play ${w.label}`" @click="playing = w.url">
+          <button v-else type="button" class="film-frame film-poster" :aria-label="`Play ${w.label}`" @click="playing = w.url">
             <picture>
               <source :srcset="`/img/${w.poster}-c.avif`" type="image/avif" />
               <img :src="`/img/${w.poster}-c.jpg`" :alt="w.label" loading="lazy" />
@@ -194,7 +194,6 @@ onMounted(() => {
   border-bottom: 1px solid var(--line);
   position: relative;
   isolation: isolate;
-  transition: padding 0.5s var(--ease-out);
 
   &::before {
     content: '';
@@ -251,12 +250,12 @@ onMounted(() => {
   }
 
   .t-sub {
-    font-size: clamp(17px, 1.5vw, 22px);
+    font-size: var(--fs-lede);
     color: var(--mute);
   }
 
   .t-body {
-    font-size: 14.5px;
+    font-size: var(--fs-body);
     line-height: 1.5;
     color: var(--ink-2);
     max-width: 40em;
@@ -290,8 +289,6 @@ onMounted(() => {
   }
 
   &:hover {
-    padding-left: 12px;
-
     &::before {
       transform: scaleY(1);
       transform-origin: top;
@@ -359,10 +356,23 @@ onMounted(() => {
     }
   }
 
+  // Posters come from six different channels, so they are printed in one
+  // ink until the pointer arrives, and colour only on hover.
   .film-poster {
     width: 100%;
     display: block;
     cursor: pointer;
+    background: var(--paper-2);
+
+    img {
+      filter: grayscale(1) contrast(1.06);
+      transition: filter 0.6s var(--ease-out);
+    }
+
+    &:hover img,
+    &:focus-visible img {
+      filter: none;
+    }
 
     picture,
     img {
@@ -371,11 +381,6 @@ onMounted(() => {
       height: 100%;
       object-fit: cover;
       object-position: 50% 30%;
-    }
-
-    img {
-      transform: scale(1.03);
-      transition: transform 1.1s var(--ease-out);
     }
 
     .play {
@@ -387,10 +392,6 @@ onMounted(() => {
         border-left-color: var(--paper);
       }
     }
-  }
-
-  &.live:hover .film-poster img {
-    transform: scale(1);
   }
 
   .film-slot {
@@ -465,7 +466,7 @@ onMounted(() => {
   }
 
   .film-l {
-    font-size: 15px;
+    font-size: var(--fs-body);
     font-weight: 450;
   }
 }
@@ -505,7 +506,7 @@ onMounted(() => {
   }
 
   .ep-t {
-    font-size: 17px;
+    font-size: var(--fs-body-lg);
     font-weight: 450;
     letter-spacing: -0.015em;
     line-height: 1.2;
@@ -613,7 +614,7 @@ onMounted(() => {
   }
 
   .q-name {
-    font-size: 14px;
+    font-size: var(--fs-small);
     font-weight: 450;
   }
 }

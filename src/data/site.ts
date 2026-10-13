@@ -258,15 +258,6 @@ export interface Door {
 // work page. `n` is derived from position; everything else references `id`.
 const doorList: Omit<Door, 'n'>[] = [
   {
-    id: 'mobility',
-    title: 'Economic Mobility & Regional Prosperity',
-    short: 'Mobility',
-    body: 'Community colleges as engines of mobility, regional talent ecosystems, and what it takes to align education, employers and communities around one goal.',
-    audiences: ['Higher education', 'Workforce boards', 'Economic development'],
-    image: 'rural',
-    imageAlt: 'A rural Colorado classroom, students laughing as a teacher reads to them.',
-  },
-  {
     id: 'democracy',
     title: 'Democracy & Civic Renewal',
     short: 'Democracy',
@@ -274,6 +265,15 @@ const doorList: Omit<Door, 'n'>[] = [
     audiences: ['Foundations', 'Civic organizations', 'Public affairs forums'],
     image: 'room',
     imageAlt: 'A community meeting seen from the back of the room, a slide about political crisis on the screen.',
+  },
+  {
+    id: 'mobility',
+    title: 'Economic Mobility & Regional Prosperity',
+    short: 'Mobility',
+    body: 'Community colleges as engines of mobility, regional talent ecosystems, and what it takes to align education, employers and communities around one goal.',
+    audiences: ['Higher education', 'Workforce boards', 'Economic development'],
+    image: 'rural',
+    imageAlt: 'A rural Colorado classroom, students laughing as a teacher reads to them.',
   },
   {
     id: 'leadership',
@@ -495,8 +495,9 @@ export const media: Media[] = [
   { kind: 'video', label: 'Keynote opening', host: 'Association of Latino Administrators and Superintendents', date: '2020', platform: 'youtube', id: 'Bb-JZpJJRbE', url: 'https://www.youtube.com/watch?v=Bb-JZpJJRbE', poster: 'keynote' },
   { kind: 'video', label: 'Leaders who listen: creating openness in education systems', host: 'Possip Partner Retreat, keynote', date: '2023', platform: 'youtube', id: 'WoVP7SJjh0s', url: 'https://www.youtube.com/watch?v=WoVP7SJjh0s', poster: 'media/WoVP7SJjh0s' },
   { kind: 'video', label: 'Co-creation and the open leader', host: 'Seek Common Ground, Learning Community Talks', date: 'Dec 2021', platform: 'youtube', id: 'kqkHOnPG2Rg', url: 'https://www.youtube.com/watch?v=kqkHOnPG2Rg', poster: 'media/kqkHOnPG2Rg' },
-  { kind: 'video', label: 'Open systems in practice', host: 'Seek Common Ground, Learning Community Talks', date: 'Jun 2021', platform: 'youtube', id: 'v7dMdpXvzRs', url: 'https://www.youtube.com/watch?v=v7dMdpXvzRs', poster: 'media/v7dMdpXvzRs' },
   { kind: 'video', label: 'Three lessons from education reform', host: 'Education Elements', platform: 'youtube', id: 'iVM2od6qwgc', url: 'https://www.youtube.com/watch?v=iVM2od6qwgc', poster: 'media/iVM2od6qwgc' },
+  { kind: 'video', label: 'EduDemocracy and the Cornerstone Project', host: 'Rank the Vote', date: 'Aug 2024', duration: '56 min', platform: 'youtube', id: 'ACgnUZAJH5w', url: 'https://www.youtube.com/watch?v=ACgnUZAJH5w', poster: 'media/ACgnUZAJH5w' },
+  { kind: 'video', label: 'On The Open System', host: 'Harvard Education Press, author clip', date: 'Aug 2023', duration: '2 min', platform: 'youtube', id: 'bm8oyesojG0', url: 'https://www.youtube.com/watch?v=bm8oyesojG0', poster: 'media/bm8oyesojG0' },
 
   { kind: 'podcast', label: 'Open System for Democracy', host: 'Future Hindsight, with Mila Atmos', date: 'Jul 2023', duration: '45 min', platform: 'apple', id: 'id1334328470?i=1000622516733', url: 'https://www.futurehindsight.com/episodes/open-system-for-democracy-landon-mascareaz-doannie-tran', poster: 'media/future-hindsight' },
   { kind: 'podcast', label: 'The Open System: Redesigning Education and Reigniting Democracy', host: 'The Harvard Education Press Podcast', date: 'Aug 2023', platform: 'apple', id: 'id1890291908?i=1000758915853', url: 'https://podcasts.apple.com/us/podcast/the-harvard-education-press-podcast/id1890291908?i=1000758915853', poster: 'media/hep' },
