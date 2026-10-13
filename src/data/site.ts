@@ -36,6 +36,8 @@ export interface Source {
   outlet: string
   date: string
   url: string
+  // A page capture under /img, set once scripts/press-shots.mjs has run.
+  image?: string
 }
 
 export const sources: Source[] = [
@@ -52,6 +54,7 @@ export const sources: Source[] = [
     outlet: 'Colorado Community College System',
     date: 'Aug 2023',
     url: 'https://cccs.edu/cccs-news/state-board-welcomes-dr-landon-mascarenaz-as-new-chair/',
+    image: 'press/cccs-chair',
   },
   {
     id: 'cc-staff',
@@ -73,6 +76,7 @@ export const sources: Source[] = [
     outlet: 'Unite America',
     date: 'Jan 2026',
     url: 'https://www.uniteamerica.org/articles/opening-colorados-primaries-how-landon-mascarenaz-is-building-a-colorado-first-coalition-for-reform',
+    image: 'press/unite',
   },
   {
     id: 'hep',
@@ -101,6 +105,7 @@ export const sources: Source[] = [
     outlet: 'Colorado Education Initiative',
     date: 'Jun 2019',
     url: 'https://www.coloradoedinitiative.org/mascarenaz-to-join-the-colorado-education-initiative-team/',
+    image: 'press/cei',
   },
   {
     id: 'hti',
@@ -115,6 +120,7 @@ export const sources: Source[] = [
     outlet: 'The 74',
     date: '',
     url: 'https://www.the74million.org/article/first-person-how-colorados-homegrown-talent-initiative-is-boosting-the-educonomy-in-8-rural-communities-to-help-students-succeed/',
+    image: 'press/the74',
   },
   {
     id: 'emergent',
@@ -150,6 +156,7 @@ export const sources: Source[] = [
     outlet: 'Obama Foundation',
     date: '2026',
     url: 'https://www.obama.org/programs/leaders/usa/2026-2027/landon-mascarenaz/',
+    image: 'press/obama',
   },
   {
     id: 'cllaro',
@@ -157,6 +164,7 @@ export const sources: Source[] = [
     outlet: 'Open Hearts & Open Democracy',
     date: 'Sep 2026',
     url: 'https://openheartsopendemocracy.substack.com/p/wednesday-september-16',
+    image: 'press/cllaro',
   },
   {
     id: 'lion',
@@ -219,6 +227,11 @@ export const honors: [string, string, string][] = [
 ]
 
 export const sourceById = (id: string) => sources.find((s) => s.id === id)
+
+// Articles about him, newest first, for the press grid on Talks. Only the
+// ones with a capture render.
+export const press = ['unite', 'cllaro', 'obama', 'copolitics', 'cccs-chair', 'the74', 'hti', 'cei', 'wpr']
+export const pressItems = () => press.map(sourceById).filter((s): s is Source => !!s?.image)
 export const sourceIndex = (id: string) => sources.findIndex((s) => s.id === id) + 1
 
 export const clients = [
@@ -451,18 +464,47 @@ export const said = {
   source: 'unite',
 }
 
-export interface Clip {
+// ---------- media ----------
+// Keynotes and podcasts. Nothing loads until it is asked for: video opens a
+// youtube-nocookie player, podcasts an Apple Podcasts episode player, and
+// `audio` rows play a plain file. `link` rows only point out.
+
+export type MediaPlatform = 'youtube' | 'apple' | 'audio' | 'link'
+
+export interface Media {
+  kind: 'video' | 'podcast'
   label: string
-  note: string
-  youtube?: string
+  host: string
+  date?: string
+  duration?: string
+  platform: MediaPlatform
+  // youtube: the video id. apple: "id<show>?i=<episode>". audio: the file url.
+  id?: string
+  url: string
+  // Under /img, without the "-c" suffix: a 16:9 poster or square show art.
   poster?: string
 }
 
-export const watch: Clip[] = [
-  { label: 'Keynote opening', note: 'Association of Latino Administrators and Superintendents', youtube: 'Bb-JZpJJRbE', poster: 'keynote' },
-  { label: 'Panel moderation', note: 'Named event' },
-  { label: 'Fireside / interview', note: 'Named event' },
+export const media: Media[] = [
+  { kind: 'video', label: 'Keynote opening', host: 'Association of Latino Administrators and Superintendents', date: '2020', platform: 'youtube', id: 'Bb-JZpJJRbE', url: 'https://www.youtube.com/watch?v=Bb-JZpJJRbE', poster: 'keynote' },
+  { kind: 'video', label: 'Leaders who listen: creating openness in education systems', host: 'Possip Partner Retreat, keynote', date: '2023', platform: 'youtube', id: 'WoVP7SJjh0s', url: 'https://www.youtube.com/watch?v=WoVP7SJjh0s', poster: 'media/WoVP7SJjh0s' },
+  { kind: 'video', label: 'Co-creation and the open leader', host: 'Seek Common Ground, Learning Community Talks', date: 'Dec 2021', platform: 'youtube', id: 'kqkHOnPG2Rg', url: 'https://www.youtube.com/watch?v=kqkHOnPG2Rg', poster: 'media/kqkHOnPG2Rg' },
+  { kind: 'video', label: 'Open systems in practice', host: 'Seek Common Ground, Learning Community Talks', date: 'Jun 2021', platform: 'youtube', id: 'v7dMdpXvzRs', url: 'https://www.youtube.com/watch?v=v7dMdpXvzRs', poster: 'media/v7dMdpXvzRs' },
+  { kind: 'video', label: 'Three lessons from education reform', host: 'Education Elements', platform: 'youtube', id: 'iVM2od6qwgc', url: 'https://www.youtube.com/watch?v=iVM2od6qwgc', poster: 'media/iVM2od6qwgc' },
+
+  { kind: 'podcast', label: 'Open System for Democracy', host: 'Future Hindsight, with Mila Atmos', date: 'Jul 2023', duration: '45 min', platform: 'apple', id: 'id1334328470?i=1000622516733', url: 'https://www.futurehindsight.com/episodes/open-system-for-democracy-landon-mascareaz-doannie-tran', poster: 'media/future-hindsight' },
+  { kind: 'podcast', label: 'The Open System: Redesigning Education and Reigniting Democracy', host: 'The Harvard Education Press Podcast', date: 'Aug 2023', platform: 'apple', id: 'id1890291908?i=1000758915853', url: 'https://podcasts.apple.com/us/podcast/the-harvard-education-press-podcast/id1890291908?i=1000758915853', poster: 'media/hep' },
+  { kind: 'podcast', label: 'The Open System', host: 'New Books in Education, with Deidre Tyler', date: 'Aug 2023', platform: 'apple', id: 'id426205817?i=1000623568963', url: 'https://newbooksnetwork.com/the-open-system', poster: 'media/nbn' },
+  { kind: 'podcast', label: 'Opening up: recreating schools as a community', host: 'Ethical Schools', date: 'Jul 2023', duration: '40 min', platform: 'apple', id: 'id1459925807?i=1000621204874', url: 'https://ethical-schools.castos.com/episodes/opening-up-recreating-schools-as-a-community', poster: 'media/ethical-schools' },
+  { kind: 'podcast', label: 'Opening up schools for civic democracy', host: 'Wisconsin Public Radio, Central Time', date: 'Jun 2023', platform: 'audio', id: 'https://mp3.wpr.org/download.php?f=ctm230622l1.mp3', url: 'https://www.wpr.org/opening-schools-civic-democracy' },
+  { kind: 'podcast', label: 'Landon Mascareñaz and Doannie Tran on The Open System', host: 'Getting Smart, with Rebecca Midles', date: 'Jun 2023', platform: 'apple', id: 'id1017984086?i=1000617235670', url: 'https://www.gettingsmart.com/podcast/landon-mascarenaz-and-doannie-tran-on-the-open-system/', poster: 'media/getting-smart' },
+  { kind: 'podcast', label: 'The Open System, episode 60', host: 'The Authority Podcast', date: 'Sep 2023', duration: '48 min', platform: 'apple', id: 'id1636774651?i=1000628238282', url: 'https://authoritypodcast.net/episodes/the-open-system-redesigning-education-and-reigniting-democracy-with-landon-mascarenaz-and-doannie-tran-the-authority-podcast-60', poster: 'media/authority' },
+  { kind: 'podcast', label: 'Episode 11, with Dr. Doannie Tran', host: 'Education Perspectives, with Liza Holland', date: 'Jun 2023', duration: '45 min', platform: 'apple', id: 'id1667400301?i=1000616281534', url: 'https://podcasts.apple.com/us/podcast/ep-11-dr-landon-mascare%C3%B1az-dr-doannie-tran/id1667400301?i=1000616281534', poster: 'media/education-perspectives' },
+  { kind: 'podcast', label: 'The Open System, his own show with Doannie Tran and Stephen Hurley', host: 'Apple Podcasts, ten episodes', date: '2023 to 2024', platform: 'link', url: 'https://podcasts.apple.com/us/podcast/the-open-system/id1717448660', poster: 'media/open-system' },
 ]
+
+export const watch = media.filter((m) => m.kind === 'video')
+export const listen = media.filter((m) => m.kind === 'podcast')
 
 export const testimonials = [
   { quote: 'Testimonial. Three to five of these, each with a full name, a title and an organization.', name: 'Full name', title: 'Title, Organization' },
