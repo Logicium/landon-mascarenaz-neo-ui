@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { listen, pressItems, site, talks, testimonials, watch, type Media } from '@/data/site'
+import { listen, site, talks, testimonials, watch, type Media } from '@/data/site'
 
 // Nothing plays until it is asked for. `playing` holds the url of the one
 // item whose player is open; video opens the youtube-nocookie player,
 // podcasts the Apple episode player, audio rows a plain file.
 const playing = ref<string | null>(null)
-const press = pressItems()
 const embed = (m: Media) =>
   m.platform === 'youtube'
     ? `https://www.youtube-nocookie.com/embed/${m.id}?autoplay=1&rel=0`
@@ -62,38 +61,10 @@ onMounted(() => {
       </ol>
     </section>
 
-    <section v-if="press.length" class="frame press">
-      <div class="sec-head">
-        <div class="sec-idx">
-          <span class="mono">07</span>
-          <span class="mono">In the press</span>
-        </div>
-        <h2 class="heading" v-reveal>Reported, reviewed, <span class="serif">profiled</span>.</h2>
-      </div>
-
-      <ul class="press-grid">
-        <li v-for="(s, i) in press" :key="s.id" v-reveal :style="{ '--reveal-delay': `${(i % 3) * 80}ms` }">
-          <a :href="s.url" target="_blank" rel="noopener noreferrer" class="press-card">
-            <figure class="press-img tone">
-              <picture>
-                <source :srcset="`/img/${s.image}.avif`" type="image/avif" />
-                <img :src="`/img/${s.image}.jpg`" :alt="`${s.outlet}: ${s.title}`" loading="lazy" />
-              </picture>
-            </figure>
-            <span class="mono">{{ s.outlet }}<template v-if="s.date"> · {{ s.date }}</template></span>
-            <span class="press-t">{{ s.title }}</span>
-            <span class="src-go" aria-hidden="true">
-              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 12 12 2M4 2h8v8" /></svg>
-            </span>
-          </a>
-        </li>
-      </ul>
-    </section>
-
     <section class="frame proof">
       <div class="sec-head">
         <div class="sec-idx">
-          <span class="mono">08</span>
+          <span class="mono">07</span>
           <span class="mono">See him work</span>
         </div>
         <h2 class="heading" v-reveal>On stage, on a panel, in an <span class="serif">interview</span>.</h2>
@@ -337,100 +308,6 @@ onMounted(() => {
 
       svg {
         transform: translate(2px, -2px);
-      }
-    }
-  }
-}
-
-// ---------- press ----------
-.press {
-  padding-block: var(--band) 0;
-}
-
-.press-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  border-top: 1px solid var(--line);
-  border-left: 1px solid var(--line);
-  margin-top: var(--gap-l);
-
-  li {
-    border-right: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-  }
-}
-
-.press-card {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  height: 100%;
-  padding: 20px 22px 24px;
-  transition: background 0.5s var(--ease-out);
-
-  .press-img {
-    aspect-ratio: 3 / 2;
-    overflow: hidden;
-    margin-bottom: 6px;
-
-    picture,
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: top;
-    }
-
-    img {
-      transform: scale(1.03);
-      transition: transform 1.1s var(--ease-out);
-    }
-  }
-
-  .press-t {
-    font-size: 15px;
-    line-height: 1.35;
-    letter-spacing: -0.01em;
-    text-wrap: pretty;
-    max-width: 26em;
-  }
-
-  .src-go {
-    margin-top: auto;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    box-shadow: inset 0 0 0 1px var(--line-2);
-    color: var(--mute);
-    transition:
-      background 0.4s var(--ease-out),
-      color 0.4s var(--ease-out),
-      box-shadow 0.4s var(--ease-out);
-
-    svg {
-      width: 11px;
-      height: 11px;
-      transition: transform 0.4s var(--ease-out);
-    }
-  }
-
-  &:hover {
-    background: var(--paper-2);
-
-    .press-img img {
-      transform: scale(1);
-    }
-
-    .src-go {
-      background: var(--turq-deep);
-      color: var(--paper);
-      box-shadow: inset 0 0 0 1px var(--turq-deep);
-
-      svg {
-        transform: translate(1px, -1px);
       }
     }
   }
@@ -774,10 +651,6 @@ onMounted(() => {
     grid-template-columns: 1fr;
   }
 
-  .press-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .ep,
   .ep.linked {
     grid-template-columns: 68px minmax(0, 1fr) 40px;
@@ -796,9 +669,6 @@ onMounted(() => {
 }
 
 @media (max-width: 600px) {
-  .press-grid {
-    grid-template-columns: 1fr;
-  }
 
   .quote {
     padding-right: 0;

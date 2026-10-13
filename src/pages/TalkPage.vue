@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { doorById, site, talks } from '@/data/site'
+import { doorById, site, sourceById, talks } from '@/data/site'
 
 const route = useRoute()
 const router = useRouter()
@@ -11,6 +11,7 @@ const talk = computed(() => talks[index.value])
 const prev = computed(() => talks[(index.value - 1 + talks.length) % talks.length])
 const next = computed(() => talks[(index.value + 1) % talks.length])
 const door = computed(() => doorById(talk.value?.door ?? 'mobility'))
+const article = computed(() => (talk.value?.press ? sourceById(talk.value.press) : undefined))
 
 watch(
   index,
@@ -68,7 +69,22 @@ watch(
           </ol>
         </div>
 
-        <figure class="slot still" v-reveal>
+        <figure v-if="article?.image" class="press" v-reveal>
+          <a :href="article.url" target="_blank" rel="noopener noreferrer" class="press-link">
+            <span class="press-img tone">
+              <picture>
+                <source :srcset="`/img/${article.image}.avif`" type="image/avif" />
+                <img :src="`/img/${article.image}.jpg`" :alt="`${article.outlet}: ${article.title}`" loading="lazy" />
+              </picture>
+            </span>
+            <figcaption>
+              <span class="mono">In the press</span>
+              <span class="press-t">{{ article.title }}</span>
+              <span class="mono ext">{{ article.outlet }}<template v-if="article.date"> · {{ article.date }}</template></span>
+            </figcaption>
+          </a>
+        </figure>
+        <figure v-else class="slot still" v-reveal>
           <span class="slot-tag">Session still 3:2</span>
         </figure>
       </div>
@@ -220,6 +236,61 @@ watch(
   aspect-ratio: 3 / 2;
 }
 
+// The article that covers this session's ground, as a page capture.
+.press-link {
+  display: grid;
+  grid-template-columns: minmax(0, 8fr) minmax(0, 4fr);
+  column-gap: clamp(20px, 2.4vw, 40px);
+  align-items: end;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.press-img {
+  display: block;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+
+  picture,
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  img {
+    transform: scale(1.03);
+    transition: transform 1.1s var(--ease-out);
+  }
+}
+
+.press figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 6px;
+
+  .press-t {
+    font-size: var(--fs-title);
+    font-weight: 380;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    text-wrap: pretty;
+  }
+}
+
+.press-link:hover {
+  .press-img img {
+    transform: scale(1);
+  }
+
+  .ext {
+    color: var(--turq-deep);
+  }
+}
+
 .pager {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -260,6 +331,11 @@ watch(
 
   .facts {
     position: static;
+  }
+
+  .press-link {
+    grid-template-columns: 1fr;
+    row-gap: 16px;
   }
 
   .big-n {

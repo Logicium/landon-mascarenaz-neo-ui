@@ -228,10 +228,8 @@ export const honors: [string, string, string][] = [
 
 export const sourceById = (id: string) => sources.find((s) => s.id === id)
 
-// Articles about him, newest first, for the press grid on Talks. Only the
-// ones with a capture render.
-export const press = ['unite', 'cllaro', 'obama', 'copolitics', 'cccs-chair', 'the74', 'hti', 'cei', 'wpr']
-export const pressItems = () => press.map(sourceById).filter((s): s is Source => !!s?.image)
+// Articles about him. A talk names the one that covers its ground through
+// `press`, and the talk page shows that article's capture.
 export const sourceIndex = (id: string) => sources.findIndex((s) => s.id === id) + 1
 
 export const clients = [
@@ -318,6 +316,8 @@ export interface Talk {
   formats: string
   door: DoorId
   image: string
+  // Source id of the article shown on the talk page, if it has a capture.
+  press?: string
   outcomes: string[]
 }
 
@@ -333,6 +333,7 @@ export const talks: Talk[] = [
     formats: 'Keynote · Retreat',
     door: 'mobility',
     image: 'panel',
+    press: 'cccs-chair',
     outcomes: [
       'Sequence a board-led transformation from listening through strategic plan to executive hire.',
       'Distinguish decisions that belong to a governing board from those that belong to administration.',
@@ -351,6 +352,7 @@ export const talks: Talk[] = [
     formats: 'Keynote · Workshop',
     door: 'mobility',
     image: 'rural',
+    press: 'the74',
     outcomes: [
       'Map the education, employer and workforce actors in their region and find the missing relationships.',
       'Explain why regional collaboratives fail at convening more often than at funding.',
@@ -369,6 +371,7 @@ export const talks: Talk[] = [
     formats: 'Keynote · Fireside',
     door: 'democracy',
     image: 'room',
+    press: 'obama',
     outcomes: [
       'Explain the relationship between institutional responsiveness and civic trust.',
       'Identify why many participation efforts increase cynicism, and what distinguishes the ones that do not.',
@@ -387,6 +390,7 @@ export const talks: Talk[] = [
     formats: 'Keynote · Cabinet retreat',
     door: 'mobility',
     image: 'trinidad',
+    press: 'cei',
     outcomes: [
       'Compare their institution’s stated priorities against its budget and calendar.',
       'Identify what an institution has to stop doing to make mobility a real organizing purpose.',
@@ -405,6 +409,7 @@ export const talks: Talk[] = [
     formats: 'Keynote · Workshop · Moderation',
     door: 'democracy',
     image: 'sign',
+    press: 'unite',
     outcomes: [
       'Assemble a coalition around a shared concrete problem rather than shared values.',
       'Identify what must be true before a first convening for the second one to happen.',
@@ -423,6 +428,7 @@ export const talks: Talk[] = [
     formats: 'Keynote · Fireside · Workshop',
     door: 'leadership',
     image: 'keynote',
+    press: 'cllaro',
     outcomes: [
       'Diagnose whether their organization is currently open or closed to the people it serves.',
       'Distinguish consultation that gathers input from participation that changes decisions.',
