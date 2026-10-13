@@ -175,23 +175,25 @@ export const sources: Source[] = [
 // (truth, stewardship, abundance) carry `shared`, and each pair lives
 // behind one of the three doors.
 
+export type DoorId = 'mobility' | 'democracy' | 'leadership'
+
 export interface Value {
   word: string
   body: string
   shared: boolean
-  door: number
+  door: DoorId
 }
 
 export const values: Value[] = [
-  { word: 'Openness', body: 'Keep your heart, mind, and path open. Seek perspectives that challenge you. Hold strong convictions while remaining open to new possibilities.', shared: false, door: 1 },
-  { word: 'Truth', body: 'Begin with shared reality. Face what is true, test assumptions, and pursue clarity, even when it complicates the story you want to tell.', shared: true, door: 1 },
-  { word: 'Agency', body: 'Shape what comes next. Give people the freedom and responsibility to choose, create, contribute, and build, not simply participate in someone else’s vision.', shared: false, door: 0 },
-  { word: 'Courage', body: 'Move toward the breakthrough. Question inherited assumptions, cross boundaries, enter difficult conversations, and create what does not yet exist.', shared: false, door: 0 },
-  { word: 'Abundance', body: 'Believe more is possible together. Share ideas, relationships, platforms, and opportunities. Build partnerships that make everyone more capable.', shared: true, door: 2 },
-  { word: 'Stewardship', body: 'Leave things more open than you found them. Use influence responsibly, lift up others, strengthen communities, and create opportunity for what comes next.', shared: true, door: 2 },
+  { word: 'Openness', body: 'Keep your heart, mind, and path open. Seek perspectives that challenge you. Hold strong convictions while remaining open to new possibilities.', shared: false, door: 'democracy' },
+  { word: 'Truth', body: 'Begin with shared reality. Face what is true, test assumptions, and pursue clarity, even when it complicates the story you want to tell.', shared: true, door: 'democracy' },
+  { word: 'Agency', body: 'Shape what comes next. Give people the freedom and responsibility to choose, create, contribute, and build, not simply participate in someone else’s vision.', shared: false, door: 'leadership' },
+  { word: 'Courage', body: 'Move toward the breakthrough. Question inherited assumptions, cross boundaries, enter difficult conversations, and create what does not yet exist.', shared: false, door: 'leadership' },
+  { word: 'Abundance', body: 'Believe more is possible together. Share ideas, relationships, platforms, and opportunities. Build partnerships that make everyone more capable.', shared: true, door: 'mobility' },
+  { word: 'Stewardship', body: 'Leave things more open than you found them. Use influence responsibly, lift up others, strengthen communities, and create opportunity for what comes next.', shared: true, door: 'mobility' },
 ]
 
-export const valuesFor = (door: number) => values.filter((v) => v.door === door)
+export const valuesFor = (door: DoorId) => values.filter((v) => v.door === door)
 
 // DRAFT for Landon and Joze to sign off. Built from the three shared values.
 export const valuesStatement =
@@ -220,48 +222,51 @@ export const clients = [
 ]
 
 export interface Door {
+  id: DoorId
   n: string
   title: string
   short: string
   body: string
   audiences: string[]
-  hue: string
   image: string
   imageAlt: string
 }
 
-export const doors: Door[] = [
+// Order matters: it is the order of the doors on the home spread and the
+// work page. `n` is derived from position; everything else references `id`.
+const doorList: Omit<Door, 'n'>[] = [
   {
-    n: '01',
-    title: 'Leadership & Latino America',
-    short: 'Leadership',
-    body: 'Representation, belonging, and what a leader actually does with a seat once they have one. From a Mexican-American leader whose family roots run through Colorado and New Mexico for generations.',
-    audiences: ['Latino organizations', 'Universities & HSIs', 'Fellowship cohorts'],
-    hue: 'var(--clay)',
-    image: 'cafe',
-    imageAlt: 'Landon Mascareñaz at a café table by a winter window, looking out at the street.',
-  },
-  {
-    n: '02',
-    title: 'Democracy & Civic Renewal',
-    short: 'Democracy',
-    body: 'Trust is not won at the ballot box. It is decided by whether the schools, colleges and city halls people actually deal with turn out to be responsive.',
-    audiences: ['Foundations', 'Civic organizations', 'Public affairs forums'],
-    hue: 'var(--clay)',
-    image: 'room',
-    imageAlt: 'A community meeting seen from the back of the room, a slide about political crisis on the screen.',
-  },
-  {
-    n: '03',
+    id: 'mobility',
     title: 'Economic Mobility & Regional Prosperity',
     short: 'Mobility',
     body: 'Community colleges as engines of mobility, regional talent ecosystems, and what it takes to align education, employers and communities around one goal.',
     audiences: ['Higher education', 'Workforce boards', 'Economic development'],
-    hue: 'var(--clay)',
     image: 'rural',
     imageAlt: 'A rural Colorado classroom, students laughing as a teacher reads to them.',
   },
+  {
+    id: 'democracy',
+    title: 'Democracy & Civic Renewal',
+    short: 'Democracy',
+    body: 'Trust is not won at the ballot box. It is decided by whether the schools, colleges and city halls people actually deal with turn out to be responsive.',
+    audiences: ['Foundations', 'Civic organizations', 'Public affairs forums'],
+    image: 'room',
+    imageAlt: 'A community meeting seen from the back of the room, a slide about political crisis on the screen.',
+  },
+  {
+    id: 'leadership',
+    title: 'Leadership & Latino America',
+    short: 'Leadership',
+    body: 'Representation, belonging, and what a leader actually does with a seat once they have one. From a Mexican-American leader whose family roots run through Colorado and New Mexico for generations.',
+    audiences: ['Latino organizations', 'Universities & HSIs', 'Fellowship cohorts'],
+    image: 'cafe',
+    imageAlt: 'Landon Mascareñaz at a café table by a winter window, looking out at the street.',
+  },
 ]
+
+export const doors: Door[] = doorList.map((d, i) => ({ ...d, n: String(i + 1).padStart(2, '0') }))
+
+export const doorById = (id: DoorId) => doors.find((d) => d.id === id) ?? doors[0]!
 
 export interface Format {
   duration: string
@@ -287,7 +292,7 @@ export interface Talk {
   audience: string
   level: string
   formats: string
-  door: number
+  door: DoorId
   image: string
   outcomes: string[]
 }
@@ -302,7 +307,7 @@ export const talks: Talk[] = [
     audience: 'Trustees & boards',
     level: 'Intermediate to advanced',
     formats: 'Keynote · Retreat',
-    door: 2,
+    door: 'mobility',
     image: 'panel',
     outcomes: [
       'Sequence a board-led transformation from listening through strategic plan to executive hire.',
@@ -320,7 +325,7 @@ export const talks: Talk[] = [
     audience: 'Workforce & economic development',
     level: 'Intro to intermediate',
     formats: 'Keynote · Workshop',
-    door: 2,
+    door: 'mobility',
     image: 'rural',
     outcomes: [
       'Map the education, employer and workforce actors in their region and find the missing relationships.',
@@ -338,7 +343,7 @@ export const talks: Talk[] = [
     audience: 'Democracy & civic',
     level: 'All levels',
     formats: 'Keynote · Fireside',
-    door: 1,
+    door: 'democracy',
     image: 'room',
     outcomes: [
       'Explain the relationship between institutional responsiveness and civic trust.',
@@ -356,7 +361,7 @@ export const talks: Talk[] = [
     audience: 'Community colleges',
     level: 'Intermediate',
     formats: 'Keynote · Cabinet retreat',
-    door: 2,
+    door: 'mobility',
     image: 'trinidad',
     outcomes: [
       'Compare their institution’s stated priorities against its budget and calendar.',
@@ -374,7 +379,7 @@ export const talks: Talk[] = [
     audience: 'Civic & leadership',
     level: 'All levels',
     formats: 'Keynote · Workshop · Moderation',
-    door: 1,
+    door: 'democracy',
     image: 'sign',
     outcomes: [
       'Assemble a coalition around a shared concrete problem rather than shared values.',
@@ -392,7 +397,7 @@ export const talks: Talk[] = [
     audience: 'Executive & leadership',
     level: 'All levels',
     formats: 'Keynote · Fireside · Workshop',
-    door: 0,
+    door: 'leadership',
     image: 'keynote',
     outcomes: [
       'Diagnose whether their organization is currently open or closed to the people it serves.',

@@ -42,7 +42,7 @@ onBeforeUnmount(() => io?.disconnect())
           <li v-for="(d, i) in doors" :key="d.n" :class="{ on: i === active }">
             <span class="mono">{{ d.n }}</span>
             <span class="mini-t">{{ d.short }}</span>
-            <span class="mini-v serif">{{ valuesFor(i).map((v) => v.word).join(' & ') }}</span>
+            <span class="mini-v serif">{{ valuesFor(d.id).map((v) => v.word).join(' & ') }}</span>
           </li>
         </ol>
         <p class="serif pin-statement" v-reveal>{{ valuesStatement }}</p>
@@ -73,7 +73,7 @@ onBeforeUnmount(() => io?.disconnect())
             <li v-for="a in d.audiences" :key="a" class="mono">{{ a }}</li>
           </ul>
           <dl class="held">
-            <div v-for="v in valuesFor(i)" :key="v.word" :class="{ shared: v.shared }">
+            <div v-for="v in valuesFor(d.id)" :key="v.word" :class="{ shared: v.shared }">
               <dt>{{ v.word }}</dt>
               <dd>{{ v.body }}</dd>
             </div>

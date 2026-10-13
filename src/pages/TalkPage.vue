@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { doors, site, talks } from '@/data/site'
+import { doorById, site, talks } from '@/data/site'
 
 const route = useRoute()
 const router = useRouter()
@@ -10,7 +10,7 @@ const index = computed(() => talks.findIndex((t) => t.slug === route.params.slug
 const talk = computed(() => talks[index.value])
 const prev = computed(() => talks[(index.value - 1 + talks.length) % talks.length])
 const next = computed(() => talks[(index.value + 1) % talks.length])
-const door = computed(() => doors[talk.value?.door ?? 0])
+const door = computed(() => doorById(talk.value?.door ?? 'mobility'))
 
 watch(
   index,

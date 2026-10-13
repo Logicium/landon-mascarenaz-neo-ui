@@ -158,7 +158,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
               <transition name="cap" mode="out-in">
                 <span :key="door.n" class="plate-cap">
                   <span class="mono">Held by</span>
-                  <span class="serif plate-vals">{{ valuesFor(doorIndex).map((v) => v.word).join(' & ') }}</span>
+                  <span class="serif plate-vals">{{ valuesFor(door.id).map((v) => v.word).join(' & ') }}</span>
                 </span>
               </transition>
             </div>
