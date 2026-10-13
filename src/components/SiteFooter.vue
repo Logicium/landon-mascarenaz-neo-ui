@@ -4,7 +4,7 @@ const year = new Date().getFullYear()
 </script>
 
 <template>
-  <footer class="site-footer">
+  <footer class="site-footer fade-in" style="--d: 900ms">
     <div class="frame">
       <div class="foot">
         <div class="col">
@@ -14,6 +14,10 @@ const year = new Date().getFullYear()
         <div class="col">
           <span class="mono">Bookings</span>
           <a :href="`mailto:${site.email}`" class="val link-line">{{ site.emailLabel }}</a>
+        </div>
+        <div class="col">
+          <span class="mono">Newsletter</span>
+          <a :href="site.substack.url" class="val link-line" target="_blank" rel="noopener">{{ site.substack.label }}</a>
         </div>
         <div class="col">
           <span class="mono">Travels from</span>
@@ -35,7 +39,7 @@ const year = new Date().getFullYear()
 
 .foot {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 24px;
 }
 
@@ -61,7 +65,10 @@ const year = new Date().getFullYear()
   }
 
   .col.right {
+    grid-column: 1 / -1;
     align-items: flex-start;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
   }
 }
 </style>

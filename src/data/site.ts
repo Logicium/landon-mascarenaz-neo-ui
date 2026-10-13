@@ -17,6 +17,10 @@ export const site = {
   agency: 'Open Futures',
   // The agency site. Domain pending; the brief signs as openfutures.co.
   agencyUrl: 'https://openfutures.co',
+  substack: {
+    label: 'Open Hearts & Open Democracy',
+    url: 'https://openheartsopendemocracy.substack.com',
+  },
 }
 
 export const hero = {
@@ -167,6 +171,13 @@ export const sources: Source[] = [
     outlet: 'American Academy of Arts & Sciences',
     date: '',
     url: 'https://www.amacad.org/ourcommonpurpose',
+  },
+  {
+    id: 'substack',
+    title: 'Open Hearts & Open Democracy, newsletter',
+    outlet: 'Substack',
+    date: '',
+    url: 'https://openheartsopendemocracy.substack.com',
   },
 ]
 
@@ -527,6 +538,7 @@ export const record: [string, string, string][] = [
   ['2020', 'Association of Latino Administrators and Superintendents, keynote', 'osi'],
   ['TV', 'Next with Kyle Clark · Real Talk with Micah Smith · 9News', ''],
   ['Podcast', 'Future Hindsight · New Books Network · Ethical Schools · Wisconsin Public Radio', 'wpr'],
+  ['Newsletter', 'Open Hearts & Open Democracy, on Substack', 'substack'],
   ['Fellow', 'Pahara Institute · Flamboyan Family Engagement Fellowship', 'pahara'],
   ['Council', 'Our Common Purpose, American Academy of Arts & Sciences', 'amacad'],
   ['Faculty', 'Executive Leadership Academy, Leadership Institute of Nevada', 'lion'],

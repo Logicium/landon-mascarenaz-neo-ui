@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter, type RouteLocationNormalized } from 'vue-router'
 import SiteHeader from '@/components/SiteHeader.vue'
 import SiteFooter from '@/components/SiteFooter.vue'
 import { scrollToY, startLenis, stopLenis } from '@/composables/useLenis'
 
 const router = useRouter()
+const route = useRoute()
 
 // After a route change settles, land on the hash target (or the top) with
 // the scroller's own easing rather than the browser's jump.
-router.afterEach((to, from) => {
+const landOn = (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
   nextTick(() => {
     window.setTimeout(() => {
       if (to.hash) {
@@ -20,9 +21,16 @@ router.afterEach((to, from) => {
       }
     }, 60)
   })
-})
+}
 
-onMounted(() => startLenis())
+router.afterEach(landOn)
+
+onMounted(() => {
+  startLenis()
+  // The app mounts after the first navigation has already resolved, so the
+  // hook above never saw it. Land on a deep-linked hash by hand.
+  if (route.hash) landOn(route, route)
+})
 onBeforeUnmount(() => stopLenis())
 </script>
 
@@ -39,6 +47,12 @@ onBeforeUnmount(() => stopLenis())
 </template>
 
 <style lang="scss">
+// The page always fills the viewport, so the footer can never sit above the
+// fold while a route is still arriving.
+main {
+  min-height: 100svh;
+}
+
 // Pages arrive the way the spreads do: from a soft blur, settling upward.
 .page-enter-active {
   transition:
