@@ -229,8 +229,8 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
       </section>
       <div ref="bookWrap" class="spacer" :style="{ height: bookHeight }" aria-hidden="true"></div>
 
-      <!-- The record -->
-      <section class="panel">
+      <!-- The record. Anchored so /#news lands on it. -->
+      <section id="news" class="panel">
         <div class="frame spread">
           <div class="spread-top">
             <span class="sec-idx"><span class="mono">03</span><span class="mono">The record</span></span>
