@@ -1,9 +1,11 @@
+import { reactive } from 'vue'
+
 // All copy for the site lives here. Edit text without touching layout.
 //
 // Biographical claims carry source ids that resolve to `sources` below, so
 // every fact on the page can link out to the public record it came from.
 
-export const site = {
+const siteSource = {
   name: 'Landon Mascareñaz',
   honorific: 'Dr. Landon Mascareñaz',
   roles: [
@@ -22,7 +24,7 @@ export const site = {
   },
 }
 
-export const hero = {
+const heroSource = {
   lines: ['Institutions', 'must stay', 'open', 'to the people', 'they serve.'],
   sub: 'Most of them do not. Twenty years inside the ones that tried: a first-grade classroom on the Navajo Nation, a state community college board, sixty rural districts, and a book about why organizations stop listening.',
 }
@@ -39,7 +41,7 @@ export interface Source {
   image?: string
 }
 
-export const sources: Source[] = [
+const sourcesSource: Source[] = [
   {
     id: 'cccs-bio',
     title: 'Dr. Landon Mascareñaz, State Board profile',
@@ -202,7 +204,7 @@ export interface Value {
   door: DoorId
 }
 
-export const values: Value[] = [
+const valuesSource: Value[] = [
   { word: 'Openness', body: 'Keep your heart, mind, and path open. Seek perspectives that challenge you. Hold strong convictions while remaining open to new possibilities.', shared: false, door: 'democracy' },
   { word: 'Truth', body: 'Begin with shared reality. Face what is true, test assumptions, and pursue clarity, even when it complicates the story you want to tell.', shared: true, door: 'democracy' },
   { word: 'Agency', body: 'Shape what comes next. Give people the freedom and responsibility to choose, create, contribute, and build, not simply participate in someone else’s vision.', shared: false, door: 'leadership' },
@@ -214,11 +216,11 @@ export const values: Value[] = [
 export const valuesFor = (door: DoorId) => values.filter((v) => v.door === door)
 
 // DRAFT for Landon and Joze to sign off. Built from the three shared values.
-export const valuesStatement =
+const valuesStatementSource =
   'Begin with what is true. Leave things more open than you found them. Believe more is possible together than alone. Truth, stewardship and abundance hold the rest of the work in place: they are what a listening tour, a rebuilt strategic plan and a cross-partisan coalition have in common.'
 
 // Honors and appointments, each with its record.
-export const honors: [string, string, string][] = [
+const honorsSource: [string, string, string][] = [
   ['Obama Foundation', 'USA Leader, 2026 to 2027 cohort', 'obama'],
   ['CLLARO', 'Roger Cisneros Public Policy Award, 2026', 'cllaro'],
   ['American Academy of Arts & Sciences', 'Our Common Purpose council', 'amacad'],
@@ -231,7 +233,7 @@ export const sourceById = (id: string) => sources.find((s) => s.id === id)
 // `press`, and the talk page shows that article's capture.
 export const sourceIndex = (id: string) => sources.findIndex((s) => s.id === id) + 1
 
-export const clients = [
+const clientsSource = [
   'Colorado Mountain College',
   'Colorado Community College System',
   'ECMC Foundation',
@@ -285,7 +287,7 @@ const doorList: Omit<Door, 'n'>[] = [
   },
 ]
 
-export const doors: Door[] = doorList.map((d, i) => ({ ...d, n: String(i + 1).padStart(2, '0') }))
+const doorsSource: Door[] = doorList.map((d, i) => ({ ...d, n: String(i + 1).padStart(2, '0') }))
 
 export const doorById = (id: DoorId) => doors.find((d) => d.id === id) ?? doors[0]!
 
@@ -295,7 +297,7 @@ export interface Format {
   body: string
 }
 
-export const formats: Format[] = [
+const formatsSource: Format[] = [
   { duration: '45 to 60 min', title: 'Keynote', body: 'Main stage, plenary or opening session, tailored to your theme with a pre-call to align on the audience.' },
   { duration: '60 to 75 min', title: 'Breakout session', body: 'Same material in a smaller room, with more discussion and more room for the audience’s own situations.' },
   { duration: '90 min', title: 'Interactive workshop', body: 'A working session, not a talk. Participants leave having applied something to their own organization.' },
@@ -320,7 +322,7 @@ export interface Talk {
   outcomes: string[]
 }
 
-export const talks: Talk[] = [
+const talksSource: Talk[] = [
   {
     slug: 'board-leadership-that-moves',
     n: '01',
@@ -437,7 +439,7 @@ export const talks: Talk[] = [
   },
 ]
 
-export const openSystem = {
+const openSystemSource = {
   title: 'The Open System',
   authors: 'Mascareñaz & Tran',
   press: 'Harvard Education Press',
@@ -463,7 +465,7 @@ export const openSystem = {
 }
 
 // A single thing he has said, on the record, with the record attached.
-export const said = {
+const saidSource = {
   quote: 'People don’t fear change. They actually fear loss.',
   context: 'On why reform has to be built locally, with the people it affects',
   source: 'unite',
@@ -490,7 +492,7 @@ export interface Media {
   poster?: string
 }
 
-export const media: Media[] = [
+const mediaSource: Media[] = [
   { kind: 'video', label: 'Keynote opening', host: 'Association of Latino Administrators and Superintendents', date: '2020', platform: 'youtube', id: 'Bb-JZpJJRbE', url: 'https://www.youtube.com/watch?v=Bb-JZpJJRbE', poster: 'keynote' },
   { kind: 'video', label: 'Leaders who listen: creating openness in education systems', host: 'Possip Partner Retreat, keynote', date: '2023', platform: 'youtube', id: 'WoVP7SJjh0s', url: 'https://www.youtube.com/watch?v=WoVP7SJjh0s', poster: 'media/WoVP7SJjh0s' },
   { kind: 'video', label: 'Co-creation and the open leader', host: 'Seek Common Ground, Learning Community Talks', date: 'Dec 2021', platform: 'youtube', id: 'kqkHOnPG2Rg', url: 'https://www.youtube.com/watch?v=kqkHOnPG2Rg', poster: 'media/kqkHOnPG2Rg' },
@@ -509,10 +511,8 @@ export const media: Media[] = [
   { kind: 'podcast', label: 'The Open System, his own show with Doannie Tran and Stephen Hurley', host: 'Apple Podcasts, ten episodes', date: '2023 to 2024', platform: 'link', url: 'https://podcasts.apple.com/us/podcast/the-open-system/id1717448660', poster: 'media/open-system' },
 ]
 
-export const watch = media.filter((m) => m.kind === 'video')
-export const listen = media.filter((m) => m.kind === 'podcast')
 
-export const testimonials = [
+const testimonialsSource = [
   { quote: 'Testimonial. Three to five of these, each with a full name, a title and an organization.', name: 'Full name', title: 'Title, Organization' },
   { quote: 'Attribution to a named person reads stronger than to an organization alone.', name: 'Full name', title: 'Title, Organization' },
   { quote: 'This is the section that convinces a committee member who has never seen him speak.', name: 'Full name', title: 'Title, Organization' },
@@ -523,7 +523,7 @@ export interface Paragraph {
   cites: string[]
 }
 
-export const person = {
+const personSource = {
   title: 'Not a commentator. A builder who kept the receipts.',
   body: [
     {
@@ -556,7 +556,7 @@ export interface Milestone {
   source: string
 }
 
-export const timeline: Milestone[] = [
+const timelineSource: Milestone[] = [
   { year: '2005', text: 'First-grade teacher on the Navajo Nation, Teach For America.', source: 'osi' },
   { year: '2007', text: 'Executive Director, Teach For America New Mexico, through 2012.', source: 'osi' },
   { year: '2012', text: 'Enters the doctoral program in education leadership at the Harvard Graduate School of Education. Completes it in 2015.', source: 'linkedin' },
@@ -573,7 +573,7 @@ export const timeline: Milestone[] = [
   { year: '2026', text: 'Receives CLLARO’s Roger Cisneros Public Policy Award at the 31st Annual Bernie Valdez Awards in September.', source: 'cllaro' },
 ]
 
-export const record: [string, string, string][] = [
+const recordSource: [string, string, string][] = [
   ['2026', 'Obama Foundation USA Leader, 2026 to 2027 cohort', 'obama'],
   ['2026', 'Roger Cisneros Public Policy Award, CLLARO Bernie Valdez Awards', 'cllaro'],
   ['2026', 'Unite America: building a Colorado-first coalition for reform', 'unite'],
@@ -592,14 +592,14 @@ export const record: [string, string, string][] = [
   ['Faculty', 'Executive Leadership Academy, Leadership Institute of Nevada', 'lion'],
 ]
 
-export const stats: [string, string, string][] = [
+const statsSource: [string, string, string][] = [
   ['60', 'Rural districts in the Homegrown Talent Initiative, across eight regions of Colorado', 'hti'],
   ['13', 'Colleges in the system whose bipartisan state board he chaired', 'cccs-chair'],
   ['30', 'Organizations, left, right and center, in the Courageous Colorado coalition', 'unite'],
   ['2005', 'First classroom. First grade, on the Navajo Nation', 'osi'],
 ]
 
-export const planners: [string, string][] = [
+const plannersSource: [string, string][] = [
   ['Fees', 'Scaled by format and organization type. Association and nonprofit rates available.'],
   ['Travel', 'From Denver, Colorado.'],
   ['Virtual', 'Available. 30 to 45 minutes preferred.'],
@@ -609,3 +609,63 @@ export const planners: [string, string][] = [
   ['Continuing education', 'Sessions can be mapped to CEU or CPE frameworks on request.'],
   ['Press kit', 'Bios at three lengths, high-resolution headshot, talk descriptions and learning outcomes.'],
 ]
+
+/* -------------------------------------------------------------------------
+ * The editable content root.
+ *
+ * The Apotome in-situ editor walks one object and writes into it, and the
+ * published overlay from the studio is merged onto that same object at boot.
+ * Both need a single reactive tree, which is why the data above is assembled
+ * here rather than exported as separate constants.
+ *
+ * The named exports below are views onto that tree, not copies: `reactive()`
+ * hands back a proxy, so `site` and `content.site` are the same object and an
+ * edit made anywhere re-renders everywhere. Every existing import keeps
+ * working untouched.
+ * ---------------------------------------------------------------------- */
+export const content = reactive({
+  site: siteSource,
+  hero: heroSource,
+  sources: sourcesSource,
+  values: valuesSource,
+  valuesStatement: valuesStatementSource,
+  honors: honorsSource,
+  clients: clientsSource,
+  doors: doorsSource,
+  formats: formatsSource,
+  talks: talksSource,
+  openSystem: openSystemSource,
+  said: saidSource,
+  media: mediaSource,
+  testimonials: testimonialsSource,
+  person: personSource,
+  timeline: timelineSource,
+  record: recordSource,
+  stats: statsSource,
+  planners: plannersSource,
+})
+
+export const site = content.site
+export const hero = content.hero
+export const sources = content.sources
+export const values = content.values
+export const valuesStatement = content.valuesStatement
+export const honors = content.honors
+export const clients = content.clients
+export const doors = content.doors
+export const formats = content.formats
+export const talks = content.talks
+export const openSystem = content.openSystem
+export const said = content.said
+export const media = content.media
+export const testimonials = content.testimonials
+export const person = content.person
+export const timeline = content.timeline
+export const record = content.record
+export const stats = content.stats
+export const planners = content.planners
+
+// Views onto the media list. The items are the same reactive objects, so an
+// edit to a video's label shows here too; only the split is fixed.
+export const watch = content.media.filter((m) => m.kind === 'video')
+export const listen = content.media.filter((m) => m.kind === 'podcast')
