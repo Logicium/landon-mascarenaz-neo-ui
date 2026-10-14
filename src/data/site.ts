@@ -12,11 +12,14 @@ export const site = {
     'Fmr. Chair, Colorado State Board for Community Colleges and Occupational Education',
   ],
   travelsFrom: 'Denver, Colorado',
-  email: 'bookings@openfutures.example',
-  emailLabel: 'bookings@openfutures',
+  email: 'bookings@openfuturesagency.com',
+  emailLabel: 'bookings@openfuturesagency.com',
   agency: 'Open Futures',
-  // The agency site. Domain pending; the brief signs as openfutures.co.
-  agencyUrl: 'https://openfutures.co',
+  agencyUrl: 'https://openfuturesagency.com',
+  substack: {
+    label: 'Open Hearts & Open Democracy',
+    url: 'https://openheartsopendemocracy.substack.com',
+  },
 }
 
 export const hero = {
@@ -32,6 +35,8 @@ export interface Source {
   outlet: string
   date: string
   url: string
+  // A page capture under /img, set once scripts/press-shots.mjs has run.
+  image?: string
 }
 
 export const sources: Source[] = [
@@ -48,6 +53,7 @@ export const sources: Source[] = [
     outlet: 'Colorado Community College System',
     date: 'Aug 2023',
     url: 'https://cccs.edu/cccs-news/state-board-welcomes-dr-landon-mascarenaz-as-new-chair/',
+    image: 'press/cccs-chair',
   },
   {
     id: 'cc-staff',
@@ -69,6 +75,7 @@ export const sources: Source[] = [
     outlet: 'Unite America',
     date: 'Jan 2026',
     url: 'https://www.uniteamerica.org/articles/opening-colorados-primaries-how-landon-mascarenaz-is-building-a-colorado-first-coalition-for-reform',
+    image: 'press/unite',
   },
   {
     id: 'hep',
@@ -97,6 +104,7 @@ export const sources: Source[] = [
     outlet: 'Colorado Education Initiative',
     date: 'Jun 2019',
     url: 'https://www.coloradoedinitiative.org/mascarenaz-to-join-the-colorado-education-initiative-team/',
+    image: 'press/cei',
   },
   {
     id: 'hti',
@@ -111,6 +119,7 @@ export const sources: Source[] = [
     outlet: 'The 74',
     date: '',
     url: 'https://www.the74million.org/article/first-person-how-colorados-homegrown-talent-initiative-is-boosting-the-educonomy-in-8-rural-communities-to-help-students-succeed/',
+    image: 'press/the74',
   },
   {
     id: 'emergent',
@@ -146,6 +155,7 @@ export const sources: Source[] = [
     outlet: 'Obama Foundation',
     date: '2026',
     url: 'https://www.obama.org/programs/leaders/usa/2026-2027/landon-mascarenaz/',
+    image: 'press/obama',
   },
   {
     id: 'cllaro',
@@ -153,6 +163,7 @@ export const sources: Source[] = [
     outlet: 'Open Hearts & Open Democracy',
     date: 'Sep 2026',
     url: 'https://openheartsopendemocracy.substack.com/p/wednesday-september-16',
+    image: 'press/cllaro',
   },
   {
     id: 'lion',
@@ -168,6 +179,13 @@ export const sources: Source[] = [
     date: '',
     url: 'https://www.amacad.org/ourcommonpurpose',
   },
+  {
+    id: 'substack',
+    title: 'Open Hearts & Open Democracy, newsletter',
+    outlet: 'Substack',
+    date: '',
+    url: 'https://openheartsopendemocracy.substack.com',
+  },
 ]
 
 // ---------- values ----------
@@ -175,23 +193,25 @@ export const sources: Source[] = [
 // (truth, stewardship, abundance) carry `shared`, and each pair lives
 // behind one of the three doors.
 
+export type DoorId = 'mobility' | 'democracy' | 'leadership'
+
 export interface Value {
   word: string
   body: string
   shared: boolean
-  door: number
+  door: DoorId
 }
 
 export const values: Value[] = [
-  { word: 'Openness', body: 'Keep your heart, mind, and path open. Seek perspectives that challenge you. Hold strong convictions while remaining open to new possibilities.', shared: false, door: 1 },
-  { word: 'Truth', body: 'Begin with shared reality. Face what is true, test assumptions, and pursue clarity, even when it complicates the story you want to tell.', shared: true, door: 1 },
-  { word: 'Agency', body: 'Shape what comes next. Give people the freedom and responsibility to choose, create, contribute, and build, not simply participate in someone else’s vision.', shared: false, door: 0 },
-  { word: 'Courage', body: 'Move toward the breakthrough. Question inherited assumptions, cross boundaries, enter difficult conversations, and create what does not yet exist.', shared: false, door: 0 },
-  { word: 'Abundance', body: 'Believe more is possible together. Share ideas, relationships, platforms, and opportunities. Build partnerships that make everyone more capable.', shared: true, door: 2 },
-  { word: 'Stewardship', body: 'Leave things more open than you found them. Use influence responsibly, lift up others, strengthen communities, and create opportunity for what comes next.', shared: true, door: 2 },
+  { word: 'Openness', body: 'Keep your heart, mind, and path open. Seek perspectives that challenge you. Hold strong convictions while remaining open to new possibilities.', shared: false, door: 'democracy' },
+  { word: 'Truth', body: 'Begin with shared reality. Face what is true, test assumptions, and pursue clarity, even when it complicates the story you want to tell.', shared: true, door: 'democracy' },
+  { word: 'Agency', body: 'Shape what comes next. Give people the freedom and responsibility to choose, create, contribute, and build, not simply participate in someone else’s vision.', shared: false, door: 'leadership' },
+  { word: 'Courage', body: 'Move toward the breakthrough. Question inherited assumptions, cross boundaries, enter difficult conversations, and create what does not yet exist.', shared: false, door: 'leadership' },
+  { word: 'Abundance', body: 'Believe more is possible together. Share ideas, relationships, platforms, and opportunities. Build partnerships that make everyone more capable.', shared: true, door: 'mobility' },
+  { word: 'Stewardship', body: 'Leave things more open than you found them. Use influence responsibly, lift up others, strengthen communities, and create opportunity for what comes next.', shared: true, door: 'mobility' },
 ]
 
-export const valuesFor = (door: number) => values.filter((v) => v.door === door)
+export const valuesFor = (door: DoorId) => values.filter((v) => v.door === door)
 
 // DRAFT for Landon and Joze to sign off. Built from the three shared values.
 export const valuesStatement =
@@ -206,6 +226,9 @@ export const honors: [string, string, string][] = [
 ]
 
 export const sourceById = (id: string) => sources.find((s) => s.id === id)
+
+// Articles about him. A talk names the one that covers its ground through
+// `press`, and the talk page shows that article's capture.
 export const sourceIndex = (id: string) => sources.findIndex((s) => s.id === id) + 1
 
 export const clients = [
@@ -220,48 +243,51 @@ export const clients = [
 ]
 
 export interface Door {
+  id: DoorId
   n: string
   title: string
   short: string
   body: string
   audiences: string[]
-  hue: string
   image: string
   imageAlt: string
 }
 
-export const doors: Door[] = [
+// Order matters: it is the order of the doors on the home spread and the
+// work page. `n` is derived from position; everything else references `id`.
+const doorList: Omit<Door, 'n'>[] = [
   {
-    n: '01',
-    title: 'Leadership & Latino America',
-    short: 'Leadership',
-    body: 'Representation, belonging, and what a leader actually does with a seat once they have one. From a Mexican-American leader whose family roots run through Colorado and New Mexico for generations.',
-    audiences: ['Latino organizations', 'Universities & HSIs', 'Fellowship cohorts'],
-    hue: 'var(--clay)',
-    image: 'cafe',
-    imageAlt: 'Landon Mascareñaz at a café table by a winter window, looking out at the street.',
-  },
-  {
-    n: '02',
+    id: 'democracy',
     title: 'Democracy & Civic Renewal',
     short: 'Democracy',
     body: 'Trust is not won at the ballot box. It is decided by whether the schools, colleges and city halls people actually deal with turn out to be responsive.',
     audiences: ['Foundations', 'Civic organizations', 'Public affairs forums'],
-    hue: 'var(--clay)',
     image: 'room',
     imageAlt: 'A community meeting seen from the back of the room, a slide about political crisis on the screen.',
   },
   {
-    n: '03',
+    id: 'mobility',
     title: 'Economic Mobility & Regional Prosperity',
     short: 'Mobility',
     body: 'Community colleges as engines of mobility, regional talent ecosystems, and what it takes to align education, employers and communities around one goal.',
     audiences: ['Higher education', 'Workforce boards', 'Economic development'],
-    hue: 'var(--clay)',
     image: 'rural',
     imageAlt: 'A rural Colorado classroom, students laughing as a teacher reads to them.',
   },
+  {
+    id: 'leadership',
+    title: 'Leadership & Latino America',
+    short: 'Leadership',
+    body: 'Representation, belonging, and what a leader actually does with a seat once they have one. From a Mexican-American leader whose family roots run through Colorado and New Mexico for generations.',
+    audiences: ['Latino organizations', 'Universities & HSIs', 'Fellowship cohorts'],
+    image: 'cafe',
+    imageAlt: 'Landon Mascareñaz at a café table by a winter window, looking out at the street.',
+  },
 ]
+
+export const doors: Door[] = doorList.map((d, i) => ({ ...d, n: String(i + 1).padStart(2, '0') }))
+
+export const doorById = (id: DoorId) => doors.find((d) => d.id === id) ?? doors[0]!
 
 export interface Format {
   duration: string
@@ -287,8 +313,10 @@ export interface Talk {
   audience: string
   level: string
   formats: string
-  door: number
+  door: DoorId
   image: string
+  // Source id of the article shown on the talk page, if it has a capture.
+  press?: string
   outcomes: string[]
 }
 
@@ -302,8 +330,9 @@ export const talks: Talk[] = [
     audience: 'Trustees & boards',
     level: 'Intermediate to advanced',
     formats: 'Keynote · Retreat',
-    door: 2,
+    door: 'mobility',
     image: 'panel',
+    press: 'cccs-chair',
     outcomes: [
       'Sequence a board-led transformation from listening through strategic plan to executive hire.',
       'Distinguish decisions that belong to a governing board from those that belong to administration.',
@@ -320,8 +349,9 @@ export const talks: Talk[] = [
     audience: 'Workforce & economic development',
     level: 'Intro to intermediate',
     formats: 'Keynote · Workshop',
-    door: 2,
+    door: 'mobility',
     image: 'rural',
+    press: 'the74',
     outcomes: [
       'Map the education, employer and workforce actors in their region and find the missing relationships.',
       'Explain why regional collaboratives fail at convening more often than at funding.',
@@ -338,8 +368,9 @@ export const talks: Talk[] = [
     audience: 'Democracy & civic',
     level: 'All levels',
     formats: 'Keynote · Fireside',
-    door: 1,
+    door: 'democracy',
     image: 'room',
+    press: 'obama',
     outcomes: [
       'Explain the relationship between institutional responsiveness and civic trust.',
       'Identify why many participation efforts increase cynicism, and what distinguishes the ones that do not.',
@@ -356,8 +387,9 @@ export const talks: Talk[] = [
     audience: 'Community colleges',
     level: 'Intermediate',
     formats: 'Keynote · Cabinet retreat',
-    door: 2,
+    door: 'mobility',
     image: 'trinidad',
+    press: 'cei',
     outcomes: [
       'Compare their institution’s stated priorities against its budget and calendar.',
       'Identify what an institution has to stop doing to make mobility a real organizing purpose.',
@@ -374,8 +406,9 @@ export const talks: Talk[] = [
     audience: 'Civic & leadership',
     level: 'All levels',
     formats: 'Keynote · Workshop · Moderation',
-    door: 1,
+    door: 'democracy',
     image: 'sign',
+    press: 'unite',
     outcomes: [
       'Assemble a coalition around a shared concrete problem rather than shared values.',
       'Identify what must be true before a first convening for the second one to happen.',
@@ -392,8 +425,9 @@ export const talks: Talk[] = [
     audience: 'Executive & leadership',
     level: 'All levels',
     formats: 'Keynote · Fireside · Workshop',
-    door: 0,
+    door: 'leadership',
     image: 'keynote',
+    press: 'cllaro',
     outcomes: [
       'Diagnose whether their organization is currently open or closed to the people it serves.',
       'Distinguish consultation that gathers input from participation that changes decisions.',
@@ -435,18 +469,48 @@ export const said = {
   source: 'unite',
 }
 
-export interface Clip {
+// ---------- media ----------
+// Keynotes and podcasts. Nothing loads until it is asked for: video opens a
+// youtube-nocookie player, podcasts an Apple Podcasts episode player, and
+// `audio` rows play a plain file. `link` rows only point out.
+
+export type MediaPlatform = 'youtube' | 'apple' | 'audio' | 'link'
+
+export interface Media {
+  kind: 'video' | 'podcast'
   label: string
-  note: string
-  youtube?: string
+  host: string
+  date?: string
+  duration?: string
+  platform: MediaPlatform
+  // youtube: the video id. apple: "id<show>?i=<episode>". audio: the file url.
+  id?: string
+  url: string
+  // Under /img, without the "-c" suffix: a 16:9 poster or square show art.
   poster?: string
 }
 
-export const watch: Clip[] = [
-  { label: 'Keynote opening', note: 'Association of Latino Administrators and Superintendents', youtube: 'Bb-JZpJJRbE', poster: 'keynote' },
-  { label: 'Panel moderation', note: 'Named event' },
-  { label: 'Fireside / interview', note: 'Named event' },
+export const media: Media[] = [
+  { kind: 'video', label: 'Keynote opening', host: 'Association of Latino Administrators and Superintendents', date: '2020', platform: 'youtube', id: 'Bb-JZpJJRbE', url: 'https://www.youtube.com/watch?v=Bb-JZpJJRbE', poster: 'keynote' },
+  { kind: 'video', label: 'Leaders who listen: creating openness in education systems', host: 'Possip Partner Retreat, keynote', date: '2023', platform: 'youtube', id: 'WoVP7SJjh0s', url: 'https://www.youtube.com/watch?v=WoVP7SJjh0s', poster: 'media/WoVP7SJjh0s' },
+  { kind: 'video', label: 'Co-creation and the open leader', host: 'Seek Common Ground, Learning Community Talks', date: 'Dec 2021', platform: 'youtube', id: 'kqkHOnPG2Rg', url: 'https://www.youtube.com/watch?v=kqkHOnPG2Rg', poster: 'media/kqkHOnPG2Rg' },
+  { kind: 'video', label: 'Three lessons from education reform', host: 'Education Elements', platform: 'youtube', id: 'iVM2od6qwgc', url: 'https://www.youtube.com/watch?v=iVM2od6qwgc', poster: 'media/iVM2od6qwgc' },
+  { kind: 'video', label: 'EduDemocracy and the Cornerstone Project', host: 'Rank the Vote', date: 'Aug 2024', duration: '56 min', platform: 'youtube', id: 'ACgnUZAJH5w', url: 'https://www.youtube.com/watch?v=ACgnUZAJH5w', poster: 'media/ACgnUZAJH5w' },
+  { kind: 'video', label: 'On The Open System', host: 'Harvard Education Press, author clip', date: 'Aug 2023', duration: '2 min', platform: 'youtube', id: 'bm8oyesojG0', url: 'https://www.youtube.com/watch?v=bm8oyesojG0', poster: 'media/bm8oyesojG0' },
+
+  { kind: 'podcast', label: 'Open System for Democracy', host: 'Future Hindsight, with Mila Atmos', date: 'Jul 2023', duration: '45 min', platform: 'apple', id: 'id1334328470?i=1000622516733', url: 'https://www.futurehindsight.com/episodes/open-system-for-democracy-landon-mascareaz-doannie-tran', poster: 'media/future-hindsight' },
+  { kind: 'podcast', label: 'The Open System: Redesigning Education and Reigniting Democracy', host: 'The Harvard Education Press Podcast', date: 'Aug 2023', platform: 'apple', id: 'id1890291908?i=1000758915853', url: 'https://podcasts.apple.com/us/podcast/the-harvard-education-press-podcast/id1890291908?i=1000758915853', poster: 'media/hep' },
+  { kind: 'podcast', label: 'The Open System', host: 'New Books in Education, with Deidre Tyler', date: 'Aug 2023', platform: 'apple', id: 'id426205817?i=1000623568963', url: 'https://newbooksnetwork.com/the-open-system', poster: 'media/nbn' },
+  { kind: 'podcast', label: 'Opening up: recreating schools as a community', host: 'Ethical Schools', date: 'Jul 2023', duration: '40 min', platform: 'apple', id: 'id1459925807?i=1000621204874', url: 'https://ethical-schools.castos.com/episodes/opening-up-recreating-schools-as-a-community', poster: 'media/ethical-schools' },
+  { kind: 'podcast', label: 'Opening up schools for civic democracy', host: 'Wisconsin Public Radio, Central Time', date: 'Jun 2023', platform: 'audio', id: 'https://mp3.wpr.org/download.php?f=ctm230622l1.mp3', url: 'https://www.wpr.org/opening-schools-civic-democracy' },
+  { kind: 'podcast', label: 'Landon Mascareñaz and Doannie Tran on The Open System', host: 'Getting Smart, with Rebecca Midles', date: 'Jun 2023', platform: 'apple', id: 'id1017984086?i=1000617235670', url: 'https://www.gettingsmart.com/podcast/landon-mascarenaz-and-doannie-tran-on-the-open-system/', poster: 'media/getting-smart' },
+  { kind: 'podcast', label: 'The Open System, episode 60', host: 'The Authority Podcast', date: 'Sep 2023', duration: '48 min', platform: 'apple', id: 'id1636774651?i=1000628238282', url: 'https://authoritypodcast.net/episodes/the-open-system-redesigning-education-and-reigniting-democracy-with-landon-mascarenaz-and-doannie-tran-the-authority-podcast-60', poster: 'media/authority' },
+  { kind: 'podcast', label: 'Episode 11, with Dr. Doannie Tran', host: 'Education Perspectives, with Liza Holland', date: 'Jun 2023', duration: '45 min', platform: 'apple', id: 'id1667400301?i=1000616281534', url: 'https://podcasts.apple.com/us/podcast/ep-11-dr-landon-mascare%C3%B1az-dr-doannie-tran/id1667400301?i=1000616281534', poster: 'media/education-perspectives' },
+  { kind: 'podcast', label: 'The Open System, his own show with Doannie Tran and Stephen Hurley', host: 'Apple Podcasts, ten episodes', date: '2023 to 2024', platform: 'link', url: 'https://podcasts.apple.com/us/podcast/the-open-system/id1717448660', poster: 'media/open-system' },
 ]
+
+export const watch = media.filter((m) => m.kind === 'video')
+export const listen = media.filter((m) => m.kind === 'podcast')
 
 export const testimonials = [
   { quote: 'Testimonial. Three to five of these, each with a full name, a title and an organization.', name: 'Full name', title: 'Title, Organization' },
@@ -522,6 +586,7 @@ export const record: [string, string, string][] = [
   ['2020', 'Association of Latino Administrators and Superintendents, keynote', 'osi'],
   ['TV', 'Next with Kyle Clark · Real Talk with Micah Smith · 9News', ''],
   ['Podcast', 'Future Hindsight · New Books Network · Ethical Schools · Wisconsin Public Radio', 'wpr'],
+  ['Newsletter', 'Open Hearts & Open Democracy, on Substack', 'substack'],
   ['Fellow', 'Pahara Institute · Flamboyan Family Engagement Fellowship', 'pahara'],
   ['Council', 'Our Common Purpose, American Academy of Arts & Sciences', 'amacad'],
   ['Faculty', 'Executive Leadership Academy, Leadership Institute of Nevada', 'lion'],

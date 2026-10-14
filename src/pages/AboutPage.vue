@@ -83,9 +83,11 @@ onMounted(() => {
         <span class="mono">Honors</span>
         <ul class="honors" v-reveal>
           <li v-for="[org, what, src] in honors" :key="org">
-            <span class="hon-org">{{ org }}</span>
-            <span class="hon-what">{{ what }}</span>
-            <a :href="srcUrl(src)" target="_blank" rel="noopener noreferrer" class="mono ext" :title="srcTitle(src)">{{ sourceById(src)?.outlet }}</a>
+            <a :href="srcUrl(src)" target="_blank" rel="noopener noreferrer" class="hon" :title="srcTitle(src)">
+              <span class="hon-org">{{ org }}</span>
+              <span class="hon-what">{{ what }}</span>
+              <span class="src-go" aria-hidden="true"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 12 12 2M4 2h8v8" /></svg></span>
+            </a>
           </li>
         </ul>
       </div>
@@ -266,7 +268,7 @@ onMounted(() => {
 
 .bio-copy {
   max-width: 44em;
-  font-size: clamp(17px, 1.35vw, 21px);
+  font-size: var(--fs-lede);
   line-height: 1.6;
 }
 
@@ -346,7 +348,7 @@ onMounted(() => {
 
   dd {
     margin-top: auto;
-    font-size: 15px;
+    font-size: var(--fs-body);
     line-height: 1.5;
     color: var(--ink-2);
     text-wrap: pretty;
@@ -358,27 +360,51 @@ onMounted(() => {
   max-width: 52em;
 
   li {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hon {
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 5fr) minmax(0, 3fr);
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr) 28px;
     gap: 16px;
     padding-block: 16px;
-    border-bottom: 1px solid var(--line);
-    align-items: baseline;
+    align-items: center;
   }
 
   .hon-org {
-    font-size: 17px;
+    font-size: var(--fs-body-lg);
     font-weight: 450;
     letter-spacing: -0.015em;
   }
 
   .hon-what {
-    font-size: 15px;
+    font-size: var(--fs-body);
     color: var(--ink-2);
   }
 
-  .ext {
-    justify-self: end;
+  .src-go {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    box-shadow: inset 0 0 0 1px var(--line-2);
+    color: var(--mute);
+    transition:
+      background 0.4s var(--ease-out),
+      color 0.4s var(--ease-out),
+      box-shadow 0.4s var(--ease-out);
+
+    svg {
+      width: 11px;
+      height: 11px;
+    }
+  }
+
+  .hon:hover .src-go {
+    background: var(--turq-deep);
+    color: var(--paper);
+    box-shadow: inset 0 0 0 1px var(--turq-deep);
   }
 }
 
@@ -408,7 +434,7 @@ onMounted(() => {
   }
 
   .stat-l {
-    font-size: 14px;
+    font-size: var(--fs-small);
     line-height: 1.5;
     color: var(--mute);
     max-width: 20em;
@@ -522,7 +548,7 @@ onMounted(() => {
   }
 
   .tl-t {
-    font-size: clamp(15px, 1.1vw, 17px);
+    font-size: var(--fs-body-lg);
     line-height: 1.5;
     color: var(--ink-2);
     text-wrap: pretty;
@@ -570,7 +596,7 @@ onMounted(() => {
   gap: 8px;
 
   dd {
-    font-size: 14.5px;
+    font-size: var(--fs-body);
     line-height: 1.5;
     text-wrap: pretty;
   }
@@ -606,7 +632,7 @@ onMounted(() => {
   gap: 8px;
 
   .kit-t {
-    font-size: 17px;
+    font-size: var(--fs-body-lg);
     font-weight: 420;
     letter-spacing: -0.015em;
   }
@@ -647,12 +673,13 @@ onMounted(() => {
     grid-template-columns: 1fr;
   }
 
-  .honors li {
-    grid-template-columns: 1fr;
-    gap: 4px;
+  .honors .hon {
+    grid-template-columns: minmax(0, 1fr) 28px;
+    row-gap: 4px;
 
-    .ext {
-      justify-self: start;
+    .src-go {
+      grid-row: 1 / span 2;
+      grid-column: 2;
     }
   }
 

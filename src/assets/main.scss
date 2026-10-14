@@ -45,12 +45,17 @@
   --fs-num-xl: clamp(96px, 13vw, 220px);
   --fs-num-lg: clamp(56px, 6.6vw, 112px);
   --fs-num-md: clamp(36px, 3.6vw, 56px);
+  --fs-lede: clamp(18px, 1.55vw, 23px);
+  // Text sizes. Three steps and the mono label; nothing else.
+  --fs-body-lg: 17px;
+  --fs-body: 15px;
+  --fs-small: 13.5px;
 
   // Rhythm. A band between sections, a large gap between a head and its body.
   --measure: 36em;
   --gutter: clamp(20px, 4vw, 64px);
-  --band: clamp(88px, 12vw, 200px);
-  --gap-l: clamp(40px, 6vw, 96px);
+  --band: clamp(96px, 13vw, 224px);
+  --gap-l: clamp(44px, 6.5vw, 104px);
   --header-h: 68px;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -82,7 +87,7 @@ html.lenis body {
 
 body {
   font-family: var(--sans);
-  font-size: 15px;
+  font-size: var(--fs-body);
   font-weight: 400;
   line-height: 1.6;
   color: var(--ink);
@@ -192,7 +197,7 @@ h4 {
 }
 
 .lede {
-  font-size: clamp(18px, 1.55vw, 23px);
+  font-size: var(--fs-lede);
   font-weight: 380;
   line-height: 1.45;
   letter-spacing: -0.014em;
@@ -203,7 +208,7 @@ h4 {
 
 .prose {
   max-width: var(--measure);
-  font-size: 16px;
+  font-size: var(--fs-body);
   line-height: 1.7;
   color: var(--ink-2);
   text-wrap: pretty;
@@ -282,7 +287,7 @@ h4 {
   border-radius: 999px;
   background: var(--btn-bg);
   color: var(--btn-fg);
-  font-size: 13.5px;
+  font-size: var(--fs-small);
   font-weight: 500;
   letter-spacing: -0.005em;
   white-space: nowrap;
@@ -398,14 +403,10 @@ h4 {
 }
 
 // ---------- print treatments ----------
-// `.tone` is the colour photograph's place in the palette: saturation pulled
-// down, warmed toward the paper, so a snapshot reads as part of the sheet.
+// `.tone` marks a colour photograph. It is shown as shot; the paper behind
+// it is the only treatment.
 .tone {
   background: var(--paper-2);
-
-  img {
-    filter: saturate(0.58) sepia(0.2) contrast(1.05) brightness(1.02);
-  }
 }
 
 // Photographs are never full colour. `.print` is one ink on paper: a

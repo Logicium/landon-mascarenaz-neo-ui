@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { site, talks, testimonials, watch } from '@/data/site'
+import { listen, site, talks, testimonials, watch, type Media } from '@/data/site'
 
-// A clip stays a poster until it is asked for; only then does the YouTube
-// player load, on the privacy-enhanced domain.
+// Nothing plays until it is asked for. `playing` holds the url of the one
+// item whose player is open; video opens the youtube-nocookie player,
+// podcasts the Apple episode player, audio rows a plain file.
 const playing = ref<string | null>(null)
+const embed = (m: Media) =>
+  m.platform === 'youtube'
+    ? `https://www.youtube-nocookie.com/embed/${m.id}?autoplay=1&rel=0`
+    : `https://embed.podcasts.apple.com/us/podcast/${m.id}`
 
 onMounted(() => {
   document.title = `Talks · ${site.name}`
@@ -62,37 +67,70 @@ onMounted(() => {
           <span class="mono">07</span>
           <span class="mono">See him work</span>
         </div>
-        <h2 class="heading" v-reveal>On stage, on a panel, in an interview.</h2>
+        <h2 class="heading" v-reveal>On stage, on a panel, in an <span class="serif">interview</span>.</h2>
       </div>
 
+      <div class="group-head">
+        <span class="mono">Watch</span>
+        <span class="mono">{{ String(watch.length).padStart(2, '0') }} keynotes and talks</span>
+      </div>
       <div class="frames">
-        <figure v-for="(w, i) in watch" :key="w.label" class="film" :class="{ live: !!w.youtube }" v-reveal :style="{ '--reveal-delay': `${i * 90}ms` }">
-          <div v-if="w.youtube && playing === w.youtube" class="film-frame">
+        <figure v-for="(w, i) in watch" :key="w.url" class="film live" v-reveal :style="{ '--reveal-delay': `${(i % 3) * 90}ms` }">
+          <div v-if="playing === w.url" class="film-frame">
             <iframe
-              :src="`https://www.youtube-nocookie.com/embed/${w.youtube}?autoplay=1&rel=0`"
+              :src="embed(w)"
               :title="w.label"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
               loading="lazy"
             ></iframe>
           </div>
-          <button v-else-if="w.youtube" type="button" class="film-frame film-poster tone" :aria-label="`Play ${w.label}`" @click="playing = w.youtube ?? null">
+          <button v-else type="button" class="film-frame film-poster" :aria-label="`Play ${w.label}`" @click="playing = w.url">
             <picture>
               <source :srcset="`/img/${w.poster}-c.avif`" type="image/avif" />
               <img :src="`/img/${w.poster}-c.jpg`" :alt="w.label" loading="lazy" />
             </picture>
             <span class="play" aria-hidden="true"></span>
           </button>
-          <div v-else class="slot film-slot">
-            <span class="play" aria-hidden="true"></span>
-            <span class="slot-tag">Video 16:9</span>
-          </div>
           <figcaption>
             <span class="film-l">{{ w.label }}</span>
-            <span class="mono">{{ w.note }}</span>
+            <span class="mono">{{ w.host }}<template v-if="w.date"> · {{ w.date }}</template></span>
           </figcaption>
         </figure>
       </div>
+
+      <div id="listen" class="group-head">
+        <span class="mono">Listen</span>
+        <span class="mono">{{ String(listen.length).padStart(2, '0') }} podcasts and radio</span>
+      </div>
+      <ol class="eps">
+        <li v-for="m in listen" :key="m.url" class="ep" :class="{ open: playing === m.url, linked: m.platform === 'link' }" v-reveal>
+          <figure v-if="m.poster" class="ep-art tone">
+            <picture>
+              <source :srcset="`/img/${m.poster}-c.avif`" type="image/avif" />
+              <img :src="`/img/${m.poster}-c.jpg`" :alt="m.host" loading="lazy" />
+            </picture>
+          </figure>
+          <div v-else class="slot ep-art"><span class="slot-tag">Audio</span></div>
+          <div class="ep-main">
+            <span class="ep-t">{{ m.label }}</span>
+            <span class="mono">{{ m.host }}<template v-if="m.date"> · {{ m.date }}</template><template v-if="m.duration"> · {{ m.duration }}</template></span>
+          </div>
+          <a :href="m.url" target="_blank" rel="noopener noreferrer" class="mono ext ep-out">{{ m.platform === 'apple' ? 'Episode page' : m.platform === 'link' ? 'Open on Apple Podcasts' : 'Listen at the source' }}</a>
+          <button v-if="m.platform !== 'link'" type="button" class="play ep-play" :class="{ on: playing === m.url }" :aria-label="playing === m.url ? `Close ${m.label}` : `Play ${m.label}`" @click="playing = playing === m.url ? null : m.url"></button>
+          <div v-if="playing === m.url" class="ep-frame">
+            <audio v-if="m.platform === 'audio'" :src="m.id" controls autoplay preload="none"></audio>
+            <iframe
+              v-else
+              :src="embed(m)"
+              :title="m.label"
+              allow="autoplay *; encrypted-media *; clipboard-write"
+              loading="lazy"
+              height="175"
+            ></iframe>
+          </div>
+        </li>
+      </ol>
 
       <div class="quotes">
         <blockquote v-for="(q, i) in testimonials" :key="i" class="quote" v-reveal :style="{ '--reveal-delay': `${i * 90}ms` }">
@@ -156,7 +194,6 @@ onMounted(() => {
   border-bottom: 1px solid var(--line);
   position: relative;
   isolation: isolate;
-  transition: padding 0.5s var(--ease-out);
 
   &::before {
     content: '';
@@ -213,12 +250,12 @@ onMounted(() => {
   }
 
   .t-sub {
-    font-size: clamp(17px, 1.5vw, 22px);
+    font-size: var(--fs-lede);
     color: var(--mute);
   }
 
   .t-body {
-    font-size: 14.5px;
+    font-size: var(--fs-body);
     line-height: 1.5;
     color: var(--ink-2);
     max-width: 40em;
@@ -252,8 +289,6 @@ onMounted(() => {
   }
 
   &:hover {
-    padding-left: 12px;
-
     &::before {
       transform: scaleY(1);
       transform-origin: top;
@@ -275,19 +310,29 @@ onMounted(() => {
   }
 }
 
+// ---------- watch and listen ----------
 .proof {
   padding-block: var(--band) 0;
 }
 
-.frames {
-  margin-top: var(--gap-l) !important;
+.group-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  margin-top: var(--gap-l);
+
+  .mono:first-child {
+    color: var(--ink);
+  }
 }
 
 .frames {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(16px, 2vw, 32px);
-  margin-top: clamp(40px, 5vw, 80px);
+  gap: clamp(24px, 2.6vw, 40px) clamp(16px, 2vw, 32px);
+  margin-top: 24px;
 }
 
 .film {
@@ -311,10 +356,23 @@ onMounted(() => {
     }
   }
 
+  // Posters come from six different channels, so they are printed in one
+  // ink until the pointer arrives, and colour only on hover.
   .film-poster {
     width: 100%;
     display: block;
     cursor: pointer;
+    background: var(--paper-2);
+
+    img {
+      filter: grayscale(1) contrast(1.06);
+      transition: filter 0.6s var(--ease-out);
+    }
+
+    &:hover img,
+    &:focus-visible img {
+      filter: none;
+    }
 
     picture,
     img {
@@ -323,11 +381,6 @@ onMounted(() => {
       height: 100%;
       object-fit: cover;
       object-position: 50% 30%;
-    }
-
-    img {
-      transform: scale(1.03);
-      transition: transform 1.1s var(--ease-out);
     }
 
     .play {
@@ -339,10 +392,6 @@ onMounted(() => {
         border-left-color: var(--paper);
       }
     }
-  }
-
-  &.live:hover .film-poster img {
-    transform: scale(1);
   }
 
   .film-slot {
@@ -417,8 +466,121 @@ onMounted(() => {
   }
 
   .film-l {
-    font-size: 15px;
+    font-size: var(--fs-body);
     font-weight: 450;
+  }
+}
+
+// Podcast rows: show art, title and meta, an outbound link, and a play ring
+// that opens the episode player underneath the row.
+.eps {
+  margin-top: 0;
+}
+
+.ep {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr) auto 40px;
+  column-gap: clamp(16px, 2vw, 28px);
+  align-items: center;
+  padding-block: 18px;
+  border-bottom: 1px solid var(--line);
+
+  .ep-art {
+    aspect-ratio: 1;
+    overflow: hidden;
+
+    picture,
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .ep-main {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .ep-t {
+    font-size: var(--fs-body-lg);
+    font-weight: 450;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+    text-wrap: pretty;
+  }
+
+  .ep-out {
+    white-space: nowrap;
+  }
+
+  // The play ring, as on the film posters, but in the row's own flow.
+  .ep-play {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--ink);
+    transition:
+      background 0.45s var(--ease-out),
+      transform 0.45s var(--ease-out);
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 55%;
+      top: 50%;
+      width: 0;
+      height: 0;
+      border-left: 10px solid var(--ink);
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      transform: translate(-50%, -50%);
+      transition: border-left-color 0.45s var(--ease-out);
+    }
+
+    &:hover,
+    &.on {
+      background: var(--ink);
+
+      &::after {
+        border-left-color: var(--paper);
+      }
+    }
+
+    // Open: the triangle becomes a square stop.
+    &.on::after {
+      border: 0;
+      width: 10px;
+      height: 10px;
+      background: var(--paper);
+      left: 50%;
+    }
+  }
+
+  &.linked {
+    grid-template-columns: 88px minmax(0, 1fr) auto;
+  }
+
+  .ep-frame {
+    grid-column: 1 / -1;
+    padding-top: 16px;
+
+    iframe {
+      display: block;
+      width: 100%;
+      border: 0;
+      border-radius: 10px;
+      background: var(--paper-2);
+    }
+
+    audio {
+      display: block;
+      width: 100%;
+    }
   }
 }
 
@@ -452,7 +614,7 @@ onMounted(() => {
   }
 
   .q-name {
-    font-size: 14px;
+    font-size: var(--fs-small);
     font-weight: 450;
   }
 }
@@ -489,6 +651,25 @@ onMounted(() => {
   .quotes {
     grid-template-columns: 1fr;
   }
+
+  .ep,
+  .ep.linked {
+    grid-template-columns: 68px minmax(0, 1fr) 40px;
+    row-gap: 10px;
+
+    .ep-out {
+      grid-column: 2;
+      white-space: normal;
+    }
+
+    .ep-play {
+      grid-row: 1;
+      grid-column: 3;
+    }
+  }
+}
+
+@media (max-width: 600px) {
 
   .quote {
     padding-right: 0;

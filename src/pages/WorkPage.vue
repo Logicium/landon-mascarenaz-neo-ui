@@ -119,7 +119,7 @@ onMounted(() => {
   }
 
   .fmt-b {
-    font-size: 14.5px;
+    font-size: var(--fs-body);
     line-height: 1.55;
     color: var(--mute);
     text-wrap: pretty;

@@ -60,7 +60,7 @@ const list = computed(() =>
   }
 
   .src-t {
-    font-size: 15px;
+    font-size: var(--fs-body);
     line-height: 1.35;
     letter-spacing: -0.01em;
     text-wrap: pretty;

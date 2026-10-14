@@ -117,7 +117,6 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
         <div class="frame spread">
           <div class="spread-top">
             <span class="sec-idx"><span class="mono">01</span><span class="mono">The work</span></span>
-            <span class="mono">Three doors in</span>
           </div>
           <div class="spread-body work-body">
             <div class="work-copy">
@@ -129,9 +128,6 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
               <transition name="cap" mode="out-in">
                 <div :key="door.n" class="work-meta">
                   <p class="lede">{{ door.body }}</p>
-                  <ul class="aud">
-                    <li v-for="a in door.audiences" :key="a" class="mono">{{ a }}</li>
-                  </ul>
                 </div>
               </transition>
               <ol class="steps" @mouseleave="doorHover = null" aria-label="Doors">
@@ -158,7 +154,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
               <transition name="cap" mode="out-in">
                 <span :key="door.n" class="plate-cap">
                   <span class="mono">Held by</span>
-                  <span class="serif plate-vals">{{ valuesFor(doorIndex).map((v) => v.word).join(' & ') }}</span>
+                  <span class="serif plate-vals">{{ valuesFor(door.id).map((v) => v.word).join(' & ') }}</span>
                 </span>
               </transition>
             </div>
@@ -179,7 +175,6 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
         <div class="frame spread">
           <div class="spread-top">
             <span class="sec-idx"><span class="mono">02</span><span class="mono">The book</span></span>
-            <span class="mono">{{ openSystem.press }}, {{ openSystem.year }}</span>
           </div>
           <div class="spread-body book-body">
             <figure class="book-cover" :class="{ turned: bookIndex === 1 }">
@@ -239,11 +234,10 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
         <div class="frame spread">
           <div class="spread-top">
             <span class="sec-idx"><span class="mono">03</span><span class="mono">The record</span></span>
-            <span class="mono">Every figure sourced</span>
           </div>
           <div class="spread-body rec-body">
             <h2 class="heading sp-title">A builder who <span class="serif">kept the receipts</span>.</h2>
-            <p class="lede rec-lede">Twenty years inside the institutions most speakers only analyze. Every figure below links to the public record it comes from.</p>
+            <p class="lede rec-lede">Twenty years inside the institutions most speakers only analyze.</p>
             <div class="stat-row">
               <div v-for="[n, l] in stats" :key="l" class="stat">
                 <span class="num stat-n">{{ n }}</span>
@@ -254,7 +248,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
               <li v-for="[org, what, src] in honors" :key="org">
                 <a :href="sourceById(src)?.url" target="_blank" rel="noopener noreferrer" class="honor">
                   <span class="honor-org">{{ org }}</span>
-                  <span class="mono">{{ what }}</span>
+                  <span class="honor-what">{{ what }}</span>
                 </a>
               </li>
             </ul>
@@ -277,7 +271,6 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
           <span class="sec-idx"><span class="mono">04</span><span class="mono">Six sessions</span></span>
           <div>
             <h2 class="heading">Six sessions, outcomes <span class="serif">written</span>.</h2>
-            <p class="lede rail-lede">Every proposal form asks for learning outcomes. They are published so a program committee can lift them straight into the agenda.</p>
           </div>
           <span class="counter num" aria-hidden="true">{{ String(active).padStart(2, '0') }}<i>/{{ String(talks.length).padStart(2, '0') }}</i></span>
         </div>
@@ -336,7 +329,6 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
           </figure>
           <div class="person-copy" v-reveal>
             <p class="subheading">A first-grade teacher on the Navajo Nation who went on to chair the board of a thirteen-college system, direct a sixty-district rural talent initiative, and found a statewide civic coalition.</p>
-            <p class="lede">Born in California, raised in Littleton, Colorado, with family roots in Colorado and New Mexico that run back generations. He lives in Denver and keeps an office in Trinidad.</p>
             <ul class="words" aria-label="Values">
               <li v-for="v in values" :key="v.word" :class="{ shared: v.shared }">{{ v.word }}</li>
             </ul>
@@ -364,6 +356,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
               <li><span class="mono">Travels from</span><span>{{ site.travelsFrom }}</span></li>
               <li><span class="mono">Virtual</span><span>Available, 30 to 45 minutes</span></li>
               <li><span class="mono">Recording</span><span>Permitted, on demand</span></li>
+              <li><span class="mono">Newsletter</span><a :href="site.substack.url" target="_blank" rel="noopener">{{ site.substack.label }}</a></li>
               <li><span class="mono">Represented by</span><a :href="site.agencyUrl" target="_blank" rel="noopener">{{ site.agency }}</a></li>
             </ul>
             <router-link :to="{ path: '/about', hash: '#planners' }" class="mono ext">Everything a committee will ask</router-link>
@@ -1115,7 +1108,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 15px;
+  font-size: var(--fs-body);
   line-height: 1.4;
   color: var(--ink-2);
 }
@@ -1131,7 +1124,8 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
   max-width: 30em;
 }
 
-// Honors under the figures: the same four columns, hairline, small.
+// Honors under the figures: the same four columns and the same small text
+// as the figure captions, the organisation in ink and the honor in mute.
 .honor-row {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -1139,7 +1133,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
 
   li {
     border-right: 1px solid var(--line);
-    padding: 14px 24px 4px 0;
+    padding: 22px 24px 8px 0;
 
     &:not(:first-child) {
       padding-left: 24px;
@@ -1154,16 +1148,21 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
     display: flex;
     flex-direction: column;
     gap: 4px;
-    color: var(--ink);
+    font-size: var(--fs-small);
+    line-height: 1.5;
+    max-width: 18em;
+    text-wrap: pretty;
     transition: color 0.35s var(--ease-out);
 
     .honor-org {
-      font-size: 14px;
-      font-weight: 450;
-      letter-spacing: -0.01em;
+      color: var(--ink);
     }
 
-    &:hover {
+    .honor-what {
+      color: var(--mute);
+    }
+
+    &:hover .honor-org {
       color: var(--clay);
     }
   }
@@ -1195,7 +1194,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
   }
 
   .stat-l {
-    font-size: 13.5px;
+    font-size: var(--fs-small);
     line-height: 1.5;
     color: var(--mute);
     max-width: 18em;
@@ -1239,10 +1238,6 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
   }
 }
 
-.rail-lede {
-  margin-top: 22px;
-}
-
 .counter {
   justify-self: end;
   font-size: var(--fs-num-lg);
@@ -1283,11 +1278,6 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
       object-fit: cover;
     }
 
-    img {
-      transform: scale(1.04);
-      transition: transform 1.1s var(--ease-out);
-    }
-
     .card-n {
       position: absolute;
       left: 12px;
@@ -1310,7 +1300,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
   }
 
   .card-s {
-    font-size: clamp(16px, 1.25vw, 19px);
+    font-size: var(--fs-lede);
     color: var(--mute);
     line-height: 1.2;
   }
@@ -1338,10 +1328,6 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
   }
 
   &:hover {
-    .card-img img {
-      transform: scale(1);
-    }
-
     .pill {
       background: var(--ink);
       color: var(--paper);
@@ -1517,7 +1503,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
     gap: 16px;
     padding-block: 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-    font-size: 14px;
+    font-size: var(--fs-small);
   }
 }
 

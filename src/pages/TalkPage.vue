@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { doors, site, talks } from '@/data/site'
+import { doorById, site, sourceById, talks } from '@/data/site'
 
 const route = useRoute()
 const router = useRouter()
@@ -10,7 +10,8 @@ const index = computed(() => talks.findIndex((t) => t.slug === route.params.slug
 const talk = computed(() => talks[index.value])
 const prev = computed(() => talks[(index.value - 1 + talks.length) % talks.length])
 const next = computed(() => talks[(index.value + 1) % talks.length])
-const door = computed(() => doors[talk.value?.door ?? 0])
+const door = computed(() => doorById(talk.value?.door ?? 'mobility'))
+const article = computed(() => (talk.value?.press ? sourceById(talk.value.press) : undefined))
 
 watch(
   index,
@@ -68,7 +69,25 @@ watch(
           </ol>
         </div>
 
-        <figure class="slot still" v-reveal>
+        <figure v-if="article?.image" class="press" v-reveal>
+          <a :href="article.url" target="_blank" rel="noopener noreferrer" class="press-link">
+            <span class="press-img tone">
+              <picture>
+                <source :srcset="`/img/${article.image}.avif`" type="image/avif" />
+                <img :src="`/img/${article.image}.jpg`" :alt="`${article.outlet}: ${article.title}`" loading="lazy" />
+              </picture>
+            </span>
+            <figcaption>
+              <span class="mono">In the press</span>
+              <span class="press-t">{{ article.title }}</span>
+              <span class="press-m">{{ article.outlet }}<template v-if="article.date">, {{ article.date }}</template></span>
+            </figcaption>
+            <span class="src-go" aria-hidden="true">
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 12 12 2M4 2h8v8" /></svg>
+            </span>
+          </a>
+        </figure>
+        <figure v-else class="slot still" v-reveal>
           <span class="slot-tag">Session still 3:2</span>
         </figure>
       </div>
@@ -174,7 +193,7 @@ watch(
       gap: 4px;
       padding-block: 12px;
       border-bottom: 1px solid var(--line);
-      font-size: 14px;
+      font-size: var(--fs-small);
     }
   }
 }
@@ -204,7 +223,7 @@ watch(
     gap: 16px;
     padding-block: 16px;
     border-bottom: 1px solid var(--line);
-    font-size: clamp(16px, 1.25vw, 19px);
+    font-size: var(--fs-lede);
     line-height: 1.5;
     color: var(--ink-2);
     text-wrap: pretty;
@@ -218,6 +237,65 @@ watch(
 
 .still {
   aspect-ratio: 3 / 2;
+}
+
+// The article that covers this session's ground: the capture full width,
+// the caption beneath it in one line.
+.press-link {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.press-img {
+  display: block;
+  aspect-ratio: 3 / 2;
+
+  picture,
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.press figcaption {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  column-gap: clamp(16px, 2vw, 32px);
+  align-items: baseline;
+
+  .press-t {
+    font-size: var(--fs-body-lg);
+    font-weight: 450;
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+    text-wrap: pretty;
+  }
+
+  .press-m {
+    font-size: var(--fs-small);
+    color: var(--mute);
+    white-space: nowrap;
+  }
+}
+
+.press .src-go {
+  display: none;
+}
+
+.press-link:hover {
+  .src-go {
+    background: var(--turq-deep);
+    color: var(--paper);
+    box-shadow: inset 0 0 0 1px var(--turq-deep);
+
+    svg {
+      transform: translate(1px, -1px);
+    }
+  }
 }
 
 .pager {
@@ -260,6 +338,11 @@ watch(
 
   .facts {
     position: static;
+  }
+
+  .press figcaption {
+    grid-template-columns: 1fr;
+    row-gap: 6px;
   }
 
   .big-n {
