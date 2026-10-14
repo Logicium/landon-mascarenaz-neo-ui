@@ -22,6 +22,8 @@ const siteSource = {
     label: 'Open Hearts & Open Democracy',
     url: 'https://openheartsopendemocracy.substack.com',
   },
+  portrait: '/img/portrait-c.jpg',
+  portraitAlt: 'Portrait of Dr. Landon Mascareñaz.',
 }
 
 const heroSource = {
@@ -264,7 +266,7 @@ const doorList: Omit<Door, 'n'>[] = [
     short: 'Democracy',
     body: 'Trust is not won at the ballot box. It is decided by whether the schools, colleges and city halls people actually deal with turn out to be responsive.',
     audiences: ['Foundations', 'Civic organizations', 'Public affairs forums'],
-    image: 'room',
+    image: '/img/room-c.jpg',
     imageAlt: 'A community meeting seen from the back of the room, a slide about political crisis on the screen.',
   },
   {
@@ -273,7 +275,7 @@ const doorList: Omit<Door, 'n'>[] = [
     short: 'Mobility',
     body: 'Community colleges as engines of mobility, regional talent ecosystems, and what it takes to align education, employers and communities around one goal.',
     audiences: ['Higher education', 'Workforce boards', 'Economic development'],
-    image: 'rural',
+    image: '/img/rural-c.jpg',
     imageAlt: 'A rural Colorado classroom, students laughing as a teacher reads to them.',
   },
   {
@@ -282,7 +284,7 @@ const doorList: Omit<Door, 'n'>[] = [
     short: 'Leadership',
     body: 'Representation, belonging, and what a leader actually does with a seat once they have one. From a Mexican-American leader whose family roots run through Colorado and New Mexico for generations.',
     audiences: ['Latino organizations', 'Universities & HSIs', 'Fellowship cohorts'],
-    image: 'cafe',
+    image: '/img/cafe-c.jpg',
     imageAlt: 'Landon Mascareñaz at a café table by a winter window, looking out at the street.',
   },
 ]
@@ -333,7 +335,7 @@ const talksSource: Talk[] = [
     level: 'Intermediate to advanced',
     formats: 'Keynote · Retreat',
     door: 'mobility',
-    image: 'panel',
+    image: '/img/panel-c.jpg',
     press: 'cccs-chair',
     outcomes: [
       'Sequence a board-led transformation from listening through strategic plan to executive hire.',
@@ -352,7 +354,7 @@ const talksSource: Talk[] = [
     level: 'Intro to intermediate',
     formats: 'Keynote · Workshop',
     door: 'mobility',
-    image: 'rural',
+    image: '/img/rural-c.jpg',
     press: 'the74',
     outcomes: [
       'Map the education, employer and workforce actors in their region and find the missing relationships.',
@@ -371,7 +373,7 @@ const talksSource: Talk[] = [
     level: 'All levels',
     formats: 'Keynote · Fireside',
     door: 'democracy',
-    image: 'room',
+    image: '/img/room-c.jpg',
     press: 'obama',
     outcomes: [
       'Explain the relationship between institutional responsiveness and civic trust.',
@@ -390,7 +392,7 @@ const talksSource: Talk[] = [
     level: 'Intermediate',
     formats: 'Keynote · Cabinet retreat',
     door: 'mobility',
-    image: 'trinidad',
+    image: '/img/trinidad-c.jpg',
     press: 'cei',
     outcomes: [
       'Compare their institution’s stated priorities against its budget and calendar.',
@@ -409,7 +411,7 @@ const talksSource: Talk[] = [
     level: 'All levels',
     formats: 'Keynote · Workshop · Moderation',
     door: 'democracy',
-    image: 'sign',
+    image: '/img/sign-c.jpg',
     press: 'unite',
     outcomes: [
       'Assemble a coalition around a shared concrete problem rather than shared values.',
@@ -428,7 +430,7 @@ const talksSource: Talk[] = [
     level: 'All levels',
     formats: 'Keynote · Fireside · Workshop',
     door: 'leadership',
-    image: 'keynote',
+    image: '/img/keynote-c.jpg',
     press: 'cllaro',
     outcomes: [
       'Diagnose whether their organization is currently open or closed to the people it serves.',
@@ -443,6 +445,7 @@ const openSystemSource = {
   title: 'The Open System',
   authors: 'Mascareñaz & Tran',
   press: 'Harvard Education Press',
+  cover: '/open-system-cover.jpg',
   year: '2023',
   pages: '280',
   isbn: '978-1-68253-813-5',
@@ -664,6 +667,11 @@ export const timeline = content.timeline
 export const record = content.record
 export const stats = content.stats
 export const planners = content.planners
+
+// Every photograph in the tree is a path to its JPEG, which is what the
+// editor binds and replaces. The AVIF beside a local JPEG is derived here,
+// so a replaced image (a studio URL or a data URL) simply has no AVIF.
+export const avif = (src: string) => (/^\/[\w./-]+\.jpg$/.test(src) ? src.replace(/\.jpg$/, '.avif') : undefined)
 
 // Views onto the media list. The items are the same reactive objects, so an
 // edit to a video's label shows here too; only the split is fixed.

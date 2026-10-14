@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import SourceList from '@/components/SourceList.vue'
 import { useHorizontal } from '@/composables/useHorizontal'
-import { honors, openSystem, person, planners, record, site, sourceById, sourceIndex, stats, timeline, values, valuesStatement } from '@/data/site'
+import { avif, honors, openSystem, person, planners, record, site, sourceById, sourceIndex, stats, timeline, values, valuesStatement } from '@/data/site'
 
 // The timeline runs sideways: a tall wrapper keeps it pinned while the
 // track slides left, and the big year reads out whichever entry is nearest.
@@ -30,8 +30,8 @@ onMounted(() => {
         <div class="portrait-col fade-in" style="--d: 300ms">
           <figure class="portrait print">
             <picture>
-              <source srcset="/img/portrait.avif" type="image/avif" />
-              <img src="/img/portrait.jpg" alt="Portrait of Dr. Landon Mascareñaz." />
+              <source v-if="avif(site.portrait)" :srcset="avif(site.portrait)" type="image/avif" />
+              <img :src="site.portrait" :alt="site.portraitAlt" />
             </picture>
           </figure>
         </div>

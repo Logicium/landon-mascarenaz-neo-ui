@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { openSystem, said, site, sourceById, talks } from '@/data/site'
+import { avif, openSystem, said, site, sourceById, talks } from '@/data/site'
 
 const publisher = sourceById(openSystem.source)
 const saidSource = sourceById(said.source)
@@ -21,8 +21,8 @@ onMounted(() => {
       <div class="head-grid">
         <figure class="cover fade-in" style="--d: 200ms">
           <picture>
-            <source srcset="/open-system-cover.avif" type="image/avif" />
-            <img src="/open-system-cover.jpg" :alt="`${openSystem.title}, by ${openSystem.authors}.`" width="894" height="1342" />
+            <source v-if="avif(openSystem.cover)" :srcset="avif(openSystem.cover)" type="image/avif" />
+            <img :src="openSystem.cover" :alt="`${openSystem.title}, by ${openSystem.authors}.`" width="894" height="1342" />
           </picture>
         </figure>
         <div class="titles">

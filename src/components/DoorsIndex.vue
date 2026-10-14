@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { doors, valuesFor, valuesStatement } from '@/data/site'
+import { avif, doors, valuesFor, valuesStatement } from '@/data/site'
 
 // Three doors into one body of work. The left column pins a large index
 // numeral that ticks over as each door scrolls through the middle of the
@@ -63,8 +63,8 @@ onBeforeUnmount(() => io?.disconnect())
           </div>
           <figure class="door-img print" v-reveal>
             <picture>
-              <source :srcset="`/img/${d.image}.avif`" type="image/avif" />
-              <img :src="`/img/${d.image}.jpg`" :alt="d.imageAlt" loading="lazy" />
+              <source v-if="avif(d.image)" :srcset="avif(d.image)" type="image/avif" />
+              <img :src="d.image" :alt="d.imageAlt" loading="lazy" />
             </picture>
           </figure>
           <h3 class="door-title">{{ d.title }}</h3>

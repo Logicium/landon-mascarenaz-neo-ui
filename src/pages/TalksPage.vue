@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { listen, site, talks, testimonials, watch, type Media } from '@/data/site'
+import { avif, listen, site, talks, testimonials, watch, type Media } from '@/data/site'
 
 // Nothing plays until it is asked for. `playing` holds the url of the one
 // item whose player is open; video opens the youtube-nocookie player,
@@ -39,8 +39,8 @@ onMounted(() => {
             <span class="t-n num">{{ t.n }}</span>
             <figure class="t-img tone">
               <picture>
-                <source :srcset="`/img/${t.image}-c.avif`" type="image/avif" />
-                <img :src="`/img/${t.image}-c.jpg`" :alt="t.title" loading="lazy" />
+                <source v-if="avif(t.image)" :srcset="avif(t.image)" type="image/avif" />
+                <img :src="t.image" :alt="t.title" loading="lazy" />
               </picture>
             </figure>
             <span class="t-main">

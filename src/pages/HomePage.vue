@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import HeroScene from '@/components/HeroScene.vue'
-import { clients, doors, hero, honors, openSystem, said, site, sourceById, stats, talks, values, valuesFor } from '@/data/site'
+import { avif, clients, doors, hero, honors, openSystem, said, site, sourceById, stats, talks, values, valuesFor } from '@/data/site'
 import { useStack } from '@/composables/useStack'
 import { useHorizontal } from '@/composables/useHorizontal'
 import { useSteps } from '@/composables/useSteps'
@@ -145,9 +145,9 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
                   <span :key="door.n" class="num plate-n" aria-hidden="true">{{ door.n }}</span>
                 </transition>
                 <transition name="wipe">
-                  <picture :key="door.image">
-                    <source :srcset="`/img/${door.image}.avif`" type="image/avif" />
-                    <img :src="`/img/${door.image}.jpg`" :alt="door.imageAlt" loading="lazy" />
+                  <picture :key="door.n">
+                    <source v-if="avif(door.image)" :srcset="avif(door.image)" type="image/avif" />
+                    <img :src="door.image" :alt="door.imageAlt" loading="lazy" />
                   </picture>
                 </transition>
               </div>
@@ -179,8 +179,8 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
           <div class="spread-body book-body">
             <figure class="book-cover" :class="{ turned: bookIndex === 1 }">
               <picture>
-                <source srcset="/open-system-cover.avif" type="image/avif" />
-                <img src="/open-system-cover.jpg" :alt="`${openSystem.title}, by ${openSystem.authors}.`" width="894" height="1342" loading="lazy" />
+                <source v-if="avif(openSystem.cover)" :srcset="avif(openSystem.cover)" type="image/avif" />
+                <img :src="openSystem.cover" :alt="`${openSystem.title}, by ${openSystem.authors}.`" width="894" height="1342" loading="lazy" />
               </picture>
             </figure>
             <div class="book-right">
@@ -278,8 +278,8 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
           <router-link v-for="t in talks" :key="t.slug" :to="{ name: 'talk', params: { slug: t.slug } }" class="card">
             <figure class="card-img tone">
               <picture>
-                <source :srcset="`/img/${t.image}-c.avif`" type="image/avif" />
-                <img :src="`/img/${t.image}-c.jpg`" :alt="t.title" loading="lazy" />
+                <source v-if="avif(t.image)" :srcset="avif(t.image)" type="image/avif" />
+                <img :src="t.image" :alt="t.title" loading="lazy" />
               </picture>
               <span class="mono card-n">{{ t.n }}</span>
             </figure>
@@ -323,8 +323,8 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
         <div class="person-grid">
           <figure class="portrait tone" v-reveal>
             <picture>
-              <source srcset="/img/portrait-c.avif" type="image/avif" />
-              <img src="/img/portrait-c.jpg" alt="Portrait of Dr. Landon Mascareñaz." loading="lazy" />
+              <source v-if="avif(site.portrait)" :srcset="avif(site.portrait)" type="image/avif" />
+              <img :src="site.portrait" :alt="site.portraitAlt" loading="lazy" />
             </picture>
           </figure>
           <div class="person-copy" v-reveal>
