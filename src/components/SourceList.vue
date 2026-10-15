@@ -21,7 +21,7 @@ const list = computed(() =>
         <span class="mono src-n">{{ String(s.n).padStart(2, '0') }}</span>
         <span class="src-main">
           <span class="src-t">{{ s.title }}</span>
-          <span class="mono src-m">{{ s.outlet }}<template v-if="s.date"> · {{ s.date }}</template></span>
+          <span class="mono src-m"><span>{{ s.outlet }}</span><template v-if="s.when"> · <span>{{ s.when }}</span></template></span>
         </span>
         <span class="src-go" aria-hidden="true">
           <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 12 12 2M4 2h8v8" /></svg>

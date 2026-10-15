@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { site, ui } from '@/data/site'
 
 const route = useRoute()
 const scrolled = ref(false)
@@ -32,18 +33,18 @@ const home = (hash: string) => (route.name === 'home' ? { hash } : { name: 'home
     <div class="frame bar">
       <router-link to="/" class="wordmark">
         <span class="mark" aria-hidden="true"></span>
-        Landon Mascareñaz
+        {{ site.name }}
       </router-link>
 
       <nav class="nav">
-        <router-link to="/work" class="nav-link" active-class="is-active">Work</router-link>
-        <router-link to="/talks" class="nav-link" active-class="is-active">Talks</router-link>
-        <router-link to="/book" class="nav-link" active-class="is-active">The Book</router-link>
-        <router-link to="/about" class="nav-link" active-class="is-active">About</router-link>
+        <router-link to="/work" class="nav-link" active-class="is-active">{{ ui.nav.work }}</router-link>
+        <router-link to="/talks" class="nav-link" active-class="is-active">{{ ui.nav.talks }}</router-link>
+        <router-link to="/book" class="nav-link" active-class="is-active">{{ ui.nav.book }}</router-link>
+        <router-link to="/about" class="nav-link" active-class="is-active">{{ ui.nav.about }}</router-link>
       </nav>
 
       <div class="right">
-        <router-link :to="home('#contact')" class="btn small">Request availability</router-link>
+        <router-link :to="home('#contact')" class="btn small">{{ ui.labels.request }}</router-link>
       </div>
     </div>
   </header>

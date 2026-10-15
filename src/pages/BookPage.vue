@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { avif, openSystem, said, site, sourceById, talks } from '@/data/site'
+import { avif, openSystem, said, site, sourceById, talks, ui } from '@/data/site'
 
 const publisher = sourceById(openSystem.source)
 const saidSource = sourceById(said.source)
@@ -15,8 +15,8 @@ onMounted(() => {
   <article class="book-page">
     <header class="frame head">
       <div class="crumbs mono">
-        <span>The book</span>
-        <span>{{ openSystem.press }}, {{ openSystem.year }}</span>
+        <span>{{ ui.sections.book }}</span>
+        <span><span>{{ openSystem.press }}</span>, <span>{{ openSystem.year }}</span></span>
       </div>
       <div class="head-grid">
         <figure class="cover fade-in" style="--d: 200ms">
@@ -27,14 +27,14 @@ onMounted(() => {
         </figure>
         <div class="titles">
           <h1 class="display lines">
-            <span class="line" style="--i: 0"><span>The Open</span></span>
-            <span class="line" style="--i: 1"><span>System<span class="serif">.</span></span></span>
+            <span class="line" style="--i: 0"><span>{{ ui.book.title1 }}</span></span>
+            <span class="line" style="--i: 1"><span><span>{{ ui.book.title2 }}</span><span class="serif">.</span></span></span>
           </h1>
-          <p class="lede fade-in" style="--d: 700ms">Redesigning Education and Reigniting Democracy. Written with Dr. Doannie Tran. A working framework for diagnosing why institutions stop listening, and reversing it.</p>
+          <p class="lede fade-in" style="--d: 700ms">{{ ui.book.lede }}</p>
           <div class="meta fade-in" style="--d: 900ms">
             <span class="mono">{{ openSystem.authors }}</span>
-            <span class="mono">ISBN {{ openSystem.isbn }}</span>
-            <a v-if="publisher" :href="publisher.url" target="_blank" rel="noopener noreferrer" class="mono ext">Publisher page</a>
+            <span class="mono"><span>{{ ui.labels.isbn }}</span> <span>{{ openSystem.isbn }}</span></span>
+            <a v-if="publisher" :href="publisher.url" target="_blank" rel="noopener noreferrer" class="mono ext">{{ ui.labels.publisherPage }}</a>
           </div>
         </div>
       </div>
@@ -44,7 +44,7 @@ onMounted(() => {
       <div class="sec-head">
         <div class="sec-idx">
           <span class="mono">01</span>
-          <span class="mono">The argument</span>
+          <span class="mono">{{ ui.sections.argument }}</span>
         </div>
         <div>
           <h2 class="heading" v-reveal>{{ openSystem.statement }}</h2>
@@ -60,7 +60,7 @@ onMounted(() => {
       <div class="sec-head">
         <div class="sec-idx">
           <span class="mono">02</span>
-          <span class="mono">Taught at</span>
+          <span class="mono">{{ ui.sections.taughtAt }}</span>
         </div>
         <ul class="inst" v-reveal>
           <li v-for="[name, sub] in openSystem.taughtAt" :key="name">
@@ -75,11 +75,11 @@ onMounted(() => {
       <div class="sec-head">
         <div class="sec-idx">
           <span class="mono">03</span>
-          <span class="mono">On the record</span>
+          <span class="mono">{{ ui.sections.onRecord }}</span>
         </div>
         <div class="said-main">
-          <p class="said-q serif" v-reveal>“{{ said.quote }}”</p>
-          <a v-if="saidSource" :href="saidSource.url" target="_blank" rel="noopener noreferrer" class="mono ext" v-reveal>{{ saidSource.outlet }}, {{ saidSource.date }}</a>
+          <p class="said-q serif" v-reveal>{{ said.quote }}</p>
+          <a v-if="saidSource" :href="saidSource.url" target="_blank" rel="noopener noreferrer" class="mono ext" v-reveal><span>{{ saidSource.outlet }}</span>, <span>{{ saidSource.when }}</span></a>
         </div>
       </div>
     </section>
@@ -88,14 +88,14 @@ onMounted(() => {
       <div class="sec-head">
         <div class="sec-idx">
           <span class="mono">04</span>
-          <span class="mono">Book the session</span>
+          <span class="mono">{{ ui.sections.bookSession }}</span>
         </div>
         <div class="cta-main" v-reveal>
-          <h2 class="heading">{{ bookTalk.title }}<span class="serif sub">, {{ bookTalk.subtitle }}</span></h2>
+          <h2 class="heading"><span>{{ bookTalk.title }}</span><span class="serif sub">, <span>{{ bookTalk.subtitle }}</span></span></h2>
           <div class="cta-row">
-            <router-link :to="{ name: 'talk', params: { slug: bookTalk.slug } }" class="btn ghost">See the session</router-link>
+            <router-link :to="{ name: 'talk', params: { slug: bookTalk.slug } }" class="btn ghost">{{ ui.labels.seeSession }}</router-link>
             <router-link :to="{ name: 'home', hash: '#contact' }" class="btn">
-              Request availability
+              {{ ui.labels.request }}
               <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg>
             </router-link>
           </div>

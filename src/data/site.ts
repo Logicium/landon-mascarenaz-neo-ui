@@ -37,7 +37,7 @@ export interface Source {
   id: string
   title: string
   outlet: string
-  date: string
+  when: string
   url: string
   // A page capture under /img, set once scripts/press-shots.mjs has run.
   image?: string
@@ -48,14 +48,14 @@ const sourcesSource: Source[] = [
     id: 'cccs-bio',
     title: 'Dr. Landon Mascareñaz, State Board profile',
     outlet: 'Colorado Community College System',
-    date: '',
+    when: '',
     url: 'https://cccs.edu/about/governance/dr-landon-mascarenaz/',
   },
   {
     id: 'cccs-chair',
     title: 'State Board welcomes Dr. Landon Mascareñaz as new chair',
     outlet: 'Colorado Community College System',
-    date: 'Aug 2023',
+    when: 'Aug 2023',
     url: 'https://cccs.edu/cccs-news/state-board-welcomes-dr-landon-mascarenaz-as-new-chair/',
     image: 'press/cccs-chair',
   },
@@ -63,21 +63,21 @@ const sourcesSource: Source[] = [
     id: 'cc-staff',
     title: 'Staff: Landon Mascareñaz, Founding Chief Executive Officer',
     outlet: 'Courageous Colorado',
-    date: '',
+    when: '',
     url: 'https://www.courageouscolorado.org/staff',
   },
   {
     id: 'copolitics',
     title: 'Q&A with Courageous Colorado’s Landon Mascareñaz: nonprofit aims to bring bravery back to politics',
     outlet: 'Colorado Politics, Ernest Luning',
-    date: 'Oct 2025',
+    when: 'Oct 2025',
     url: 'https://www.coloradopolitics.com/2025/10/17/qa-with-courageous-colorados-landon-mascare%C3%B1az-nonprofit-aims-to-bring-bravery-back-to-politics/',
   },
   {
     id: 'unite',
     title: 'Opening Colorado’s primaries: how Landon Mascareñaz is building a Colorado-first coalition for reform',
     outlet: 'Unite America',
-    date: 'Jan 2026',
+    when: 'Jan 2026',
     url: 'https://www.uniteamerica.org/articles/opening-colorados-primaries-how-landon-mascarenaz-is-building-a-colorado-first-coalition-for-reform',
     image: 'press/unite',
   },
@@ -85,28 +85,28 @@ const sourcesSource: Source[] = [
     id: 'hep',
     title: 'The Open System: Redesigning Education and Reigniting Democracy',
     outlet: 'Harvard Education Press',
-    date: '2023',
+    when: '2023',
     url: 'https://hep.gse.harvard.edu/9781682538135/the-open-system/',
   },
   {
     id: 'osi',
     title: 'Mascareñaz bio and archive',
     outlet: 'The Open System Institute',
-    date: '',
+    when: '',
     url: 'https://www.theopensystem.org/mascarenaz-bio-archive',
   },
   {
     id: 'pahara',
     title: 'Fellow profile: Landon Mascareñaz',
     outlet: 'Pahara Institute',
-    date: '',
+    when: '',
     url: 'https://www.pahara.org/fellow/landon-mascare%C3%B1az',
   },
   {
     id: 'cei',
     title: 'Mascareñaz to join the Colorado Education Initiative team',
     outlet: 'Colorado Education Initiative',
-    date: 'Jun 2019',
+    when: 'Jun 2019',
     url: 'https://www.coloradoedinitiative.org/mascarenaz-to-join-the-colorado-education-initiative-team/',
     image: 'press/cei',
   },
@@ -114,14 +114,14 @@ const sourcesSource: Source[] = [
     id: 'hti',
     title: 'Homegrown Talent Initiative',
     outlet: 'Colorado Succeeds',
-    date: '',
+    when: '',
     url: 'https://coloradosucceeds.org/resource/homegrown-talent-initiative/',
   },
   {
     id: 'the74',
     title: 'First person: how Colorado’s Homegrown Talent Initiative is boosting the “educonomy” in 8 rural communities',
     outlet: 'The 74',
-    date: '',
+    when: '',
     url: 'https://www.the74million.org/article/first-person-how-colorados-homegrown-talent-initiative-is-boosting-the-educonomy-in-8-rural-communities-to-help-students-succeed/',
     image: 'press/the74',
   },
@@ -129,35 +129,35 @@ const sourcesSource: Source[] = [
     id: 'emergent',
     title: 'About Emergent Campus Trinidad',
     outlet: 'Emergent Campus',
-    date: '',
+    when: '',
     url: 'https://emergentcampus.org/trinidad-campus/',
   },
   {
     id: 'ctn',
     title: 'Landon Mascareñaz, Convener and Chair',
     outlet: 'Colorado Trustee Network',
-    date: '',
+    when: '',
     url: 'https://colorado-trustee-network.squarespace.com/convening-committee-members/landon-mascarenaz',
   },
   {
     id: 'wpr',
     title: 'Contributor page: Landon Mascareñaz',
     outlet: 'Wisconsin Public Radio',
-    date: '',
+    when: '',
     url: 'https://www.wpr.org/person/landon-mascarenaz',
   },
   {
     id: 'linkedin',
     title: 'Landon Mascareñaz',
     outlet: 'LinkedIn',
-    date: '',
+    when: '',
     url: 'https://www.linkedin.com/in/landonmascarenaz',
   },
   {
     id: 'obama',
     title: 'USA Leaders 2026–2027: Landon Mascareñaz',
     outlet: 'Obama Foundation',
-    date: '2026',
+    when: '2026',
     url: 'https://www.obama.org/programs/leaders/usa/2026-2027/landon-mascarenaz/',
     image: 'press/obama',
   },
@@ -165,7 +165,7 @@ const sourcesSource: Source[] = [
     id: 'cllaro',
     title: 'Roger Cisneros Public Policy Award, 31st Bernie Valdez Awards',
     outlet: 'Open Hearts & Open Democracy',
-    date: 'Sep 2026',
+    when: 'Sep 2026',
     url: 'https://openheartsopendemocracy.substack.com/p/wednesday-september-16',
     image: 'press/cllaro',
   },
@@ -173,21 +173,21 @@ const sourcesSource: Source[] = [
     id: 'lion',
     title: 'Executive Leadership Academy, faculty',
     outlet: 'Leadership Institute of Nevada',
-    date: '',
+    when: '',
     url: 'https://www.lionv.org/executive-leadership-academy',
   },
   {
     id: 'amacad',
     title: 'Our Common Purpose',
     outlet: 'American Academy of Arts & Sciences',
-    date: '',
+    when: '',
     url: 'https://www.amacad.org/ourcommonpurpose',
   },
   {
     id: 'substack',
     title: 'Open Hearts & Open Democracy, newsletter',
     outlet: 'Substack',
-    date: '',
+    when: '',
     url: 'https://openheartsopendemocracy.substack.com',
   },
 ]
@@ -485,7 +485,7 @@ export interface Media {
   kind: 'video' | 'podcast'
   label: string
   host: string
-  date?: string
+  when?: string
   duration?: string
   platform: MediaPlatform
   // youtube: the video id. apple: "id<show>?i=<episode>". audio: the file url.
@@ -496,22 +496,22 @@ export interface Media {
 }
 
 const mediaSource: Media[] = [
-  { kind: 'video', label: 'Keynote opening', host: 'Association of Latino Administrators and Superintendents', date: '2020', platform: 'youtube', id: 'Bb-JZpJJRbE', url: 'https://www.youtube.com/watch?v=Bb-JZpJJRbE', poster: 'keynote' },
-  { kind: 'video', label: 'Leaders who listen: creating openness in education systems', host: 'Possip Partner Retreat, keynote', date: '2023', platform: 'youtube', id: 'WoVP7SJjh0s', url: 'https://www.youtube.com/watch?v=WoVP7SJjh0s', poster: 'media/WoVP7SJjh0s' },
-  { kind: 'video', label: 'Co-creation and the open leader', host: 'Seek Common Ground, Learning Community Talks', date: 'Dec 2021', platform: 'youtube', id: 'kqkHOnPG2Rg', url: 'https://www.youtube.com/watch?v=kqkHOnPG2Rg', poster: 'media/kqkHOnPG2Rg' },
+  { kind: 'video', label: 'Keynote opening', host: 'Association of Latino Administrators and Superintendents', when: '2020', platform: 'youtube', id: 'Bb-JZpJJRbE', url: 'https://www.youtube.com/watch?v=Bb-JZpJJRbE', poster: 'keynote' },
+  { kind: 'video', label: 'Leaders who listen: creating openness in education systems', host: 'Possip Partner Retreat, keynote', when: '2023', platform: 'youtube', id: 'WoVP7SJjh0s', url: 'https://www.youtube.com/watch?v=WoVP7SJjh0s', poster: 'media/WoVP7SJjh0s' },
+  { kind: 'video', label: 'Co-creation and the open leader', host: 'Seek Common Ground, Learning Community Talks', when: 'Dec 2021', platform: 'youtube', id: 'kqkHOnPG2Rg', url: 'https://www.youtube.com/watch?v=kqkHOnPG2Rg', poster: 'media/kqkHOnPG2Rg' },
   { kind: 'video', label: 'Three lessons from education reform', host: 'Education Elements', platform: 'youtube', id: 'iVM2od6qwgc', url: 'https://www.youtube.com/watch?v=iVM2od6qwgc', poster: 'media/iVM2od6qwgc' },
-  { kind: 'video', label: 'EduDemocracy and the Cornerstone Project', host: 'Rank the Vote', date: 'Aug 2024', duration: '56 min', platform: 'youtube', id: 'ACgnUZAJH5w', url: 'https://www.youtube.com/watch?v=ACgnUZAJH5w', poster: 'media/ACgnUZAJH5w' },
-  { kind: 'video', label: 'On The Open System', host: 'Harvard Education Press, author clip', date: 'Aug 2023', duration: '2 min', platform: 'youtube', id: 'bm8oyesojG0', url: 'https://www.youtube.com/watch?v=bm8oyesojG0', poster: 'media/bm8oyesojG0' },
+  { kind: 'video', label: 'EduDemocracy and the Cornerstone Project', host: 'Rank the Vote', when: 'Aug 2024', duration: '56 min', platform: 'youtube', id: 'ACgnUZAJH5w', url: 'https://www.youtube.com/watch?v=ACgnUZAJH5w', poster: 'media/ACgnUZAJH5w' },
+  { kind: 'video', label: 'On The Open System', host: 'Harvard Education Press, author clip', when: 'Aug 2023', duration: '2 min', platform: 'youtube', id: 'bm8oyesojG0', url: 'https://www.youtube.com/watch?v=bm8oyesojG0', poster: 'media/bm8oyesojG0' },
 
-  { kind: 'podcast', label: 'Open System for Democracy', host: 'Future Hindsight, with Mila Atmos', date: 'Jul 2023', duration: '45 min', platform: 'apple', id: 'id1334328470?i=1000622516733', url: 'https://www.futurehindsight.com/episodes/open-system-for-democracy-landon-mascareaz-doannie-tran', poster: 'media/future-hindsight' },
-  { kind: 'podcast', label: 'The Open System: Redesigning Education and Reigniting Democracy', host: 'The Harvard Education Press Podcast', date: 'Aug 2023', platform: 'apple', id: 'id1890291908?i=1000758915853', url: 'https://podcasts.apple.com/us/podcast/the-harvard-education-press-podcast/id1890291908?i=1000758915853', poster: 'media/hep' },
-  { kind: 'podcast', label: 'The Open System', host: 'New Books in Education, with Deidre Tyler', date: 'Aug 2023', platform: 'apple', id: 'id426205817?i=1000623568963', url: 'https://newbooksnetwork.com/the-open-system', poster: 'media/nbn' },
-  { kind: 'podcast', label: 'Opening up: recreating schools as a community', host: 'Ethical Schools', date: 'Jul 2023', duration: '40 min', platform: 'apple', id: 'id1459925807?i=1000621204874', url: 'https://ethical-schools.castos.com/episodes/opening-up-recreating-schools-as-a-community', poster: 'media/ethical-schools' },
-  { kind: 'podcast', label: 'Opening up schools for civic democracy', host: 'Wisconsin Public Radio, Central Time', date: 'Jun 2023', platform: 'audio', id: 'https://mp3.wpr.org/download.php?f=ctm230622l1.mp3', url: 'https://www.wpr.org/opening-schools-civic-democracy' },
-  { kind: 'podcast', label: 'Landon Mascareñaz and Doannie Tran on The Open System', host: 'Getting Smart, with Rebecca Midles', date: 'Jun 2023', platform: 'apple', id: 'id1017984086?i=1000617235670', url: 'https://www.gettingsmart.com/podcast/landon-mascarenaz-and-doannie-tran-on-the-open-system/', poster: 'media/getting-smart' },
-  { kind: 'podcast', label: 'The Open System, episode 60', host: 'The Authority Podcast', date: 'Sep 2023', duration: '48 min', platform: 'apple', id: 'id1636774651?i=1000628238282', url: 'https://authoritypodcast.net/episodes/the-open-system-redesigning-education-and-reigniting-democracy-with-landon-mascarenaz-and-doannie-tran-the-authority-podcast-60', poster: 'media/authority' },
-  { kind: 'podcast', label: 'Episode 11, with Dr. Doannie Tran', host: 'Education Perspectives, with Liza Holland', date: 'Jun 2023', duration: '45 min', platform: 'apple', id: 'id1667400301?i=1000616281534', url: 'https://podcasts.apple.com/us/podcast/ep-11-dr-landon-mascare%C3%B1az-dr-doannie-tran/id1667400301?i=1000616281534', poster: 'media/education-perspectives' },
-  { kind: 'podcast', label: 'The Open System, his own show with Doannie Tran and Stephen Hurley', host: 'Apple Podcasts, ten episodes', date: '2023 to 2024', platform: 'link', url: 'https://podcasts.apple.com/us/podcast/the-open-system/id1717448660', poster: 'media/open-system' },
+  { kind: 'podcast', label: 'Open System for Democracy', host: 'Future Hindsight, with Mila Atmos', when: 'Jul 2023', duration: '45 min', platform: 'apple', id: 'id1334328470?i=1000622516733', url: 'https://www.futurehindsight.com/episodes/open-system-for-democracy-landon-mascareaz-doannie-tran', poster: 'media/future-hindsight' },
+  { kind: 'podcast', label: 'The Open System: Redesigning Education and Reigniting Democracy', host: 'The Harvard Education Press Podcast', when: 'Aug 2023', platform: 'apple', id: 'id1890291908?i=1000758915853', url: 'https://podcasts.apple.com/us/podcast/the-harvard-education-press-podcast/id1890291908?i=1000758915853', poster: 'media/hep' },
+  { kind: 'podcast', label: 'The Open System', host: 'New Books in Education, with Deidre Tyler', when: 'Aug 2023', platform: 'apple', id: 'id426205817?i=1000623568963', url: 'https://newbooksnetwork.com/the-open-system', poster: 'media/nbn' },
+  { kind: 'podcast', label: 'Opening up: recreating schools as a community', host: 'Ethical Schools', when: 'Jul 2023', duration: '40 min', platform: 'apple', id: 'id1459925807?i=1000621204874', url: 'https://ethical-schools.castos.com/episodes/opening-up-recreating-schools-as-a-community', poster: 'media/ethical-schools' },
+  { kind: 'podcast', label: 'Opening up schools for civic democracy', host: 'Wisconsin Public Radio, Central Time', when: 'Jun 2023', platform: 'audio', id: 'https://mp3.wpr.org/download.php?f=ctm230622l1.mp3', url: 'https://www.wpr.org/opening-schools-civic-democracy' },
+  { kind: 'podcast', label: 'Landon Mascareñaz and Doannie Tran on The Open System', host: 'Getting Smart, with Rebecca Midles', when: 'Jun 2023', platform: 'apple', id: 'id1017984086?i=1000617235670', url: 'https://www.gettingsmart.com/podcast/landon-mascarenaz-and-doannie-tran-on-the-open-system/', poster: 'media/getting-smart' },
+  { kind: 'podcast', label: 'The Open System, episode 60', host: 'The Authority Podcast', when: 'Sep 2023', duration: '48 min', platform: 'apple', id: 'id1636774651?i=1000628238282', url: 'https://authoritypodcast.net/episodes/the-open-system-redesigning-education-and-reigniting-democracy-with-landon-mascarenaz-and-doannie-tran-the-authority-podcast-60', poster: 'media/authority' },
+  { kind: 'podcast', label: 'Episode 11, with Dr. Doannie Tran', host: 'Education Perspectives, with Liza Holland', when: 'Jun 2023', duration: '45 min', platform: 'apple', id: 'id1667400301?i=1000616281534', url: 'https://podcasts.apple.com/us/podcast/ep-11-dr-landon-mascare%C3%B1az-dr-doannie-tran/id1667400301?i=1000616281534', poster: 'media/education-perspectives' },
+  { kind: 'podcast', label: 'The Open System, his own show with Doannie Tran and Stephen Hurley', host: 'Apple Podcasts, ten episodes', when: '2023 to 2024', platform: 'link', url: 'https://podcasts.apple.com/us/podcast/the-open-system/id1717448660', poster: 'media/open-system' },
 ]
 
 
@@ -613,6 +613,137 @@ const plannersSource: [string, string][] = [
   ['Press kit', 'Bios at three lengths, high-resolution headshot, talk descriptions and learning outcomes.'],
 ]
 
+
+// ---------- chrome and page copy ----------
+// Every label, button, heading and sentence that is not already part of a
+// record above. One key per distinct string: the editor binds a string to
+// the first path that holds it, so a label reused across pages lives here
+// once and is rendered from the same key everywhere.
+const uiSource = {
+  nav: { work: 'Work', talks: 'Talks', book: 'The Book', about: 'About' },
+  labels: {
+    request: 'Request availability',
+    seeTalks: 'See the talks',
+    exploreWork: 'Explore the work',
+    aboutBook: 'About the book',
+    fullRecord: 'The full record',
+    viewSession: 'View session',
+    browseTalks: 'Browse the talks',
+    aboutLandon: 'About Landon',
+    bookSession: 'Book this session',
+    seeSession: 'See the session',
+    episodePage: 'Episode page',
+    listenSource: 'Listen at the source',
+    openApple: 'Open on Apple Podcasts',
+    publisherPage: 'Publisher page',
+    committee: 'Everything a committee will ask',
+    scroll: 'Scroll',
+    previous: 'Previous',
+    next: 'Next',
+    heldBy: 'Held by',
+    source: 'Source',
+    isbn: 'ISBN',
+    doors: 'doors',
+    for: 'for',
+    sessions: 'sessions',
+  },
+  sections: {
+    spokenFor: 'Has spoken for',
+    selected: 'Selected',
+    work: 'The work',
+    book: 'The book',
+    record: 'The record',
+    argument: 'The argument',
+    details: 'The details',
+    sessions: 'Sessions',
+    onRecord: 'On the record',
+    person: 'The person',
+    travelsFrom: 'Travels from',
+    virtual: 'Virtual',
+    recording: 'Recording',
+    newsletter: 'Newsletter',
+    representedBy: 'Represented by',
+    bookings: 'Bookings',
+    watch: 'Watch',
+    listen: 'Listen',
+    inPress: 'In the press',
+    seeHimWork: 'See him work',
+    audience: 'Audience',
+    level: 'Level',
+    formats: 'Formats',
+    door: 'Door',
+    biography: 'Biography',
+    values: 'Values',
+    honors: 'Honors',
+    timeline: 'Timeline',
+    selectedRecord: 'Selected record',
+    sources: 'Sources',
+    planners: 'For planners',
+    pressKit: 'Press kit',
+    whatToBook: 'What you can book',
+    taughtAt: 'Taught at',
+    bookSession: 'Book the session',
+    audio: 'Audio',
+  },
+  home: {
+    bookLead: 'Closing looks like',
+    bookAccent: 'competence',
+    detailsLead: 'Six moves to an',
+    detailsAccent: 'open',
+    detailsTail: 'system.',
+    recordLead: 'A builder who',
+    recordAccent: 'kept the receipts',
+    recordLede: 'Twenty years inside the institutions most speakers only analyze.',
+    railLead: 'Six sessions, outcomes',
+    railAccent: 'written',
+    railEndLead: 'All six, with',
+    railEndAccent: 'outcomes',
+    personStatement: 'A first-grade teacher on the Navajo Nation who went on to chair the board of a thirteen-college system, direct a sixty-district rural talent initiative, and found a statewide civic coalition.',
+    contactLede: 'Tell us the audience, the date and the format. We answer the same day.',
+    virtual: 'Available, 30 to 45 minutes',
+    recording: 'Permitted, on demand',
+  },
+  work: {
+    title1: 'One body',
+    title2: 'of work',
+    lede: 'Three doors into it. Different audiences meet this work from different directions, and the same underlying question waits behind each one: does the institution still listen to the people it serves?',
+    pinCopy: 'Different audiences meet this work from different directions. A workforce board and a democracy foundation are asking the same question from opposite ends of it.',
+    formatsHeading: 'Six formats, one conversation.',
+  },
+  talks: {
+    title1: 'Six sessions',
+    title2: 'outcomes written.',
+    lede: 'Every proposal form asks for learning outcomes. They are published here so a program committee can lift them straight into the agenda.',
+    proofLead: 'On stage, on a panel, in an',
+    proofAccent: 'interview',
+    watchNote: 'keynotes and talks',
+    listenNote: 'podcasts and radio',
+    outcomes: 'Participants leave able to',
+  },
+  book: {
+    title1: 'The Open',
+    title2: 'System',
+    lede: 'Redesigning Education and Reigniting Democracy. Written with Dr. Doannie Tran. A working framework for diagnosing why institutions stop listening, and reversing it.',
+  },
+  about: {
+    title1: 'Not a',
+    title2: 'commentator',
+    lede: 'A builder who kept the receipts. Twenty years across education, workforce, rural and civic institutions, most of it from inside the room where the decision was made.',
+    valuesNote: 'Six words, in his own wording',
+    timelineNote: 'Each entry links to the record it comes from',
+    timelineHeading: 'Twenty years, dated and sourced.',
+    now: 'Now',
+    nowText: 'Founding CEO, Courageous Colorado. Keynotes, workshops and facilitation across the three doors.',
+    sourcesNote: 'The public record this page draws on',
+    kit: [
+      { title: 'Bios at three lengths', note: '50 · 150 · 400 words' },
+      { title: 'High-resolution headshot', note: 'Print and screen' },
+      { title: 'Talk descriptions', note: 'With learning outcomes' },
+      { title: 'Introduction script', note: 'For the host' },
+    ],
+  },
+}
+
 /* -------------------------------------------------------------------------
  * The editable content root.
  *
@@ -646,6 +777,7 @@ export const content = reactive({
   record: recordSource,
   stats: statsSource,
   planners: plannersSource,
+  ui: uiSource,
 })
 
 export const site = content.site
@@ -667,6 +799,7 @@ export const timeline = content.timeline
 export const record = content.record
 export const stats = content.stats
 export const planners = content.planners
+export const ui = content.ui
 
 // Every photograph in the tree is a path to its JPEG, which is what the
 // editor binds and replaces. The AVIF beside a local JPEG is derived here,

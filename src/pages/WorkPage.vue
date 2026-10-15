@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import DoorsIndex from '@/components/DoorsIndex.vue'
-import { formats, site } from '@/data/site'
+import { formats, site, ui } from '@/data/site'
 
 onMounted(() => {
   document.title = `The work · ${site.name}`
@@ -12,15 +12,15 @@ onMounted(() => {
   <article class="work">
     <header class="frame head">
       <div class="crumbs mono">
-        <span>The work</span>
-        <span>01 / 03 doors</span>
+        <span>{{ ui.sections.work }}</span>
+        <span>01 / 03 <span>{{ ui.labels.doors }}</span></span>
       </div>
       <div class="head-grid">
         <h1 class="display lines">
-          <span class="line" style="--i: 0"><span>One body</span></span>
-          <span class="line" style="--i: 1"><span>of work<span class="serif">.</span></span></span>
+          <span class="line" style="--i: 0"><span>{{ ui.work.title1 }}</span></span>
+          <span class="line" style="--i: 1"><span><span>{{ ui.work.title2 }}</span><span class="serif">.</span></span></span>
         </h1>
-        <p class="lede fade-in" style="--d: 700ms">Three doors into it. Different audiences meet this work from different directions, and the same underlying question waits behind each one: does the institution still listen to the people it serves?</p>
+        <p class="lede fade-in" style="--d: 700ms">{{ ui.work.lede }}</p>
       </div>
     </header>
 
@@ -30,9 +30,9 @@ onMounted(() => {
       <div class="sec-head">
         <div class="sec-idx">
           <span class="mono">04</span>
-          <span class="mono">What you can book</span>
+          <span class="mono">{{ ui.sections.whatToBook }}</span>
         </div>
-        <h2 class="heading" v-reveal>Six formats, one conversation.</h2>
+        <h2 class="heading" v-reveal>{{ ui.work.formatsHeading }}</h2>
       </div>
       <div class="fmt-grid">
         <div v-for="(f, i) in formats" :key="f.title" class="fmt" v-reveal :style="{ '--reveal-delay': `${(i % 3) * 80}ms` }">
@@ -45,7 +45,7 @@ onMounted(() => {
 
     <section class="frame cta">
       <router-link :to="{ name: 'home', hash: '#contact' }" class="btn">
-        Request availability
+        {{ ui.labels.request }}
         <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg>
       </router-link>
     </section>

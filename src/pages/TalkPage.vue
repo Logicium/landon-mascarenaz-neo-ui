@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { doorById, site, sourceById, talks } from '@/data/site'
+import { doorById, site, sourceById, talks, ui } from '@/data/site'
 
 const route = useRoute()
 const router = useRouter()
@@ -27,7 +27,7 @@ watch(
   <article v-if="talk" class="talk-page" :key="talk.slug">
     <header class="frame head">
       <div class="crumbs mono">
-        <router-link to="/talks" class="link-line">Talks</router-link>
+        <router-link to="/talks" class="link-line">{{ ui.nav.talks }}</router-link>
         <span>{{ talk.n }} / {{ String(talks.length).padStart(2, '0') }}</span>
       </div>
 
@@ -45,13 +45,13 @@ watch(
     <section class="frame body">
       <aside class="facts fade-in" style="--d: 500ms">
         <dl>
-          <div><dt class="mono">Audience</dt><dd>{{ talk.audience }}</dd></div>
-          <div><dt class="mono">Level</dt><dd>{{ talk.level }}</dd></div>
-          <div><dt class="mono">Formats</dt><dd>{{ talk.formats }}</dd></div>
-          <div><dt class="mono">Door</dt><dd class="door-dd"><i class="door-sq" aria-hidden="true"></i>{{ door?.n }} {{ door?.title }}</dd></div>
+          <div><dt class="mono">{{ ui.sections.audience }}</dt><dd>{{ talk.audience }}</dd></div>
+          <div><dt class="mono">{{ ui.sections.level }}</dt><dd>{{ talk.level }}</dd></div>
+          <div><dt class="mono">{{ ui.sections.formats }}</dt><dd>{{ talk.formats }}</dd></div>
+          <div><dt class="mono">{{ ui.sections.door }}</dt><dd class="door-dd"><i class="door-sq" aria-hidden="true"></i>{{ door?.n }} <span>{{ door?.title }}</span></dd></div>
         </dl>
         <a href="#contact" class="btn" @click.prevent="router.push({ name: 'home', hash: '#contact' })">
-          Book this session
+          {{ ui.labels.bookSession }}
           <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg>
         </a>
       </aside>
@@ -60,7 +60,7 @@ watch(
         <p class="lede fade-in" style="--d: 550ms">{{ talk.body }}</p>
 
         <div class="outcomes" v-reveal>
-          <h2 class="subheading">Participants leave able to</h2>
+          <h2 class="subheading">{{ ui.talks.outcomes }}</h2>
           <ol>
             <li v-for="(o, i) in talk.outcomes" :key="o">
               <span class="mono">{{ String(i + 1).padStart(2, '0') }}</span>
@@ -78,9 +78,9 @@ watch(
               </picture>
             </span>
             <figcaption>
-              <span class="mono">In the press</span>
+              <span class="mono">{{ ui.sections.inPress }}</span>
               <span class="press-t">{{ article.title }}</span>
-              <span class="press-m">{{ article.outlet }}<template v-if="article.date">, {{ article.date }}</template></span>
+              <span class="press-m"><span>{{ article.outlet }}</span><template v-if="article.when">, <span>{{ article.when }}</span></template></span>
             </figcaption>
             <span class="src-go" aria-hidden="true">
               <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 12 12 2M4 2h8v8" /></svg>
@@ -95,11 +95,11 @@ watch(
 
     <nav class="frame pager" aria-label="Other talks">
       <router-link :to="{ name: 'talk', params: { slug: prev.slug } }" class="pg">
-        <span class="mono">Previous</span>
+        <span class="mono">{{ ui.labels.previous }}</span>
         <span class="pg-t">{{ prev.title }}</span>
       </router-link>
       <router-link :to="{ name: 'talk', params: { slug: next.slug } }" class="pg right">
-        <span class="mono">Next</span>
+        <span class="mono">{{ ui.labels.next }}</span>
         <span class="pg-t">{{ next.title }}</span>
       </router-link>
     </nav>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { avif, listen, site, talks, testimonials, watch, type Media } from '@/data/site'
+import { avif, listen, site, talks, testimonials, ui, watch, type Media } from '@/data/site'
 
 // Nothing plays until it is asked for. `playing` holds the url of the one
 // item whose player is open; video opens the youtube-nocookie player,
@@ -20,15 +20,15 @@ onMounted(() => {
   <article class="talks-page">
     <header class="frame head">
       <div class="crumbs mono">
-        <span>Talks</span>
-        <span>{{ String(talks.length).padStart(2, '0') }} sessions</span>
+        <span>{{ ui.nav.talks }}</span>
+        <span>{{ String(talks.length).padStart(2, '0') }} <span>{{ ui.labels.sessions }}</span></span>
       </div>
       <div class="head-grid">
         <h1 class="display lines">
-          <span class="line" style="--i: 0"><span>Six sessions<span class="serif">,</span></span></span>
-          <span class="line" style="--i: 1"><span>outcomes written.</span></span>
+          <span class="line" style="--i: 0"><span><span>{{ ui.talks.title1 }}</span><span class="serif">,</span></span></span>
+          <span class="line" style="--i: 1"><span>{{ ui.talks.title2 }}</span></span>
         </h1>
-        <p class="lede fade-in" style="--d: 700ms">Every proposal form asks for learning outcomes. They are published here so a program committee can lift them straight into the agenda.</p>
+        <p class="lede fade-in" style="--d: 700ms">{{ ui.talks.lede }}</p>
       </div>
     </header>
 
@@ -65,14 +65,14 @@ onMounted(() => {
       <div class="sec-head">
         <div class="sec-idx">
           <span class="mono">07</span>
-          <span class="mono">See him work</span>
+          <span class="mono">{{ ui.sections.seeHimWork }}</span>
         </div>
-        <h2 class="heading" v-reveal>On stage, on a panel, in an <span class="serif">interview</span>.</h2>
+        <h2 class="heading" v-reveal><span>{{ ui.talks.proofLead }}</span> <span class="serif">{{ ui.talks.proofAccent }}</span>.</h2>
       </div>
 
       <div class="group-head">
-        <span class="mono">Watch</span>
-        <span class="mono">{{ String(watch.length).padStart(2, '0') }} keynotes and talks</span>
+        <span class="mono">{{ ui.sections.watch }}</span>
+        <span class="mono">{{ String(watch.length).padStart(2, '0') }} <span>{{ ui.talks.watchNote }}</span></span>
       </div>
       <div class="frames">
         <figure v-for="(w, i) in watch" :key="w.url" class="film live" v-reveal :style="{ '--reveal-delay': `${(i % 3) * 90}ms` }">
@@ -94,14 +94,14 @@ onMounted(() => {
           </button>
           <figcaption>
             <span class="film-l">{{ w.label }}</span>
-            <span class="mono">{{ w.host }}<template v-if="w.date"> · {{ w.date }}</template></span>
+            <span class="mono"><span>{{ w.host }}</span><template v-if="w.when"> · <span>{{ w.when }}</span></template></span>
           </figcaption>
         </figure>
       </div>
 
       <div id="listen" class="group-head">
-        <span class="mono">Listen</span>
-        <span class="mono">{{ String(listen.length).padStart(2, '0') }} podcasts and radio</span>
+        <span class="mono">{{ ui.sections.listen }}</span>
+        <span class="mono">{{ String(listen.length).padStart(2, '0') }} <span>{{ ui.talks.listenNote }}</span></span>
       </div>
       <ol class="eps">
         <li v-for="m in listen" :key="m.url" class="ep" :class="{ open: playing === m.url, linked: m.platform === 'link' }" v-reveal>
@@ -111,12 +111,12 @@ onMounted(() => {
               <img :src="`/img/${m.poster}-c.jpg`" :alt="m.host" loading="lazy" />
             </picture>
           </figure>
-          <div v-else class="slot ep-art"><span class="slot-tag">Audio</span></div>
+          <div v-else class="slot ep-art"><span class="slot-tag">{{ ui.sections.audio }}</span></div>
           <div class="ep-main">
             <span class="ep-t">{{ m.label }}</span>
-            <span class="mono">{{ m.host }}<template v-if="m.date"> · {{ m.date }}</template><template v-if="m.duration"> · {{ m.duration }}</template></span>
+            <span class="mono"><span>{{ m.host }}</span><template v-if="m.when"> · <span>{{ m.when }}</span></template><template v-if="m.duration"> · <span>{{ m.duration }}</span></template></span>
           </div>
-          <a :href="m.url" target="_blank" rel="noopener noreferrer" class="mono ext ep-out">{{ m.platform === 'apple' ? 'Episode page' : m.platform === 'link' ? 'Open on Apple Podcasts' : 'Listen at the source' }}</a>
+          <a :href="m.url" target="_blank" rel="noopener noreferrer" class="mono ext ep-out">{{ m.platform === 'apple' ? ui.labels.episodePage : m.platform === 'link' ? ui.labels.openApple : ui.labels.listenSource }}</a>
           <button v-if="m.platform !== 'link'" type="button" class="play ep-play" :class="{ on: playing === m.url }" :aria-label="playing === m.url ? `Close ${m.label}` : `Play ${m.label}`" @click="playing = playing === m.url ? null : m.url"></button>
           <div v-if="playing === m.url" class="ep-frame">
             <audio v-if="m.platform === 'audio'" :src="m.id" controls autoplay preload="none"></audio>
@@ -134,7 +134,7 @@ onMounted(() => {
 
       <div class="quotes">
         <blockquote v-for="(q, i) in testimonials" :key="i" class="quote" v-reveal :style="{ '--reveal-delay': `${i * 90}ms` }">
-          <p class="q-text serif">“{{ q.quote }}”</p>
+          <p class="q-text serif">{{ q.quote }}</p>
           <footer>
             <span class="q-name">{{ q.name }}</span>
             <span class="mono">{{ q.title }}</span>
@@ -145,7 +145,7 @@ onMounted(() => {
 
     <section class="frame cta">
       <router-link :to="{ name: 'home', hash: '#contact' }" class="btn">
-        Request availability
+        {{ ui.labels.request }}
         <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg>
       </router-link>
     </section>

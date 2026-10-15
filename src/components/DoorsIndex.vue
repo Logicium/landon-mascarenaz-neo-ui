@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import { avif, doors, valuesFor, valuesStatement } from '@/data/site'
+import { avif, doors, ui, valuesFor, valuesStatement } from '@/data/site'
 
 // Three doors into one body of work. The left column pins a large index
 // numeral that ticks over as each door scrolls through the middle of the
@@ -35,9 +35,7 @@ onBeforeUnmount(() => io?.disconnect())
           </div>
           <span class="of num">/{{ String(doors.length).padStart(2, '0') }}</span>
         </div>
-        <p class="lede pin-copy" v-reveal>
-          Different audiences meet this work from different directions. A workforce board and a democracy foundation are asking the same question from opposite ends of it.
-        </p>
+        <p class="lede pin-copy" v-reveal>{{ ui.work.pinCopy }}</p>
         <ol class="mini" aria-hidden="true">
           <li v-for="(d, i) in doors" :key="d.n" :class="{ on: i === active }">
             <span class="mono">{{ d.n }}</span>
@@ -59,7 +57,7 @@ onBeforeUnmount(() => io?.disconnect())
         >
           <div class="door-top">
             <span class="mono idx">{{ d.n }}</span>
-            <span class="serif who-serif">for {{ d.audiences[0] }}</span>
+            <span class="serif who-serif"><span>{{ ui.labels.for }}</span> <span>{{ d.audiences[0] }}</span></span>
           </div>
           <figure class="door-img print" v-reveal>
             <picture>

@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import SourceList from '@/components/SourceList.vue'
 import { useHorizontal } from '@/composables/useHorizontal'
-import { avif, honors, openSystem, person, planners, record, site, sourceById, sourceIndex, stats, timeline, values, valuesStatement } from '@/data/site'
+import { avif, honors, openSystem, person, planners, record, site, sourceById, sourceIndex, stats, timeline, ui, values, valuesStatement } from '@/data/site'
 
 // The timeline runs sideways: a tall wrapper keeps it pinned while the
 // track slides left, and the big year reads out whichever entry is nearest.
@@ -37,10 +37,10 @@ onMounted(() => {
         </div>
         <div class="titles">
           <h1 class="display lines">
-            <span class="line" style="--i: 0"><span>Not a</span></span>
-            <span class="line" style="--i: 1"><span>commentator<span class="serif">.</span></span></span>
+            <span class="line" style="--i: 0"><span>{{ ui.about.title1 }}</span></span>
+            <span class="line" style="--i: 1"><span><span>{{ ui.about.title2 }}</span><span class="serif">.</span></span></span>
           </h1>
-          <p class="lede fade-in" style="--d: 700ms">A builder who kept the receipts. Twenty years across education, workforce, rural and civic institutions, most of it from inside the room where the decision was made.</p>
+          <p class="lede fade-in" style="--d: 700ms">{{ ui.about.lede }}</p>
           <ul class="roles fade-in" style="--d: 900ms">
             <li v-for="r in site.roles" :key="r" class="mono">{{ r }}</li>
           </ul>
@@ -50,10 +50,10 @@ onMounted(() => {
 
     <section class="frame bio">
       <div class="bio-grid">
-        <span class="mono">Biography</span>
+        <span class="mono">{{ ui.sections.biography }}</span>
         <div class="prose bio-copy" v-reveal>
           <p v-for="p in person.body" :key="p.text">
-            {{ p.text }}<span class="cites"><a v-for="c in p.cites" :key="c" :href="srcUrl(c)" target="_blank" rel="noopener noreferrer" class="cite" :title="srcTitle(c)">{{ sourceIndex(c) }}</a></span>
+            <span>{{ p.text }}</span><span class="cites"><a v-for="c in p.cites" :key="c" :href="srcUrl(c)" target="_blank" rel="noopener noreferrer" class="cite" :title="srcTitle(c)">{{ sourceIndex(c) }}</a></span>
           </p>
           <p>{{ openSystem.pull }}</p>
         </div>
@@ -63,8 +63,8 @@ onMounted(() => {
     <section class="frame vals">
       <div class="bio-grid">
         <div class="tl-side">
-          <span class="mono">Values</span>
-          <span class="mono tl-note">Six words, in his own wording</span>
+          <span class="mono">{{ ui.sections.values }}</span>
+          <span class="mono tl-note">{{ ui.about.valuesNote }}</span>
         </div>
         <div class="vals-main">
           <p class="serif vals-statement" v-reveal>{{ valuesStatement }}</p>
@@ -80,7 +80,7 @@ onMounted(() => {
 
     <section class="frame hon">
       <div class="bio-grid">
-        <span class="mono">Honors</span>
+        <span class="mono">{{ ui.sections.honors }}</span>
         <ul class="honors" v-reveal>
           <li v-for="[org, what, src] in honors" :key="org">
             <a :href="srcUrl(src)" target="_blank" rel="noopener noreferrer" class="hon" :title="srcTitle(src)">
@@ -98,7 +98,7 @@ onMounted(() => {
         <div v-for="([n, l, s], i) in stats" :key="l" class="stat" v-reveal :style="{ '--reveal-delay': `${i * 90}ms` }">
           <span class="num stat-n">{{ n }}</span>
           <span class="stat-l">{{ l }}</span>
-          <a v-if="s" :href="srcUrl(s)" target="_blank" rel="noopener noreferrer" class="mono ext stat-src" :title="srcTitle(s)">Source {{ String(sourceIndex(s)).padStart(2, '0') }}</a>
+          <a v-if="s" :href="srcUrl(s)" target="_blank" rel="noopener noreferrer" class="mono ext stat-src" :title="srcTitle(s)"><span>{{ ui.labels.source }}</span> {{ String(sourceIndex(s)).padStart(2, '0') }}</a>
         </div>
       </div>
     </section>
@@ -107,10 +107,10 @@ onMounted(() => {
       <div class="tl-sticky">
         <div class="frame tl-head">
           <div class="tl-side">
-            <span class="mono">Timeline</span>
-            <span class="mono tl-note">Each entry links to the record it comes from</span>
+            <span class="mono">{{ ui.sections.timeline }}</span>
+            <span class="mono tl-note">{{ ui.about.timelineNote }}</span>
           </div>
-          <h2 class="heading">Twenty years, dated and sourced.</h2>
+          <h2 class="heading">{{ ui.about.timelineHeading }}</h2>
           <transition name="yr" mode="out-in">
             <span :key="tlActive" class="num tl-big" aria-hidden="true">{{ timeline[tlActive]?.year }}</span>
           </transition>
@@ -124,9 +124,9 @@ onMounted(() => {
           </article>
           <div class="tl-item tl-end">
             <span class="tl-dot" aria-hidden="true"></span>
-            <span class="num tl-y">Now</span>
-            <p class="tl-t">Founding CEO, Courageous Colorado. Keynotes, workshops and facilitation across the three doors.</p>
-            <router-link :to="{ name: 'home', hash: '#contact' }" class="mono ext">Request availability</router-link>
+            <span class="num tl-y">{{ ui.about.now }}</span>
+            <p class="tl-t">{{ ui.about.nowText }}</p>
+            <router-link :to="{ name: 'home', hash: '#contact' }" class="mono ext">{{ ui.labels.request }}</router-link>
           </div>
         </div>
       </div>
@@ -134,7 +134,7 @@ onMounted(() => {
 
     <section class="frame rec">
       <div class="bio-grid">
-        <span class="mono">Selected record</span>
+        <span class="mono">{{ ui.sections.selectedRecord }}</span>
         <ul class="record" v-reveal>
           <li v-for="[y, r, s] in record" :key="r">
             <span class="mono y">{{ y }}</span>
@@ -148,8 +148,8 @@ onMounted(() => {
     <section id="sources" class="frame srcs">
       <div class="bio-grid">
         <div class="tl-side">
-          <span class="mono">Sources</span>
-          <span class="mono tl-note">The public record this page draws on</span>
+          <span class="mono">{{ ui.sections.sources }}</span>
+          <span class="mono tl-note">{{ ui.about.sourcesNote }}</span>
         </div>
         <SourceList />
       </div>
@@ -158,8 +158,8 @@ onMounted(() => {
     <section id="planners" class="frame plan">
       <div class="bio-grid">
         <div class="tl-side">
-          <span class="mono">For planners</span>
-          <span class="mono tl-note">Everything a committee will ask</span>
+          <span class="mono">{{ ui.sections.planners }}</span>
+          <span class="mono tl-note">{{ ui.labels.committee }}</span>
         </div>
         <dl class="plan-grid" v-reveal>
           <div v-for="[k, v] in planners" :key="k" class="plan-item">
@@ -172,23 +172,11 @@ onMounted(() => {
 
     <section class="frame kit">
       <div class="bio-grid">
-        <span class="mono">Press kit</span>
+        <span class="mono">{{ ui.sections.pressKit }}</span>
         <div class="kit-grid" v-reveal>
-          <div class="kit-item">
-            <span class="kit-t">Bios at three lengths</span>
-            <span class="mono">50 · 150 · 400 words</span>
-          </div>
-          <div class="kit-item">
-            <span class="kit-t">High-resolution headshot</span>
-            <span class="mono">Print and screen</span>
-          </div>
-          <div class="kit-item">
-            <span class="kit-t">Talk descriptions</span>
-            <span class="mono">With learning outcomes</span>
-          </div>
-          <div class="kit-item">
-            <span class="kit-t">Introduction script</span>
-            <span class="mono">For the host</span>
+          <div v-for="k in ui.about.kit" :key="k.title" class="kit-item">
+            <span class="kit-t">{{ k.title }}</span>
+            <span class="mono">{{ k.note }}</span>
           </div>
         </div>
       </div>
@@ -196,7 +184,7 @@ onMounted(() => {
 
     <section class="frame cta">
       <router-link :to="{ name: 'home', hash: '#contact' }" class="btn">
-        Request availability
+        {{ ui.labels.request }}
         <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg>
       </router-link>
     </section>

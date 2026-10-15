@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { site } from '@/data/site'
+import { site, ui } from '@/data/site'
 const year = new Date().getFullYear()
 </script>
 
@@ -8,23 +8,23 @@ const year = new Date().getFullYear()
     <div class="frame">
       <div class="foot">
         <div class="col">
-          <span class="mono">Represented by</span>
+          <span class="mono">{{ ui.sections.representedBy }}</span>
           <a :href="site.agencyUrl" class="val link-line" target="_blank" rel="noopener">{{ site.agency }}</a>
         </div>
         <div class="col">
-          <span class="mono">Bookings</span>
+          <span class="mono">{{ ui.sections.bookings }}</span>
           <a :href="`mailto:${site.email}`" class="val link-line">{{ site.emailLabel }}</a>
         </div>
         <div class="col">
-          <span class="mono">Newsletter</span>
+          <span class="mono">{{ ui.sections.newsletter }}</span>
           <a :href="site.substack.url" class="val link-line" target="_blank" rel="noopener">{{ site.substack.label }}</a>
         </div>
         <div class="col">
-          <span class="mono">Travels from</span>
+          <span class="mono">{{ ui.sections.travelsFrom }}</span>
           <span class="val">{{ site.travelsFrom }}</span>
         </div>
         <div class="col right">
-          <span class="mono">© {{ year }} {{ site.honorific }}</span>
+          <span class="mono">© {{ year }} <span>{{ site.honorific }}</span></span>
         </div>
       </div>
     </div>

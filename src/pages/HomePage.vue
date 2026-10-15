@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import HeroScene from '@/components/HeroScene.vue'
-import { avif, clients, doors, hero, honors, openSystem, said, site, sourceById, stats, talks, values, valuesFor } from '@/data/site'
+import { avif, clients, doors, hero, honors, openSystem, said, site, sourceById, stats, talks, ui, values, valuesFor } from '@/data/site'
 import { useStack } from '@/composables/useStack'
 import { useHorizontal } from '@/composables/useHorizontal'
 import { useSteps } from '@/composables/useSteps'
@@ -13,9 +13,9 @@ const saidSource = sourceById(said.source)
 const stack = ref<HTMLElement | null>(null)
 const { active: spreadActive, inView: stackOn, progress: stackProgress, scrollTo: goSpread } = useStack(stack)
 const spreads = [
-  { n: '01', title: 'The work' },
-  { n: '02', title: 'The book' },
-  { n: '03', title: 'The record' },
+  { n: '01', title: ui.sections.work },
+  { n: '02', title: ui.sections.book },
+  { n: '03', title: ui.sections.record },
 ]
 
 // The session rail.
@@ -36,8 +36,8 @@ const door = computed(() => doors[doorIndex.value] ?? doors[0]!)
 // The book spread steps from the argument to the details.
 const bookWrap = ref<HTMLElement | null>(null)
 const bookSteps = [
-  { n: '01', short: 'The argument' },
-  { n: '02', short: 'The details' },
+  { n: '01', short: ui.sections.argument },
+  { n: '02', short: ui.sections.details },
 ]
 const { index: bookScrolled, sub: bookSub, height: bookHeight } = useSteps(bookWrap, bookSteps.length)
 const bookHover = ref<number | null>(null)
@@ -69,10 +69,10 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
           <p class="lede">{{ hero.sub }}</p>
           <div class="hero-cta">
             <a href="#contact" class="btn">
-              Request availability
+              {{ ui.labels.request }}
               <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg>
             </a>
-            <router-link to="/talks" class="btn ghost">See the talks</router-link>
+            <router-link to="/talks" class="btn ghost">{{ ui.labels.seeTalks }}</router-link>
           </div>
         </div>
 
@@ -81,7 +81,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
             <li v-for="r in site.roles" :key="r" class="mono">{{ r }}</li>
           </ul>
           <div class="scroll-cue">
-            <span class="mono">Scroll</span>
+            <span class="mono">{{ ui.labels.scroll }}</span>
             <span class="cue-line"></span>
           </div>
         </div>
@@ -91,8 +91,8 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
     <!-- ============ CLIENTS ============ -->
     <section class="clients" aria-label="Has spoken for">
       <div class="frame clients-head">
-        <span class="mono">Has spoken for</span>
-        <span class="mono">Selected</span>
+        <span class="mono">{{ ui.sections.spokenFor }}</span>
+        <span class="mono">{{ ui.sections.selected }}</span>
       </div>
       <div class="marquee" aria-hidden="true">
         <div class="track">
@@ -116,7 +116,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
       <section class="panel">
         <div class="frame spread">
           <div class="spread-top">
-            <span class="sec-idx"><span class="mono">01</span><span class="mono">The work</span></span>
+            <span class="sec-idx"><span class="mono">01</span><span class="mono">{{ ui.sections.work }}</span></span>
           </div>
           <div class="spread-body work-body">
             <div class="work-copy">
@@ -153,7 +153,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
               </div>
               <transition name="cap" mode="out-in">
                 <span :key="door.n" class="plate-cap">
-                  <span class="mono">Held by</span>
+                  <span class="mono">{{ ui.labels.heldBy }}</span>
                   <span class="serif plate-vals">{{ valuesFor(door.id).map((v) => v.word).join(' & ') }}</span>
                 </span>
               </transition>
@@ -161,7 +161,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
           </div>
           <div class="spread-foot">
             <router-link to="/work" class="btn ghost">
-              Explore the work
+              {{ ui.labels.exploreWork }}
               <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg>
             </router-link>
             <span class="mono">{{ door.n }} / {{ String(doors.length).padStart(2, '0') }}</span>
@@ -174,7 +174,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
       <section class="panel">
         <div class="frame spread">
           <div class="spread-top">
-            <span class="sec-idx"><span class="mono">02</span><span class="mono">The book</span></span>
+            <span class="sec-idx"><span class="mono">02</span><span class="mono">{{ ui.sections.book }}</span></span>
           </div>
           <div class="spread-body book-body">
             <figure class="book-cover" :class="{ turned: bookIndex === 1 }">
@@ -186,12 +186,12 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
             <div class="book-right">
               <transition name="tl" mode="out-in">
                 <div v-if="bookIndex === 0" key="argument" class="book-page">
-                  <h2 class="heading sp-title">Closing looks like <span class="serif">competence</span>.</h2>
+                  <h2 class="heading sp-title"><span>{{ ui.home.bookLead }}</span> <span class="serif">{{ ui.home.bookAccent }}</span>.</h2>
                   <p class="lede">{{ openSystem.body[0] }}</p>
                   <p class="lede pull-line serif">{{ openSystem.pull }}</p>
                 </div>
                 <div v-else key="details" class="book-page book-detail">
-                  <h2 class="heading sp-title">Six moves to an <span class="serif">open</span> system.</h2>
+                  <h2 class="heading sp-title"><span>{{ ui.home.detailsLead }}</span> <span class="serif">{{ ui.home.detailsAccent }}</span> <span>{{ ui.home.detailsTail }}</span></h2>
                   <p class="lede">{{ openSystem.moves }}</p>
                   <dl class="book-stats">
                     <div v-for="[n, l] in bookStats" :key="l">
@@ -200,11 +200,11 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
                     </div>
                   </dl>
                   <div class="book-right-col">
-                    <span class="mono">Taught at</span>
+                    <span class="mono">{{ ui.sections.taughtAt }}</span>
                     <ul class="book-taught">
                       <li v-for="[name] in openSystem.taughtAt" :key="name">{{ name }}</li>
                     </ul>
-                    <span class="mono">{{ openSystem.authors }} · ISBN {{ openSystem.isbn }}</span>
+                    <span class="mono"><span>{{ openSystem.authors }}</span> · <span>{{ ui.labels.isbn }}</span> <span>{{ openSystem.isbn }}</span></span>
                   </div>
                 </div>
               </transition>
@@ -220,7 +220,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
           </div>
           <div class="spread-foot">
             <router-link to="/book" class="btn ghost">
-              About the book
+              {{ ui.labels.aboutBook }}
               <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg>
             </router-link>
             <span class="mono">{{ bookSteps[bookIndex]?.n }} / {{ String(bookSteps.length).padStart(2, '0') }}</span>
@@ -233,11 +233,11 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
       <section id="news" class="panel">
         <div class="frame spread">
           <div class="spread-top">
-            <span class="sec-idx"><span class="mono">03</span><span class="mono">The record</span></span>
+            <span class="sec-idx"><span class="mono">03</span><span class="mono">{{ ui.sections.record }}</span></span>
           </div>
           <div class="spread-body rec-body">
-            <h2 class="heading sp-title">A builder who <span class="serif">kept the receipts</span>.</h2>
-            <p class="lede rec-lede">Twenty years inside the institutions most speakers only analyze.</p>
+            <h2 class="heading sp-title"><span>{{ ui.home.recordLead }}</span> <span class="serif">{{ ui.home.recordAccent }}</span>.</h2>
+            <p class="lede rec-lede">{{ ui.home.recordLede }}</p>
             <div class="stat-row">
               <div v-for="[n, l] in stats" :key="l" class="stat">
                 <span class="num stat-n">{{ n }}</span>
@@ -255,7 +255,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
           </div>
           <div class="spread-foot">
             <router-link to="/about" class="btn ghost">
-              The full record
+              {{ ui.labels.fullRecord }}
               <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg>
             </router-link>
             <span class="mono">03 / 03</span>
@@ -268,9 +268,9 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
     <section ref="rail" class="rail" :style="{ height: railHeight }" aria-label="Talks">
       <div class="rail-sticky">
         <div class="frame rail-head">
-          <span class="sec-idx"><span class="mono">04</span><span class="mono">Six sessions</span></span>
+          <span class="sec-idx"><span class="mono">04</span><span class="mono">{{ ui.sections.sessions }}</span></span>
           <div>
-            <h2 class="heading">Six sessions, outcomes <span class="serif">written</span>.</h2>
+            <h2 class="heading"><span>{{ ui.home.railLead }}</span> <span class="serif">{{ ui.home.railAccent }}</span>.</h2>
           </div>
           <span class="counter num" aria-hidden="true">{{ String(active).padStart(2, '0') }}<i>/{{ String(talks.length).padStart(2, '0') }}</i></span>
         </div>
@@ -286,12 +286,12 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
             <span class="mono card-f">{{ t.formats }}</span>
             <span class="card-t">{{ t.title }}</span>
             <span class="card-s serif">{{ t.subtitle }}</span>
-            <span class="pill">View session <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg></span>
+            <span class="pill"><span>{{ ui.labels.viewSession }}</span> <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg></span>
           </router-link>
           <div class="card card-end">
-            <span class="heading">All six, with <span class="serif">outcomes</span>.</span>
+            <span class="heading"><span>{{ ui.home.railEndLead }}</span> <span class="serif">{{ ui.home.railEndAccent }}</span>.</span>
             <router-link to="/talks" class="btn">
-              Browse the talks
+              {{ ui.labels.browseTalks }}
               <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg>
             </router-link>
           </div>
@@ -304,11 +304,11 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
       <div class="sec-head">
         <div class="sec-idx">
           <span class="mono">05</span>
-          <span class="mono">On the record</span>
+          <span class="mono">{{ ui.sections.onRecord }}</span>
         </div>
         <div class="said-main">
-          <p class="said-q serif" v-reveal>“{{ said.quote }}”</p>
-          <a v-if="saidSource" :href="saidSource.url" target="_blank" rel="noopener noreferrer" class="mono ext" v-reveal>{{ saidSource.outlet }}, {{ saidSource.date }}</a>
+          <p class="said-q serif" v-reveal>{{ said.quote }}</p>
+          <a v-if="saidSource" :href="saidSource.url" target="_blank" rel="noopener noreferrer" class="mono ext" v-reveal><span>{{ saidSource.outlet }}</span>, <span>{{ saidSource.when }}</span></a>
         </div>
       </div>
     </section>
@@ -318,7 +318,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
       <div class="sec-head">
         <div class="sec-idx">
           <span class="mono">06</span>
-          <span class="mono">The person</span>
+          <span class="mono">{{ ui.sections.person }}</span>
         </div>
         <div class="person-grid">
           <figure class="portrait tone" v-reveal>
@@ -328,12 +328,12 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
             </picture>
           </figure>
           <div class="person-copy" v-reveal>
-            <p class="subheading">A first-grade teacher on the Navajo Nation who went on to chair the board of a thirteen-college system, direct a sixty-district rural talent initiative, and found a statewide civic coalition.</p>
+            <p class="subheading">{{ ui.home.personStatement }}</p>
             <ul class="words" aria-label="Values">
               <li v-for="v in values" :key="v.word" :class="{ shared: v.shared }">{{ v.word }}</li>
             </ul>
             <router-link to="/about" class="btn ghost">
-              About Landon
+              {{ ui.labels.aboutLandon }}
               <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg>
             </router-link>
           </div>
@@ -345,21 +345,21 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
     <section id="contact" class="contact">
       <div class="frame">
         <div class="contact-grid">
-          <h2 class="display contact-title" v-reveal>Request<br />availability<span class="serif">.</span></h2>
+          <h2 class="display contact-title" v-reveal><span class="ct">{{ ui.labels.request }}</span><span class="serif">.</span></h2>
           <div class="contact-side" v-reveal>
-            <p class="lede">Tell us the audience, the date and the format. We answer the same day.</p>
+            <p class="lede">{{ ui.home.contactLede }}</p>
             <a :href="`mailto:${site.email}`" class="btn">
               {{ site.emailLabel }}
               <svg class="arrow" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 12 12 2M4 2h8v8" /></svg>
             </a>
             <ul class="contact-meta">
-              <li><span class="mono">Travels from</span><span>{{ site.travelsFrom }}</span></li>
-              <li><span class="mono">Virtual</span><span>Available, 30 to 45 minutes</span></li>
-              <li><span class="mono">Recording</span><span>Permitted, on demand</span></li>
-              <li><span class="mono">Newsletter</span><a :href="site.substack.url" target="_blank" rel="noopener">{{ site.substack.label }}</a></li>
-              <li><span class="mono">Represented by</span><a :href="site.agencyUrl" target="_blank" rel="noopener">{{ site.agency }}</a></li>
+              <li><span class="mono">{{ ui.sections.travelsFrom }}</span><span>{{ site.travelsFrom }}</span></li>
+              <li><span class="mono">{{ ui.sections.virtual }}</span><span>{{ ui.home.virtual }}</span></li>
+              <li><span class="mono">{{ ui.sections.recording }}</span><span>{{ ui.home.recording }}</span></li>
+              <li><span class="mono">{{ ui.sections.newsletter }}</span><a :href="site.substack.url" target="_blank" rel="noopener">{{ site.substack.label }}</a></li>
+              <li><span class="mono">{{ ui.sections.representedBy }}</span><a :href="site.agencyUrl" target="_blank" rel="noopener">{{ site.agency }}</a></li>
             </ul>
-            <router-link :to="{ path: '/about', hash: '#planners' }" class="mono ext">Everything a committee will ask</router-link>
+            <router-link :to="{ path: '/about', hash: '#planners' }" class="mono ext">{{ ui.labels.committee }}</router-link>
           </div>
         </div>
       </div>
@@ -1459,6 +1459,10 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
 }
 
 .contact-title {
+  // Narrow enough that the two words take a line each, with the clay
+  // full stop following the last word rather than floating after the block.
+  max-width: 6.6em;
+
   .serif {
     color: var(--clay);
   }

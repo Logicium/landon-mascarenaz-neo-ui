@@ -402,6 +402,18 @@ h4 {
   }
 }
 
+// Quotation marks are drawn by CSS so the quoted text stays an exact copy of
+// its config string, which is what lets the editor bind it.
+.said-q::before,
+.q-text::before {
+  content: '\201C';
+}
+
+.said-q::after,
+.q-text::after {
+  content: '\201D';
+}
+
 // ---------- print treatments ----------
 // `.tone` marks a colour photograph. It is shown as shot; the paper behind
 // it is the only treatment.
