@@ -6,8 +6,8 @@ dist
 dist-ssr
 *.tsbuildinfo
 
-# Environment
-.env
+# Environment. The studio origin and the site's public beacon key are
+# committed on purpose: the site is public and the key is not a secret.
 .env.*
 !.env.example
 !.env.production

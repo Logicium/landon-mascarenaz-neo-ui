@@ -620,7 +620,7 @@ const plannersSource: [string, string][] = [
 // the first path that holds it, so a label reused across pages lives here
 // once and is rendered from the same key everywhere.
 const uiSource = {
-  nav: { work: 'Work', talks: 'Talks', book: 'The Book', about: 'About' },
+  nav: { work: 'Work', talks: 'Talks', book: 'The Book', about: 'About', newsletter: 'Newsletter' },
   labels: {
     request: 'Request availability',
     seeTalks: 'See the talks',
@@ -638,6 +638,8 @@ const uiSource = {
     publisherPage: 'Publisher page',
     committee: 'Everything a committee will ask',
     scroll: 'Scroll',
+    menu: 'Menu',
+    close: 'Close',
     previous: 'Previous',
     next: 'Next',
     heldBy: 'Held by',

@@ -441,6 +441,39 @@ onMounted(() => {
   padding-top: var(--band);
 }
 
+// ---------- selected record ----------
+.record {
+  border-top: 1px solid var(--line);
+  max-width: 52em;
+
+  li {
+    display: grid;
+    grid-template-columns: 90px minmax(0, 1fr);
+    gap: 16px;
+    padding-block: 14px;
+    border-bottom: 1px solid var(--line);
+    font-size: var(--fs-body);
+    line-height: 1.45;
+    align-items: baseline;
+  }
+
+  .y {
+    color: var(--ink);
+  }
+
+  .r {
+    color: var(--ink-2);
+  }
+
+  .r-link {
+    transition: color 0.35s var(--ease-out);
+
+    &:hover {
+      color: var(--turq-deep);
+    }
+  }
+}
+
 // ---------- horizontal timeline ----------
 .tl-rail {
   position: relative;
@@ -659,6 +692,21 @@ onMounted(() => {
 
   .vals-grid {
     grid-template-columns: 1fr;
+
+    div {
+      min-height: 0;
+      padding: 20px 20px 24px;
+      gap: 10px;
+    }
+
+    dd {
+      margin-top: 0;
+    }
+  }
+
+  .record li {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 12px;
   }
 
   .honors .hon {

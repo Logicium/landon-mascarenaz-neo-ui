@@ -629,21 +629,42 @@ onMounted(() => {
     row-gap: 28px;
   }
 
+  // Phone rows: the photograph full width, then the numeral, the words and
+  // the arrow on one line that starts at the top.
   .talk {
-    grid-template-columns: 68px minmax(0, 1fr) 36px;
-    row-gap: 16px;
+    grid-template-columns: 44px minmax(0, 1fr) 36px;
+    align-items: start;
+    row-gap: 18px;
+    padding-block: 24px;
 
     .t-img {
       grid-column: 1 / -1;
-      max-width: 420px;
+      max-width: none;
+    }
+
+    .t-n {
+      font-size: var(--fs-title);
+      padding-top: 2px;
     }
 
     .t-main {
-      grid-column: 2;
+      grid-column: 1 / 3;
+    }
+
+    .t-body {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .t-meta {
       display: none;
+    }
+
+    .t-go {
+      width: 36px;
+      height: 36px;
     }
   }
 

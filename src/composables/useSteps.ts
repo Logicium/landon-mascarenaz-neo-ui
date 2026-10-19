@@ -4,8 +4,7 @@ import { onBeforeUnmount, onMounted, ref, type Ref } from 'vue'
 // empty block that follows it in the stack, scrolls through the viewport.
 // The panel itself stays sticky in the shared stack the whole time, so the
 // next spread still slides over it. `index` is the current step, `sub` the
-// progress within it (0 to 1). On narrow screens the spacer is hidden and
-// the first step is shown.
+// progress within it (0 to 1).
 export function useSteps(spacer: Ref<HTMLElement | null>, count: number) {
   const index = ref(0)
   const sub = ref(0)
@@ -14,7 +13,7 @@ export function useSteps(spacer: Ref<HTMLElement | null>, count: number) {
   const update = () => {
     raf = 0
     const el = spacer.value
-    if (!el || window.innerWidth < 960) return
+    if (!el) return
     // The spacer's top starts one viewport down when the panel pins, and
     // reaches the top of the viewport when the spacer has fully passed.
     const h = el.offsetHeight

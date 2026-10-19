@@ -45,7 +45,7 @@ const bookIndex = computed(() => bookHover.value ?? bookScrolled.value)
 const bookStats: [string, string][] = [
   [openSystem.pages, 'pages'],
   [openSystem.year, 'published'],
-  [String(openSystem.taughtAt.length), 'universities teaching it'],
+  [String(openSystem.taughtAt.length), 'universities'],
   ['2', 'authors'],
 ]
 
@@ -345,7 +345,7 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
     <section id="contact" class="contact">
       <div class="frame">
         <div class="contact-grid">
-          <h2 class="display contact-title" v-reveal><span class="ct">{{ ui.labels.request }}</span><span class="serif">.</span></h2>
+          <h2 class="display contact-title" v-reveal><span>{{ ui.labels.request }}</span><span class="serif">.</span></h2>
           <div class="contact-side" v-reveal>
             <p class="lede">{{ ui.home.contactLede }}</p>
             <a :href="`mailto:${site.email}`" class="btn">
@@ -1527,100 +1527,235 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
     margin-top: 40px;
   }
 
-  // Panels stop stacking and simply flow.
-  .panel {
-    position: relative;
-    height: auto;
-    min-height: 0;
-    filter: none;
-    transform: none;
-    opacity: 1;
-  }
-
-  .spread {
-    padding-block: 40px 40px;
-  }
-
-  .spread-body {
-    padding-block: 32px;
-  }
-
-  .work-body,
-  .book-body,
-  .book-detail {
-    grid-template-columns: 1fr;
-    row-gap: 32px;
-  }
-
-  .book-right-col {
-    align-items: flex-start;
-    text-align: left;
-  }
-
-  .work-plate {
-    align-items: stretch;
-
-    .plate {
-      aspect-ratio: 4 / 3;
-      flex: none;
-    }
-
-    // Narrow screens: the numeral sits above the plate's top-left corner.
-    .plate-n {
-      left: 0;
-      bottom: auto;
-      top: 0;
-      transform: translate(0, calc(-100% - 10px));
-    }
-  }
-
-  .work-title {
-    width: auto;
-
-    .wt-line {
-      white-space: normal;
-    }
-  }
-
-  .spacer {
-    display: none;
+  // ----- the spreads still stack on a phone -----
+  // Each spread is laid out to fit one phone viewport, so the sticky stack
+  // and the slide-over work exactly as they do on a desktop. The blur is
+  // lighter, since a phone pays more for it.
+  .panel.covered {
+    filter: blur(calc(var(--cover, 0) * var(--cover, 0) * 8px));
   }
 
   .stack-nav {
     display: none;
   }
 
-  .book-cover picture {
-    height: auto;
-    width: min(100%, 260px);
+  .spread {
+    padding-block: calc(var(--header-h) + 8px) 14px;
   }
 
-  .honor-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .spread-top {
+    padding-bottom: 12px;
+  }
 
-    li:nth-child(2) {
-      border-right: 0;
+  .spread-foot {
+    padding-top: 12px;
+  }
+
+  .spread-body {
+    padding-block: 14px 12px;
+  }
+
+  // The work: title, lede, the plate filling what is left, then the steps.
+  .work-body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .work-copy {
+    display: contents;
+  }
+
+  .work-title {
+    order: 1;
+    width: auto;
+    font-size: clamp(36px, 10.5vw, 46px);
+    mix-blend-mode: normal;
+
+    .wt-line {
+      white-space: normal;
+    }
+  }
+
+  .work-meta {
+    order: 2;
+
+    .lede {
+      font-size: var(--fs-body-lg);
+      line-height: 1.4;
+      max-width: none;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+
+  .work-plate {
+    order: 3;
+    flex: 1;
+    min-height: 0;
+    align-items: stretch;
+    gap: 10px;
+
+    .plate {
+      flex: 1;
+      min-height: 120px;
+      aspect-ratio: auto;
     }
 
-    li:nth-child(3) {
-      padding-left: 0;
+    // The big numeral is a desktop gesture; the step bars carry the count here.
+    .plate-n {
+      display: none;
     }
+  }
+
+  .work-copy > .steps {
+    order: 4;
+    margin-top: 0;
+  }
+
+  // Three narrow columns: the number sits above the name.
+  .step .step-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  // The book: a small cover above the words.
+  .book-body {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .book-cover {
+    align-self: flex-start;
+    flex: none;
+
+    picture {
+      height: clamp(120px, 20svh, 200px);
+      width: auto;
+    }
+  }
+
+  .book-right {
+    flex: 1;
+    min-height: 0;
+    gap: 14px;
+  }
+
+  .book-page {
+    gap: 12px;
+
+    .sp-title {
+      font-size: clamp(28px, 7.6vw, 36px);
+    }
+
+    .lede {
+      font-size: var(--fs-body-lg);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+
+  .book-detail {
+    display: flex;
+    flex-direction: column;
+  }
+
+  // The four figures in one row.
+  .book-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    div {
+      padding: 10px 8px 10px 0;
+      gap: 4px;
+    }
+
+    dt {
+      font-size: 10px;
+    }
+
+    dd {
+      font-size: clamp(22px, 6.5vw, 30px);
+    }
+  }
+
+  // The taught-at list lives on the book page; the phone spread keeps the figures.
+  .book-right-col {
+    display: none;
+  }
+
+  // The record: the figures two by two, the honors beneath.
+  .rec-body {
+    row-gap: 12px;
+
+    .sp-title {
+      font-size: clamp(28px, 7.6vw, 36px);
+    }
+  }
+
+  .rec-lede {
+    font-size: var(--fs-body-lg);
+    line-height: 1.4;
   }
 
   .stat-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 
-    .stat:nth-child(2) {
-      border-right: 0;
+    .stat {
+      padding: 12px 12px 6px 0;
+      gap: 6px;
+
+      &:nth-child(2) {
+        border-right: 0;
+      }
+
+      &:nth-child(3) {
+        padding-left: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      &:nth-child(4) {
+        border-top: 1px solid var(--line);
+      }
     }
 
-    .stat:nth-child(3) {
-      padding-left: 0;
-      border-top: 1px solid var(--line);
+    .stat-n {
+      font-size: clamp(34px, 9vw, 44px);
     }
 
-    .stat:nth-child(4) {
-      border-top: 1px solid var(--line);
+    .stat-l {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+
+  .honor-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    li {
+      padding: 10px 12px 2px 0;
+
+      &:nth-child(2) {
+        border-right: 0;
+      }
+
+      &:nth-child(3) {
+        padding-left: 0;
+      }
+    }
+
+    .honor {
+      gap: 2px;
     }
   }
 
@@ -1674,21 +1809,26 @@ const fill = (i: number, index: number, hover: number | null, s: number) => (ind
   }
 }
 
-@media (max-width: 600px) {
-  .stat-row {
-    grid-template-columns: 1fr;
-
-    .stat {
-      border-right: 0;
-      padding-left: 0;
-      border-top: 1px solid var(--line);
-
-      &:first-child {
-        border-top: 0;
-      }
-    }
+// Short phones: the honors step aside so the record still fits one screen.
+@media (max-width: 960px) and (max-height: 720px) {
+  .honor-row {
+    display: none;
   }
 
+  .work-title {
+    font-size: clamp(32px, 9vw, 40px);
+  }
+
+  .work-meta .lede {
+    -webkit-line-clamp: 3;
+  }
+
+  .stat-row .stat-l {
+    -webkit-line-clamp: 2;
+  }
+}
+
+@media (max-width: 600px) {
   .hero-foot {
     flex-direction: column;
     align-items: flex-start;
