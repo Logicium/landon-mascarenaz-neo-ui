@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { avif, openSystem, said, site, sourceById, talks, ui } from '@/data/site'
+import { avif, openSystem, said, sourceById, talks, ui } from '@/data/site'
 
 const publisher = sourceById(openSystem.source)
 const saidSource = sourceById(said.source)
 const bookTalk = talks.find((t) => t.slug === 'the-open-system')
 
-onMounted(() => {
-  document.title = `${openSystem.title} · ${site.name}`
-})
 </script>
 
 <template>

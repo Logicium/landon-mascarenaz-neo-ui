@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import DoorsIndex from '@/components/DoorsIndex.vue'
-import { formats, site, ui } from '@/data/site'
+import { formats, ui } from '@/data/site'
 
-onMounted(() => {
-  document.title = `The work · ${site.name}`
-})
 </script>
 
 <template>

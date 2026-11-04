@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { doorById, site, sourceById, talks, ui } from '@/data/site'
+import { doorById, sourceById, talks, ui } from '@/data/site'
 
 const route = useRoute()
 const router = useRouter()
@@ -17,7 +17,6 @@ watch(
   index,
   (i) => {
     if (i < 0) router.replace('/')
-    else document.title = `${talk.value?.title} · ${site.name}`
   },
   { immediate: true },
 )

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { avif, listen, site, talks, testimonials, ui, watch, type Media } from '@/data/site'
+import { ref } from 'vue'
+import { avif, listen, talks, testimonials, ui, watch, type Media } from '@/data/site'
 
 // Nothing plays until it is asked for. `playing` holds the url of the one
 // item whose player is open; video opens the youtube-nocookie player,
@@ -11,9 +11,6 @@ const embed = (m: Media) =>
     ? `https://www.youtube-nocookie.com/embed/${m.id}?autoplay=1&rel=0`
     : `https://embed.podcasts.apple.com/us/podcast/${m.id}`
 
-onMounted(() => {
-  document.title = `Talks · ${site.name}`
-})
 </script>
 
 <template>

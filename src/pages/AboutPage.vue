@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import SourceList from '@/components/SourceList.vue'
 import { useHorizontal } from '@/composables/useHorizontal'
 import { avif, honors, openSystem, person, planners, record, site, sourceById, sourceIndex, stats, timeline, ui, values, valuesStatement } from '@/data/site'
@@ -18,9 +18,6 @@ const srcTitle = (id: string) => {
   return s ? `${s.outlet}: ${s.title}` : ''
 }
 
-onMounted(() => {
-  document.title = `About · ${site.name}`
-})
 </script>
 
 <template>
