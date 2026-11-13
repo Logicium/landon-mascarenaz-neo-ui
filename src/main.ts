@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import { installSeo } from './seo'
+import { site as seoSite } from './seo.site'
 import { reveal } from './directives/reveal'
 import { content } from './data/site'
 import { resolveKitEnv } from './kit/env'
@@ -9,6 +11,8 @@ import { applyDeep, initApotomeEditor, loadPublishedContent } from './kit/editor
 import './assets/main.scss'
 
 const app = createApp(App).use(router).directive('reveal', reveal)
+// the head follows the route table on every navigation; the build wrote the same tags per page
+installSeo(router, seoSite)
 
 // Mount only once the first route's chunk has resolved, so the header, the
 // page and the footer paint together instead of the footer arriving first.

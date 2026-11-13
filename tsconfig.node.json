@@ -1,8 +1,7 @@
 {
   "extends": "@tsconfig/node24/tsconfig.json",
-  "include": ["vite.config.*"],
+  "include": ["vite.config.*", "src/seo/node.ts", "src/seo/prerender.ts", "src/seo/browser.ts", "src/seo/expand.ts", "src/seo/vercel.ts"],
   "compilerOptions": {
-    "composite": true,
     "noEmit": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "module": "ESNext",

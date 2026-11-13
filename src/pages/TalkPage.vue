@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import NotFoundPage from '@/pages/NotFoundPage.vue'
 import { doorById, sourceById, talks, ui } from '@/data/site'
+import { useSeoData } from '@/seo'
 
 const route = useRoute()
 const router = useRouter()
@@ -13,17 +15,14 @@ const next = computed(() => talks[(index.value + 1) % talks.length])
 const door = computed(() => doorById(talk.value?.door ?? 'mobility'))
 const article = computed(() => (talk.value?.press ? sourceById(talk.value.press) : undefined))
 
-watch(
-  index,
-  (i) => {
-    if (i < 0) router.replace('/')
-  },
-  { immediate: true },
-)
+// Title, description, share image and the CreativeWork follow the record
+// through the route table, the same values the prerender wrote for this talk.
+useSeoData(talk)
 </script>
 
 <template>
-  <article v-if="talk" class="talk-page" :key="talk.slug">
+  <NotFoundPage v-if="!talk" />
+  <article v-else class="talk-page" :key="talk.slug">
     <header class="frame head">
       <div class="crumbs mono">
         <router-link to="/talks" class="link-line">{{ ui.nav.talks }}</router-link>
